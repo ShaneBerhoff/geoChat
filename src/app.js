@@ -46,7 +46,7 @@ const getISP = async (ipAddress) => {
 
         console.log("ISP from API =",isp);
         const isAllowed = ALLOWED_ISPS.includes(isp);
-        const ispInfo = { isAllowed, isp};
+        const ispInfo = { isAllowed, isp };
 
         // Cache in redis with an expo
         await redisCache.set(cacheKey, JSON.stringify(ispInfo), {EX: 86400});
@@ -80,7 +80,7 @@ app.get('/', (req, res) => {
 });
 
 // Chat route for the HTML file with ISP middleware
-app.get('/chat', ispMiddleware, (req, res) => {
+app.get('/chatroom', ispMiddleware, (req, res) => {
     res.sendFile(path.join(__dirname, '../public/chat/index.html'));
 });
 

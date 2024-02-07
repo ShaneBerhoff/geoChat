@@ -1,11 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <meta charset="UTF-8">
     <title>Welcome to Chat App</title>
+    <script src="welcome/welcome.js"></script>
 </head>
 <body>
     <h1>Welcome to Our Chat App</h1>
-    <p>Click the button below to start chatting!</p>
-    <a href="/chat">Go to Chat</a>
+    <p>Enter a pseudonym to start chatting!</p>
+    <form id="form" action="/chatroom" method="get">
+        <input id="name" autocomplete="off" required/>
+        <input type="submit" value="Go to chat">
+    </form>
 </body>
 </html>
