@@ -2,7 +2,6 @@ require('dotenv').config({ path: '../.env' });
 const http = require('http');
 const socketIo = require('socket.io');
 const app = require('./app');
-const connectMongo = require('./utils/mongoClient');
 const { createSubscriberClient } = require('./utils/redisClient');
 const chatController = require('./controllers/chatController');
 
@@ -28,10 +27,9 @@ io.on('connection', (socket) => {
     });
 });
 
-// Initialize and connect to MongoDB, and set up Redis clients
+// Initialize and connect Redis client
 async function initializeConnections() {
     try {
-        await connectMongo();
         const redisSubscriber = await createSubscriberClient();
 
         // Redis subscription for chat messages

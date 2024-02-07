@@ -1,4 +1,3 @@
-const Message = require('../models/messageModel');
 const { connectRedis } = require('../utils/redisClient');
 
 // Connects to Redis
@@ -10,15 +9,10 @@ connectRedis().then(client => {
 // Used to send a message to all users
 const sendMessage = async (messageData) => {
     try {
-        // Save message to MongoDB
-        const message = new Message(messageData);
-        await message.save();
-        console.log("Message saved to DB");
-
         // Ensure Redis client is available
         if (redisPublish) {
             // Publish message to the correct Redis channel
-            redisPublish.publish('chatMessages', JSON.stringify(message));
+            redisPublish.publish('chatMessages', JSON.stringify(messageData));
             console.log("Message published to Redis");
         } else {
             console.error('Redis client not available');
