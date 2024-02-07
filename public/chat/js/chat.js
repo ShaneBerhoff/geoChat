@@ -1,22 +1,28 @@
 document.addEventListener('DOMContentLoaded', function() {
     var socket = io();
 
+    //Get elements
     var form = document.getElementById('form');
     var input = document.getElementById('input');
     var messages = document.getElementById('messages');
 
-    form.addEventListener('submit', function(e) {
-        e.preventDefault();
+    // Form submission
+    form.addEventListener('submit', function(event) {
+        event.preventDefault();
         if (input.value) {
-            socket.emit('chat message', { content: input.value, sender: 'SomeSender' });
+            //Send message to server
+            let time = Date.now();
+            socket.emit('chat message', { content: input.value, sender: sessionStorage.getItem('username'), timestamp: time });
             input.value = '';
         }
     });
 
     socket.on('chat message', function(msg) {
         console.log("Message recieved");
-        var item = document.createElement('li');
-        item.textContent = msg.content;
+        let date = new Date(msg.timestamp);
+        let timeStr = `${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}:${date.getSeconds().toString().padStart(2, '0')}`;
+        const item = document.createElement('p');
+        item.innerHTML = `<strong>${msg.sender}</strong> (<em>${timeStr}</em>) ${msg.content}`;
         messages.appendChild(item);
         window.scrollTo(0, document.body.scrollHeight);
     });
