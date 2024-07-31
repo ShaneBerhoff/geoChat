@@ -1,9 +1,9 @@
 import { useNavigate } from 'react-router-dom';
 
 const Welcome = () => {
-    async function onFormSubmit(event) {
-        const navigate = useNavigate();
+    const navigate = useNavigate();
 
+    async function onFormSubmit(event) {
         event.preventDefault();
         const name = document.getElementById('name').value;
 
@@ -28,12 +28,11 @@ const Welcome = () => {
         <>
             <h1>Welcome to Our Chat App</h1>
             <p>Enter a pseudonym to start chatting!</p>
-            <form id="form" onSubmit={() => onFormSubmit()} method="get">
-                <input id="name" autocomplete="off" required/>
+            <form id="form" onSubmit={onFormSubmit} method="get">
+                <input id="name" autoComplete="off" required />
                 <input type="submit" value="Go to chat" />
             </form>
         </>
-        
     );
 }
 
