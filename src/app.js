@@ -1,3 +1,4 @@
+require('dotenv').config({path: './src/.env'});
 const express = require('express');
 const axios = require('axios');
 const path = require('path');
@@ -75,9 +76,13 @@ const ispMiddleware = async (req, res, next) => {
 };
 
 // API route for validation
-app.post('/api/validate', ispMiddleware, (req, res) => {
+app.post('/api/validate', (req, res, next) => {
+    console.log('Validate route hit');
+    next();
+  }, ispMiddleware, (req, res) => {
+    console.log('Validation passed');
     res.json({ isValid: true });
-});
+  });
 
 // Serve static files from the React app
 app.use(express.static(path.join(__dirname, '../client/build')));

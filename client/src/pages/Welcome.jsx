@@ -12,9 +12,22 @@ const Welcome = () => {
         }
 
         try {
-            const response = await fetch('/api/validate');
+            const response = await fetch('/api/validate', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                // You can send an empty body or include any necessary data
+                body: JSON.stringify({}),
+            });
+
             if (response.ok) {
-                navigate('/chatroom');
+                const data = await response.json();
+                if (data.isValid) {
+                    navigate('/chatroom');
+                } else {
+                    navigate('/access-denied');
+                }
             } else {
                 navigate('/access-denied');
             }
