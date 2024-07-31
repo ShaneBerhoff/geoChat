@@ -66,25 +66,25 @@ const ispMiddleware = async (req, res, next) => {
         if (clientISP && clientISP.isAllowed) {
             next();
         } else {
-            res.sendFile(path.join(__dirname, '../public/splash/index.html'));
+            res.status(403).json({ isValid: false });
         }
     } catch (error) {
         console.error('ISP check error:', error);
-        res.status(500).send('Error checking ISP');
+        res.status(500).json({ isValid: false });
     }
 };
 
-// Root route for the welcome page
-app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, '../public/welcome/index.html'));
+// API route for validation
+app.post('/api/validate', ispMiddleware, (req, res) => {
+    res.json({ isValid: true });
 });
 
-// Chat route for the HTML file with ISP middleware
-app.get('/chatroom', ispMiddleware, (req, res) => {
-    res.sendFile(path.join(__dirname, '../public/chat/index.html'));
-});
+// Serve static files from the React app
+app.use(express.static(path.join(__dirname, '../client/build')));
 
-// Serve static files from 'public', but after specific routes
-app.use(express.static(path.join(__dirname, '../public')));
+// Catch all other routes and return the index file, allowing React Router to handle routing
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '../client/build', 'index.html'));
+});
 
 module.exports = app;
