@@ -30,7 +30,6 @@ const ChatPage = () => {
     event.preventDefault();
     if (inputRef.current.value) {
       const message = {
-        sessionToken: sessionStorage.getItem('token'),
         content: inputRef.current.value,
         createdAt: Date.now(),
       };
