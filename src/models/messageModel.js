@@ -1,3 +1,4 @@
+require('dotenv').config({ path: '../.env' });
 const { Schema, model } = require('mongoose');
 
 const messageSchema = new Schema({
@@ -12,7 +13,8 @@ const messageSchema = new Schema({
     },
     createdAt: { 
         type: Date, 
-        default: Date.now 
+        default: Date.now,
+        expires: process.env.TTL
     }
 }); 
 

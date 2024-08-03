@@ -1,5 +1,6 @@
 const Session = require('../models/sessionModel')
 const { v4: uuidv4 } = require('uuid');
+require('dotenv').config({ path: '../.env' });
 
 const findUser = async (sessionToken) => {
     let session;
@@ -22,29 +23,35 @@ const findExistingSession = async (username) => {
 
 const deactivateSession = async (sessionToken) => {
     if (sessionToken) {
+        const expiresAt = new Date(Date.now() + parseInt(process.env.SESSION_RECOVERY_PERIOD)*60*1000);
         try {
-            await Session.findOneAndUpdate(
+            await Session.updateOne(
                 { token: sessionToken },
-                { isActive: false },
-                { new: true }
+                {
+                    $set: {
+                        isActive: false,
+                        expiresAt: expiresAt
+                    }
+                }
             );
             console.log(`Session ${sessionToken} set to inactive`);
         } catch (error) {
             console.error('Error setting session to inactive:', error);
         }
     }
-}
+};
 
-const updateSession = async (session, updateData) => {
+const reactivateSession = async (sessionToken) => {
     try {
-        Object.keys(updateData).forEach(key => {
-            if (session.schema.path(key)) {
-                session[key] = updateData[key];
+        await Session.updateOne(
+            { token: sessionToken },
+            { 
+                $set: { isActive: true },
+                $unset: { expiresAt: 1 }
             }
-        });
-        await session.save();
+        );                      
     } catch (error) {
-        console.error('Error updating session data:', error);
+        console.error('Error reactivating session:', error);
         throw error;
     }
 };
@@ -72,6 +79,6 @@ module.exports = {
     findUser,
     findExistingSession,
     deactivateSession,
-    updateSession,
+    reactivateSession,
     createSession
 };

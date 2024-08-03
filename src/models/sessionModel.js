@@ -17,6 +17,10 @@ const sessionSchema = new Schema({
     isActive: { 
         type: Boolean, 
         default: true 
+    },
+    expiresAt: {
+        type: Date,
+        expires: 0
     }
 });
 

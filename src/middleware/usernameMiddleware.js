@@ -21,9 +21,7 @@ const usernameMiddleware = async (req, res, next) => {
             return next();
         } else if (!existingSession.isActive && existingSession.token === clientToken) { // If inactive and matching token recover
             // Reactivate the session
-            await sessionController.updateSession(existingSession, {
-                isActive: true
-            });
+            await sessionController.reactivateSession(clientToken);
             
             // Send down the line
             console.log("Valid Recovery: ", username)
