@@ -1,14 +1,63 @@
-// Send message to all users
-const sendMessage = async (io, messageData) => {
-    try {
-      io.emit('chat message', messageData);
-      console.log("Message emitted to clients");
-    } catch (error) {
-      console.error('Error in sendMessage:', error);
-      throw error;
-    }
-  };
+const Message = require('../models/messageModel')
+const sessionController = require('../controllers/sessionController');
+
+// Save message and send to all users
+const handleMessage = async (io, messageData) => {
+  // Save to db
+  try {
+    const message = new Message(messageData);
+    await message.save();
+    console.log("Message saved to DB")
+  } catch (error) {
+    console.error('Failed to save message to DB:', error)
+    throw error;
+  }
   
-  module.exports = {
-    sendMessage
-  };
+  // Convert sessionToken to username and broadcast to all users
+  try {
+    userMessageData = {
+      sender: await sessionController.findUser(messageData.sessionToken),
+      content: messageData.content,
+      timestamp: messageData.createdAt
+    };
+    console.log("UserMessageData:", userMessageData);
+    io.emit('chat message', userMessageData);
+    console.log("Message emitted to clients");
+  } catch (error) {
+    console.error('Error in handleMessage:', error);
+    throw error;
+  }
+};
+
+// Load chat history
+const loadMessages = async (io) => {
+  try {
+    const messages = await Message.find().sort({ createdAt: 1})
+
+    // convert sessions to usernames
+    const messagesWithUsernames = await Promise.all(
+      messages.map(async (message) => {
+        const username = await sessionController.findUser(message.sessionToken);
+        return {
+          _id: message._id,
+          sender: username,
+          content: message.content,
+          timestamp: message.createdAt,
+        };
+      })
+    );
+
+    //TODO: remove log once front loading is connected
+    console.log("Messages With Usernames:", messagesWithUsernames)
+    io.emit('load messages', messagesWithUsernames);
+    console.log("Existing chat messages sent to client")
+  } catch (error) {
+    console.error('Error fetching messages:', error);
+    throw error
+  }
+}
+
+module.exports = {
+  handleMessage,
+  loadMessages
+};
