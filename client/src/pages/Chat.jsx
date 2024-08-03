@@ -7,7 +7,13 @@ const ChatPage = () => {
   const socket = useRef(null);
 
   useEffect(() => {
-    socket.current = io();
+    const token = sessionStorage.getItem('token');
+
+    socket.current = io('http://localhost:3000', {
+      auth: {
+        token: token
+      }
+    });
     socket.current.on('chat message', (msg) => {
       setMessages((prevMessages) => [...prevMessages, msg]);
       window.scrollTo(0, document.body.scrollHeight);
@@ -23,11 +29,12 @@ const ChatPage = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
     if (inputRef.current.value) {
-      socket.current.emit('chat message', {
+      const message = {
+        sessionToken: sessionStorage.getItem('token'),
         content: inputRef.current.value,
-        sender: sessionStorage.getItem('username'),
-        timestamp: Date.now(),
-      });
+        createdAt: Date.now(),
+      };
+      socket.current.emit('chat message', message);
       inputRef.current.value = '';
     }
   };
