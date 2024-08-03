@@ -3,8 +3,8 @@ const http = require('http');
 const socketIo = require('socket.io');
 const app = require('./app');
 const chatController = require('./controllers/chatController');
+const sessionController = require('./controllers/sessionController');
 const connectDB = require('./utils/mongoClient');
-const Session = require('./models/sessionModel');
 
 // Create server and sockets
 const server = http.createServer(app);
@@ -16,16 +16,25 @@ connectDB();
 // Socket action when connection
 io.on('connection', async (socket) => {
     console.log('New client connected');
+    const sessionToken = socket.handshake.auth.token;
 
     // Load exisiting chat messages
     try {
-        await chatController.loadMessages(io);
+        await chatController.loadChat(io);
     } catch (error) {
-        console.error('Error sending messages to client:', error)
+        console.error('Error sending chat messages to client:', error)
+    }
+
+    // Load exisiting message history
+    try {
+        await chatController.loadPersonalHistory(io, sessionToken);
+    } catch (error) {
+        console.error('Error sending personal chat history to client:', error)
     }
 
     socket.on('chat message', async (msg) => {
         console.log("Message received: ", msg);
+        // Send message to chat controller
         try {
             await chatController.handleMessage(io, msg);
         } catch (error) {
@@ -35,20 +44,8 @@ io.on('connection', async (socket) => {
 
     socket.on('disconnect', async () => {
         console.log('Client disconnected');
-
-        const sessionToken = socket.handshake.auth.token;
-        if (sessionToken) {
-            try {
-                await Session.findOneAndUpdate(
-                    { token: sessionToken },
-                    { isActive: false },
-                    { new: true }
-                );
-                console.log(`Session ${sessionToken} set to inactive`);
-            } catch (error) {
-                console.error('Error setting session to inactive:', error);
-            }
-        }
+        // Send session to session controller to deactivate
+        sessionController.deactivateSession(sessionToken);
     });
 });
 
