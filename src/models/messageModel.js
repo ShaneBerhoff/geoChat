@@ -7,6 +7,10 @@ const messageSchema = new Schema({
         required: true,
         index: true 
     },
+    username: {
+        type: String,
+        required: true,
+    },
     content: { 
         type: String, 
         required: true 
@@ -14,7 +18,7 @@ const messageSchema = new Schema({
     createdAt: { 
         type: Date, 
         default: Date.now,
-        expires: process.env.TTL
+        expires: parseInt(process.env.TTL)
     }
 }); 
 

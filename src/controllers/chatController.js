@@ -1,11 +1,14 @@
 const Message = require('../models/messageModel')
-const sessionController = require('../controllers/sessionController');
 
 // Save message and send to all users
-const handleMessage = async (io, messageData) => {
+const handleMessage = async (io, messageData, username, sessionToken) => {
   // Save to db
   try {
-    const message = new Message(messageData);
+    const message = new Message({
+      ...messageData,
+      sessionToken: sessionToken,
+      username: username
+    });
     await message.save();
     console.log("Message saved to DB")
   } catch (error) {
@@ -13,10 +16,10 @@ const handleMessage = async (io, messageData) => {
     throw error;
   }
   
-  // Convert sessionToken to username and broadcast to all users
+  // Broadcast to all users
   try {
     userMessageData = {
-      sender: await sessionController.findUser(messageData.sessionToken),
+      sender: username,
       content: messageData.content,
       timestamp: messageData.createdAt
     };
@@ -34,22 +37,17 @@ const loadChat = async (io) => {
   try {
     const messages = await Message.find().sort({ createdAt: 1})
 
-    // convert sessions to usernames
-    const messagesWithUsernames = await Promise.all(
-      messages.map(async (message) => {
-        const username = await sessionController.findUser(message.sessionToken);
-        return {
-          _id: message._id,
-          sender: username,
-          content: message.content,
-          timestamp: message.createdAt,
-        };
-      })
-    );
+    // prepare data
+    const formattedMessages = messages.map(message => ({
+      _id: message._id,
+      sender: message.username,
+      content: message.content,
+      timestamp: message.createdAt
+    }));
 
     //TODO: remove log once front loading is connected
-    console.log("Messages With Usernames:", messagesWithUsernames)
-    io.emit('load chat', messagesWithUsernames);
+    console.log("Formatted Chat History:", formattedMessages)
+    io.emit('load chat', formattedMessages);
     console.log("Existing chat messages sent to client")
   } catch (error) {
     console.error('Error fetching chat messages:', error);
@@ -57,18 +55,16 @@ const loadChat = async (io) => {
   }
 }
 
-const loadPersonalHistory = async (io, sessionToken) => {
+const loadPersonalHistory = async (io, sessionToken, username) => {
   try {
     const messages = await Message.find({ sessionToken: sessionToken });
-    const username = await sessionController.findUser(sessionToken);
-    const formattedMessages = messages.map((message) => {
-      return {
-          _id: message._id,
-          sender: username,
-          content: message.content,
-          timestamp: message.createdAt
-      };
-    });
+
+    const formattedMessages = messages.map(message => ({
+      _id: message._id,
+      sender: message.username,
+      content: message.content,
+      timestamp: message.createdAt
+    }));
 
     //TODO: remove log once front loading is connected
     console.log("Personal message history with username:", formattedMessages);

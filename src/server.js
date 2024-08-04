@@ -17,6 +17,7 @@ connectDB();
 io.on('connection', async (socket) => {
     console.log('New client connected');
     const sessionToken = socket.handshake.auth.token;
+    const username = await sessionController.findUser(sessionToken);
 
     // Load exisiting chat messages
     try {
@@ -27,16 +28,17 @@ io.on('connection', async (socket) => {
 
     // Load exisiting message history
     try {
-        await chatController.loadPersonalHistory(io, sessionToken);
+        await chatController.loadPersonalHistory(io, sessionToken, username);
     } catch (error) {
         console.error('Error sending personal chat history to client:', error)
     }
 
     socket.on('chat message', async (msg) => {
-        console.log("Message received: ", msg);
+        console.log("Message received from:", username);
+        console.log(msg);
         // Send message to chat controller
         try {
-            await chatController.handleMessage(io, msg);
+            await chatController.handleMessage(io, msg, username, sessionToken);
         } catch (error) {
             console.error('Error handling chat message:', error);
         }
