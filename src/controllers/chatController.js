@@ -19,9 +19,8 @@ const handleMessage = async (io, messageData, username, sessionToken) => {
   // Broadcast to all users
   try {
     userMessageData = {
-      sender: username,
-      content: messageData.content,
-      timestamp: messageData.createdAt
+      username: username,
+      ...messageData
     };
     console.log("UserMessageData:", userMessageData);
     io.emit('chat message', userMessageData);
@@ -35,19 +34,11 @@ const handleMessage = async (io, messageData, username, sessionToken) => {
 // Load chat history
 const loadChat = async (io) => {
   try {
-    const messages = await Message.find().sort({ createdAt: 1})
+    const messages = await Message.find()
+    .select('-sessionToken')
+    .sort({ createdAt: 1 });
 
-    // prepare data
-    const formattedMessages = messages.map(message => ({
-      _id: message._id,
-      sender: message.username,
-      content: message.content,
-      timestamp: message.createdAt
-    }));
-
-    //TODO: remove log once front loading is connected
-    console.log("Formatted Chat History:", formattedMessages)
-    io.emit('load chat', formattedMessages);
+    io.emit('load chat', messages);
     console.log("Existing chat messages sent to client")
   } catch (error) {
     console.error('Error fetching chat messages:', error);
@@ -55,20 +46,13 @@ const loadChat = async (io) => {
   }
 }
 
-const loadPersonalHistory = async (io, sessionToken, username) => {
+const loadPersonalHistory = async (io, sessionToken) => {
   try {
-    const messages = await Message.find({ sessionToken: sessionToken });
+    const messages = await Message.find({ sessionToken: sessionToken })
+    .select('-sessionToken -username')
+    .sort({ createdAt: 1 });
 
-    const formattedMessages = messages.map(message => ({
-      _id: message._id,
-      sender: message.username,
-      content: message.content,
-      timestamp: message.createdAt
-    }));
-
-    //TODO: remove log once front loading is connected
-    console.log("Personal message history with username:", formattedMessages);
-    io.emit('load personal history', formattedMessages);
+    io.emit('load personal history', messages);
     console.log("Existing personal history sent to client");
   } catch (error) {
     console.error('Error fetching personal history', error);

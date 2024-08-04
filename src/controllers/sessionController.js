@@ -2,14 +2,29 @@ const Session = require('../models/sessionModel')
 const { v4: uuidv4 } = require('uuid');
 require('dotenv').config({ path: '../.env' });
 
-const findUser = async (sessionToken) => {
+const loadUser = async (io, sessionToken) => {
     let session;
     try {
         session = await Session.findOne({token: sessionToken});
+        if (!session) {
+            console.log('No session found for token:', sessionToken);
+            return null;
+        }
     } catch (error){
         console.error("Error finding username for session:", error);
+        throw error;
     }
-    return session ? session.username : null;
+    
+    userInfo = {
+        username: session.username,
+        createdAt: session.createdAt
+    }
+
+    // Send user info to client
+    console.log('User info emitted to client')
+    io.emit('user info', userInfo);
+
+    return session.username;
 }
 
 const findExistingSession = async (username) => {
@@ -76,7 +91,7 @@ const createSession = async (username) => {
 
 
 module.exports = {
-    findUser,
+    loadUser,
     findExistingSession,
     deactivateSession,
     reactivateSession,
