@@ -1,0 +1,40 @@
+.board-container {
+    background-color: #F6F6F6;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-radius: 15px; 
+    max-height: 330px;
+}
+
+.board-container h2 {
+    margin: 0;
+}
+
+.leaderboard-list {
+    padding: 0; /* Remove default padding */
+    list-style: none; /* Remove default list styling */
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center items horizontally */
+    width: 100%; /* Ensure list takes full width */
+}
+
+.leaderboard-item {
+    margin-bottom: 20px; /* Adjust the value for desired spacing */
+    display: grid;
+    grid-template-columns: auto 1fr;
+    align-items: center;
+    width: auto; /* Let items have auto width for better centering */
+}
+
+.item-number {
+    margin-right: 10px; /* Adjust spacing as needed */
+}
+
+.item-text {
+    display: inline-block;
+}
