@@ -6,7 +6,8 @@ import ChatHistory from '../components/ChatHistory';
 import './styles/Chat.css';
 
 const ChatPage = () => {
-  const [messages, setMessages] = useState([]);
+  const [ messages, setMessages ] = useState([]);
+  const [ messageHistory, setMessageHistory ] = useState([]);
   const inputRef = useRef(null);
   const socket = useRef(null);
 
@@ -112,11 +113,18 @@ const ChatPage = () => {
         token: token
       }
     });
+    socket.current.on('load chat'), (msgArray) => {
+        setMessages(msgArray);
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+    socket.current.on('load personal history'), (msgArray) => {
+        setMessageHistory(msgArray);
+    }
     socket.current.on('chat message', (msg) => {
       setMessages((prevMessages) => [...prevMessages, msg]);
       window.scrollTo(0, document.body.scrollHeight);
     });
-
+   
     return () => {
       if (socket.current) {
         socket.current.disconnect();
@@ -132,6 +140,7 @@ const ChatPage = () => {
         createdAt: Date.now(),
       };
       socket.current.emit('chat message', message);
+      setMessageHistory((prevHistory) => [...prevHistory, message]);
       inputRef.current.value = '';
     }
   };
@@ -147,9 +156,9 @@ const ChatPage = () => {
         <div className="container">
             <div id="chat">
                 <ul id="messages">
-                    {dummyMessages.map((msg, index) => (
+                    {messages.map((msg, index) => (
                         <li key={index}>
-                            <em className='timestamp'>{msg.timestamp}</em> <strong>{msg.sender}:</strong>  {msg.content}
+                            <em className='timestamp'>{formatTime(msg.timestamp)}</em> <strong>{msg.sender}:</strong>  {msg.content}
                         </li>
                     ))}
                 </ul>
@@ -167,7 +176,7 @@ const ChatPage = () => {
                     <Leaderboard />
                 </div>
                 <div className='chat-history-container'>
-                    <ChatHistory />
+                    <ChatHistory messages={messageHistory} />
                 </div>
             </div>
 
