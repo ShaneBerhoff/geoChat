@@ -4,12 +4,9 @@ const Welcome = () => {
     const navigate = useNavigate();
 
     async function onFormSubmit(event) {
+        // get the username value
         event.preventDefault();
-        const name = document.getElementById('name').value;
-
-        if (name) {
-            sessionStorage.setItem('username', name);
-        }
+        const username = document.getElementById('username').value;
 
         try {
             const response = await fetch('/api/validate', {
@@ -17,22 +14,27 @@ const Welcome = () => {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                // You can send an empty body or include any necessary data
-                body: JSON.stringify({}),
+                body: JSON.stringify({username: username, clientToken: sessionStorage.getItem('token')}),
             });
 
             if (response.ok) {
                 const data = await response.json();
-                if (data.isValid) {
+                if (data.locationValid && data.usernameValid) {
+                    sessionStorage.setItem('token', data.sessionToken);
                     navigate('/chatroom');
-                } else {
+                } else if (!data.locationValid){
+                    console.log("Invalid Location")
+                    navigate('/access-denied');
+                } else if (!data.usernameValid){
+                    console.log("Invalid Username")
                     navigate('/access-denied');
                 }
             } else {
+                console.log("Error")
                 navigate('/access-denied');
             }
         } catch (error) {
-            console.error('Error:', error);
+            console.error('Error with validation fetch operation:', error);
             navigate('/access-denied');
         }
     }
@@ -41,8 +43,8 @@ const Welcome = () => {
         <>
             <h1>Welcome to Our Chat App</h1>
             <p>Enter a pseudonym to start chatting!</p>
-            <form id="form" onSubmit={onFormSubmit} method="get">
-                <input id="name" autoComplete="off" required />
+            <form id="form" onSubmit={onFormSubmit}>
+                <input id="username" autoComplete="off" required />
                 <input type="submit" value="Go to chat" />
             </form>
         </>

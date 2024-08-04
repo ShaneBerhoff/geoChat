@@ -6,10 +6,11 @@ import ChatHistory from '../components/ChatHistory';
 import './styles/Chat.css';
 
 const ChatPage = () => {
-    const [ messages, setMessages ] = useState([]);
-    const [ hasEnteredUsername, setHasEnteredUsername ] = useState(false);
+  const [messages, setMessages] = useState([]);
+  const inputRef = useRef(null);
+  const socket = useRef(null);
 
-    const dummyMessages = [
+  const dummyMessages = [
         {
             sender: 'John Smith',
             timestamp: '2:24:15',
@@ -102,40 +103,38 @@ const ChatPage = () => {
         },
         
     ]
+  
+  useEffect(() => {
+    const token = sessionStorage.getItem('token');
 
+    socket.current = io('http://localhost:3000', {
+      auth: {
+        token: token
+      }
+    });
+    socket.current.on('chat message', (msg) => {
+      setMessages((prevMessages) => [...prevMessages, msg]);
+      window.scrollTo(0, document.body.scrollHeight);
+    });
 
-    const inputRef = useRef(null);
-    const socket = useRef(null);
-
-    useEffect(() => {
-        socket.current = io();
-        socket.current.on('chat message', (msg) => {
-        setMessages((prevMessages) => [...prevMessages, msg]);
-        window.scrollTo(0, document.body.scrollHeight);
-        });
-
-        return () => {
-        if (socket.current) {
-            socket.current.disconnect();
-        }
-        };
-    }, []);
-
-    function handleEnteredUsername() {
-        setHasEnteredUsername(true);
-    }
-
-    const handleSubmit = (event) => {
-        event.preventDefault();
-        if (inputRef.current.value) {
-        socket.current.emit('chat message', {
-            content: inputRef.current.value,
-            sender: sessionStorage.getItem('username'),
-            timestamp: Date.now(),
-        });
-        inputRef.current.value = '';
-        }
+    return () => {
+      if (socket.current) {
+        socket.current.disconnect();
+      }
     };
+  }, []);
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    if (inputRef.current.value) {
+      const message = {
+        content: inputRef.current.value,
+        createdAt: Date.now(),
+      };
+      socket.current.emit('chat message', message);
+      inputRef.current.value = '';
+    }
+  };
 
     const formatTime = (timestamp) => {
         const date = new Date(timestamp);
