@@ -4,6 +4,7 @@ import NavBar from '../components/Navbar';
 import Leaderboard from '../components/Leaderboard';
 import ChatHistory from '../components/ChatHistory';
 import './styles/Chat.css';
+import Chatbox from '../components/ChatBox';
 
 const ChatPage = () => {
   const [ messages, setMessages ] = useState([]);
@@ -12,99 +13,7 @@ const ChatPage = () => {
   const inputRef = useRef(null);
   const socket = useRef(null);
 
-  const dummyMessages = [
-        {
-            sender: 'John Smith',
-            timestamp: '2:24:15',
-            content: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry.'
-        },
-        {
-            sender: 'John Smith',
-            timestamp: '2:24:15',
-            content: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry.'
-        },
-        {
-            sender: 'John Smith',
-            timestamp: '2:24:15',
-            content: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry.'
-        },
-        {
-            sender: 'John Smith',
-            timestamp: '2:24:15',
-            content: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry.'
-        },
-        {
-            sender: 'John Smith',
-            timestamp: '2:24:15',
-            content: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry.'
-        },
-        {
-            sender: 'John Smith',
-            timestamp: '2:24:15',
-            content: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry.'
-        },
-        {
-            sender: 'John Smith',
-            timestamp: '2:24:15',
-            content: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry.'
-        },
-        {
-            sender: 'John Smith',
-            timestamp: '2:24:15',
-            content: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry.'
-        },
-        {
-            sender: 'John Smith',
-            timestamp: '2:24:15',
-            content: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry.'
-        },
-        {
-            sender: 'John Smith',
-            timestamp: '2:24:15',
-            content: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry.'
-        },
-        {
-            sender: 'John Smith',
-            timestamp: '2:24:15',
-            content: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry.'
-        },
-        {
-            sender: 'John Smith',
-            timestamp: '2:24:15',
-            content: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry.'
-        },
-        {
-            sender: 'John Smith',
-            timestamp: '2:24:15',
-            content: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry.'
-        },
-        {
-            sender: 'John Smith',
-            timestamp: '2:24:15',
-            content: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry.'
-        },
-        {
-            sender: 'John Smith',
-            timestamp: '2:24:15',
-            content: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry.'
-        },
-        {
-            sender: 'John Smith',
-            timestamp: '2:24:15',
-            content: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry.'
-        },
-        {
-            sender: 'John Smith',
-            timestamp: '2:24:15',
-            content: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry.'
-        },
-        {
-            sender: 'John Smith',
-            timestamp: '2:24:15',
-            content: 'Short message test.'
-        },
-        
-    ]
+  
   
   useEffect(() => {
     const token = sessionStorage.getItem('token');
@@ -157,24 +66,15 @@ const ChatPage = () => {
     }
   };
 
-    const formatTime = (timestamp) => {
-        const date = new Date(timestamp);
-        return date.toTimeString().split(' ')[0];
-    };
+    
 
   return (
     <>
         <NavBar />
         <div className="container">
             <div id="chat">
-                <ul id="messages">
-                    {messages.map((msg, index) => (
-                        <li key={index}>
-                            <em className='timestamp'>{formatTime(msg.createdAt)}</em> <strong>{msg.username}:</strong>  {msg.content}
-                        </li>
-                    ))}
-                </ul>
-
+                <Chatbox messages={messages}/>
+                
                 <form id="form" onSubmit={handleSubmit}>
                     <div className="input-container">
                         <input id="input" ref={inputRef} autoComplete="off" placeholder='Enter a message here'/>
