@@ -29,6 +29,9 @@ io.on('connection', async (socket) => {
     // Load user info
     socket.username = await sessionController.loadUser(socket);
 
+    //TODO: need a better fix here. solve for needing to reactivate session on a reload
+    await sessionController.reactivateSession(socket.sessionToken);
+
     // Load exisiting chat messages
     try {
         await chatController.loadChat(socket);
