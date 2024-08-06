@@ -1,5 +1,5 @@
 import './styles/ChatHistory.css';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 const ChatHistory = ({ messages, userInfo }) => {
     const dummyChatHistory = [
@@ -22,7 +22,8 @@ const ChatHistory = ({ messages, userInfo }) => {
         { createdAt: "2:24:15", content: "Lorem Ipsum is simply dummy text of the printing industry." }
     ];
 
-    const [ elapsedTime, setElapsedTime ] = useState('');
+    const [elapsedTime, setElapsedTime] = useState('');
+    const messagesContainerRef = useRef(null);
 
     useEffect(() => {
         const calculateElapsedTime = () => {
@@ -43,7 +44,15 @@ const ChatHistory = ({ messages, userInfo }) => {
         return () => clearInterval(intervalId); 
     }, [userInfo.createdAt]);
 
+    useEffect(() => {
+        scrollToBottom();
+    }, [messages]);
 
+    const scrollToBottom = () => {
+        if (messagesContainerRef.current) {
+            messagesContainerRef.current.scrollTop = messagesContainerRef.current.scrollHeight;
+        }
+    };
 
     const formatTime = (timestamp) => {
         const date = new Date(timestamp);
@@ -55,7 +64,7 @@ const ChatHistory = ({ messages, userInfo }) => {
             <div className="name-container">
                 <p className="name"><strong>{userInfo.username}</strong> &lt; {elapsedTime} &gt;</p>
             </div>
-            <div className="messages-container">
+            <div className="messages-container" ref={messagesContainerRef}>
                 {messages.map((message, index) => (
                     <p className="message" key={index}>
                         {formatTime(message.createdAt)} {message.content}
@@ -64,6 +73,6 @@ const ChatHistory = ({ messages, userInfo }) => {
             </div>
         </div>
     );
-}
+};
 
 export default ChatHistory;
