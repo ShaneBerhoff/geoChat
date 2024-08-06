@@ -8,7 +8,12 @@ const connectDB = require('./utils/mongoClient');
 
 // Create server and sockets
 const server = http.createServer(app);
-const io = socketIo(server);
+const io = socketIo(server, {
+    cors: {
+      origin: '*',  //TODO: restrict later
+      methods: ['GET', 'POST']
+    }
+  });  
 
 // Connect mongoDB
 connectDB();
@@ -16,30 +21,30 @@ connectDB();
 // Socket action when connection
 io.on('connection', async (socket) => {
     console.log('New client connected');
-    const sessionToken = socket.handshake.auth.token;
+    socket.sessionToken = socket.handshake.auth.token;
     // Load user info
-    const username = await sessionController.loadUser(io, sessionToken);
+    socket.username = await sessionController.loadUser(socket);
 
     // Load exisiting chat messages
     try {
-        await chatController.loadChat(io);
+        await chatController.loadChat(socket);
     } catch (error) {
         console.error('Error sending chat messages to client:', error);
     }
 
     // Load exisiting message history
     try {
-        await chatController.loadPersonalHistory(io, sessionToken);
+        await chatController.loadPersonalHistory(socket);
     } catch (error) {
         console.error('Error sending personal chat history to client:', error);
     }
 
     socket.on('chat message', async (msg) => {
-        console.log("Message received from:", username);
+        console.log("Message received from:", socket.username);
         console.log(msg);
         // Send message to chat controller
         try {
-            await chatController.handleMessage(io, msg, username, sessionToken);
+            await chatController.handleMessage(socket, msg);
         } catch (error) {
             console.error('Error handling chat message:', error);
         }
@@ -48,11 +53,12 @@ io.on('connection', async (socket) => {
     socket.on('disconnect', async () => {
         console.log('Client disconnected');
         // Send session to session controller to deactivate
-        sessionController.deactivateSession(sessionToken);
+        sessionController.deactivateSession(socket.sessionToken);
     });
 });
 
 const PORT = process.env.PORT || 3000;
-server.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+const HOST = '0.0.0.0';
+server.listen(PORT, HOST, () => {
+    console.log(`Server running on http://${HOST}:${PORT}`);
 });

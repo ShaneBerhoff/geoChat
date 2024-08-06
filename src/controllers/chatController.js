@@ -1,7 +1,10 @@
 const Message = require('../models/messageModel')
 
 // Save message and send to all users
-const handleMessage = async (io, messageData, username, sessionToken) => {
+const handleMessage = async (socket, messageData) => {
+  const username = socket.username;
+  const sessionToken = socket.sessionToken;
+  
   // Save to db
   try {
     const message = new Message({
@@ -23,7 +26,8 @@ const handleMessage = async (io, messageData, username, sessionToken) => {
       ...messageData
     };
     console.log("UserMessageData:", userMessageData);
-    io.emit('chat message', userMessageData);
+    socket.broadcast.emit('chat message', userMessageData);
+    socket.emit('chat message', userMessageData);
     console.log("Message emitted to clients");
   } catch (error) {
     console.error('Error in handleMessage:', error);
@@ -32,13 +36,13 @@ const handleMessage = async (io, messageData, username, sessionToken) => {
 };
 
 // Load chat history
-const loadChat = async (io) => {
+const loadChat = async (socket) => {
   try {
     const messages = await Message.find()
     .select('-sessionToken')
     .sort({ createdAt: 1 });
 
-    io.emit('load chat', messages);
+    socket.emit('load chat', messages);
     console.log("Existing chat messages sent to client")
   } catch (error) {
     console.error('Error fetching chat messages:', error);
@@ -46,13 +50,13 @@ const loadChat = async (io) => {
   }
 }
 
-const loadPersonalHistory = async (io, sessionToken) => {
+const loadPersonalHistory = async (socket) => {
   try {
-    const messages = await Message.find({ sessionToken: sessionToken })
+    const messages = await Message.find({ sessionToken: socket.sessionToken })
     .select('-sessionToken -username')
     .sort({ createdAt: 1 });
 
-    io.emit('load personal history', messages);
+    socket.emit('load personal history', messages);
     console.log("Existing personal history sent to client");
   } catch (error) {
     console.error('Error fetching personal history', error);

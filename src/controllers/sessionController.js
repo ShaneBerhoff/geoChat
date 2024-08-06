@@ -2,12 +2,12 @@ const Session = require('../models/sessionModel')
 const { v4: uuidv4 } = require('uuid');
 require('dotenv').config({ path: '../.env' });
 
-const loadUser = async (io, sessionToken) => {
+const loadUser = async (socket) => {
     let session;
     try {
-        session = await Session.findOne({token: sessionToken});
+        session = await Session.findOne({token: socket.sessionToken});
         if (!session) {
-            console.log('No session found for token:', sessionToken);
+            console.log('No session found for token:', socket.sessionToken);
             return null;
         }
     } catch (error){
@@ -22,7 +22,7 @@ const loadUser = async (io, sessionToken) => {
 
     // Send user info to client
     console.log('User info emitted to client')
-    io.emit('user info', userInfo);
+    socket.emit('user info', userInfo);
 
     return session.username;
 }
