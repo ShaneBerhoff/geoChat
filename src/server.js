@@ -4,6 +4,7 @@ const socketIo = require('socket.io');
 const app = require('./app');
 const chatController = require('./controllers/chatController');
 const sessionController = require('./controllers/sessionController');
+const LeaderboardManager = require('./controllers/leaderboardManager');
 const connectDB = require('./utils/mongoClient');
 
 // Create server and sockets
@@ -17,6 +18,9 @@ const io = socketIo(server, {
 
 // Connect mongoDB
 connectDB();
+
+// Leaderboard manager
+const leaderboardManager = new LeaderboardManager(io);
 
 // Socket action when connection
 io.on('connection', async (socket) => {
@@ -38,6 +42,10 @@ io.on('connection', async (socket) => {
     } catch (error) {
         console.error('Error sending personal chat history to client:', error);
     }
+
+    // Load existing leaderboard
+    socket.emit('leaderboard', leaderboardManager.getLeaderboard());
+    
 
     socket.on('chat message', async (msg) => {
         console.log("Message received from:", socket.username);
