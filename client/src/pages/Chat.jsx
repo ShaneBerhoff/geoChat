@@ -12,16 +12,29 @@ const ChatPage = () => {
   const [ userInfo, setUserInfo ] = useState([]);
   const inputRef = useRef(null);
   const socket = useRef(null);
-
-  
   
   useEffect(() => {
     const token = sessionStorage.getItem('token');
+    const serverIp = process.env.REACT_APP_SERVER_IP;
+    const port = process.env.REACT_APP_SERVER_PORT;
 
-    socket.current = io('http://localhost:3000', {
+    if (!serverIp || !port) {
+      console.error("Environment variables REACT_APP_SERVER_IP and REACT_APP_SERVER_PORT must be defined");
+      return;
+    }
+
+    socket.current = io(`http://${serverIp}:${port}`, {
       auth: {
         token: token
       }
+    });
+
+    // Connection checks
+    socket.current.on('connect', () => {
+      console.log('Connected to server');
+    });
+    socket.current.on('connect_error', (err) => {
+      console.log('Connection error:', err.message);
     });
 
     // Load chat messages
@@ -66,7 +79,6 @@ const ChatPage = () => {
     }
   };
 
-    
 
   return (
     <>
