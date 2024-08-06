@@ -10,6 +10,7 @@ const ChatPage = () => {
   const [messages, setMessages] = useState([]);
   const [messageHistory, setMessageHistory] = useState([]);
   const [userInfo, setUserInfo] = useState([]);
+  const [leaderboard, setLeaderboard] = useState([]);
   const inputRef = useRef(null);
   const chatContainerRef = useRef(null);
   const socket = useRef(null);
@@ -52,6 +53,11 @@ const ChatPage = () => {
     // Load personal message history
     socket.current.on('load personal history', (msgArray) => {
       setMessageHistory(msgArray);
+    });
+
+    // Listen for leaderboard updates
+    socket.current.on('leaderboard', (leaderboardArray) => {
+      setLeaderboard(leaderboardArray);
     });
 
     // Listen for new chat messages
@@ -104,7 +110,7 @@ const ChatPage = () => {
         </div>
         <div className="boards-container">
           <div className='leaderboard-container'>
-            <Leaderboard />
+            <Leaderboard leaderboardArray={leaderboard}/>
           </div>
           <div className='chat-history-container'>
             <ChatHistory messages={messageHistory} userInfo={userInfo} />
