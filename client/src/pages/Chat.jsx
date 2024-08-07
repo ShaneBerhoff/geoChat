@@ -17,18 +17,18 @@ const ChatPage = () => {
 
   useEffect(() => {
     const token = sessionStorage.getItem('token');
-    const serverIp = process.env.REACT_APP_SERVER_IP;
-    const port = process.env.REACT_APP_SERVER_PORT;
+    const SOCKET_URL = import.meta.env.VITE_SOCKET_URL;
 
-    if (!serverIp || !port) {
-      console.error("Environment variables REACT_APP_SERVER_IP and REACT_APP_SERVER_PORT must be defined");
+    if (!SOCKET_URL) {
+      console.error("Environment variables VITE_SOCKET_URL must be defined");
       return;
     }
 
-    socket.current = io(`http://${serverIp}:${port}`, {
+    socket.current = io(SOCKET_URL, {
       auth: {
         token: token
-      }
+      },
+      transports: ['websocket']
     });
 
     // Connection checks
