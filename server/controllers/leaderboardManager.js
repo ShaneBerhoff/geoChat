@@ -1,5 +1,4 @@
 const Session = require('../models/sessionModel');
-require('dotenv').config({ path: '../.env' });
 
 class LeaderboardManager {
     constructor(io) {

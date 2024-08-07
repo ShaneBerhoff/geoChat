@@ -1,6 +1,5 @@
 const Session = require('../models/sessionModel')
 const { v4: uuidv4 } = require('uuid');
-require('dotenv').config({ path: '../.env' });
 
 // Sends user into to client and returns username
 const loadUser = async (socket) => {
