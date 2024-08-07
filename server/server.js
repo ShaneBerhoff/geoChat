@@ -1,4 +1,8 @@
-require('dotenv').config({path: './server/.env'});
+const dotenv = require('dotenv');
+dotenv.config({ path: './server/.env' });
+const ENV = process.env.NODE_ENV || 'development';
+dotenv.config({ path: `./server/.env.${ENV}` });
+
 const http = require('http');
 const socketIo = require('socket.io');
 const app = require('./app');
@@ -11,10 +15,11 @@ const connectDB = require('./utils/mongoClient');
 const server = http.createServer(app);
 const io = socketIo(server, {
     cors: {
-      origin: '*',  //TODO: restrict later
-      methods: ['GET', 'POST']
+        origin: process.env.CLIENT_URL,
+        methods: ["GET", "POST"],
+        credentials: true
     }
-  });  
+});
 
 // Connect mongoDB
 connectDB();
@@ -48,7 +53,7 @@ io.on('connection', async (socket) => {
 
     // Load existing leaderboard
     socket.emit('leaderboard', leaderboardManager.getLeaderboard());
-    
+
 
     socket.on('chat message', async (msg) => {
         console.log("Message received from:", socket.username);
@@ -69,7 +74,7 @@ io.on('connection', async (socket) => {
 });
 
 const PORT = process.env.PORT;
-const HOST = '0.0.0.0';
+const HOST = process.env.HOST;
 server.listen(PORT, HOST, () => {
     console.log(`Server running on http://${HOST}:${PORT}`);
 });
