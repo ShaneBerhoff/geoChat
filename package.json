@@ -4,12 +4,14 @@
   "private": true,
   "description": "A geofenced anonymous live chat 📍💬",
   "scripts": {
-    "start": "node server/server.js",
-    "server": "nodemon server/server.js",
-    "client": "cd client && npm start",
+    "start": "NODE_ENV=production node server/server.js",
+    "server": "NODE_ENV=development nodemon server/server.js",
+    "client": "cd client && npm run dev",
     "build": "cd client && npm run build",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
-    "install-all": "npm install && cd client && npm install && cd ../server && npm install"
+    "install-all": "npm install && cd client && npm install && cd ../server && npm install",
+    "preview": "cd client && npm run preview",
+    "prod": "npm run build && npm start"
   },
   "keywords": [],
   "author": "",
