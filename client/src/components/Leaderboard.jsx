@@ -1,5 +1,5 @@
 import './styles/Leaderboard.css';
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 
 const useTimeDifference = (createdAt) => {
   const [timeDiff, setTimeDiff] = useState('');

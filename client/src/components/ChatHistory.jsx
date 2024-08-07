@@ -2,25 +2,6 @@ import './styles/ChatHistory.css';
 import { useState, useEffect, useRef } from 'react';
 
 const ChatHistory = ({ messages, userInfo }) => {
-    const dummyChatHistory = [
-        { createdAt: "2:24:15", content: "Lorem Ipsum is simply dummy text of the printing industry." },
-        { createdAt: "2:24:16", content: "Lorem Ipsum is simply dummy text of the printing industry." },
-        { createdAt: "2:24:17", content: "Lorem Ipsum is simply dummy text of the printing industry." },
-        { createdAt: "2:24:18", content: "Lorem Ipsum is simply dummy text of the printing industry." },
-        { createdAt: "2:24:19", content: "Lorem Ipsum is simply dummy text of the printing industry." },
-        { createdAt: "2:24:19", content: "Lorem Ipsum is simply dummy text of the printing industry." },
-        { createdAt: "2:24:19", content: "Lorem Ipsum is simply dummy text of the printing industry." },
-        { createdAt: "2:24:19", content: "Lorem Ipsum is simply dummy text of the printing industry." },
-        { createdAt: "2:24:15", content: "Lorem Ipsum is simply dummy text of the printing industry." },
-        { createdAt: "2:24:15", content: "Lorem Ipsum is simply dummy text of the printing industry." },
-        { createdAt: "2:24:15", content: "Lorem Ipsum is simply dummy text of the printing industry." },
-        { createdAt: "2:24:19", content: "Lorem Ipsum is simply dummy text of the printing industry." },
-        { createdAt: "2:24:15", content: "Lorem Ipsum is simply dummy text of the printing industry." },
-        { createdAt: "2:24:15", content: "Lorem Ipsum is simply dummy text of the printing industry." },
-        { createdAt: "2:24:19", content: "Lorem Ipsum is simply dummy text of the printing industry." },
-        { createdAt: "2:24:15", content: "Lorem Ipsum is simply dummy text of the printing industry." },
-        { createdAt: "2:24:15", content: "Lorem Ipsum is simply dummy text of the printing industry." }
-    ];
 
     const [elapsedTime, setElapsedTime] = useState('');
     const messagesContainerRef = useRef(null);
@@ -41,7 +22,7 @@ const ChatHistory = ({ messages, userInfo }) => {
         calculateElapsedTime();
         const intervalId = setInterval(calculateElapsedTime, 1000);
 
-        return () => clearInterval(intervalId); 
+        return () => clearInterval(intervalId);
     }, [userInfo.createdAt]);
 
     useEffect(() => {
