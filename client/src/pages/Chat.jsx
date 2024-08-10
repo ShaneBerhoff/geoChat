@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import io from 'socket.io-client';
 import NavBar from '../components/Navbar';
 import Leaderboard from '../components/Leaderboard';
@@ -7,16 +8,22 @@ import './styles/Chat.css';
 import Chatbox from '../components/ChatBox';
 
 const ChatPage = () => {
-  const [messages, setMessages] = useState([]);
-  const [messageHistory, setMessageHistory] = useState([]);
-  const [userInfo, setUserInfo] = useState([]);
-  const [leaderboard, setLeaderboard] = useState([]);
+  const [ messages, setMessages ] = useState([]);
+  const [ messageHistory, setMessageHistory ] = useState([]);
+  const [ userInfo, setUserInfo ] = useState([]);
+  const [ leaderboard, setLeaderboard ] = useState([]);
   const inputRef = useRef(null);
   const chatContainerRef = useRef(null);
   const socket = useRef(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const token = sessionStorage.getItem('token');
+
+    if (!token) {
+      navigate('/');
+      return;
+    }
     const SOCKET_URL = import.meta.env.VITE_SOCKET_URL;
 
     if (!SOCKET_URL) {
