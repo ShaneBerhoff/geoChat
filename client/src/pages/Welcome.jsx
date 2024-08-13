@@ -14,13 +14,13 @@ const Welcome = () => {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({username: username, clientToken: sessionStorage.getItem('token')}),
+                body: JSON.stringify({username: username}),
             });
 
             if (response.ok) {
                 const data = await response.json();
                 if (data.locationValid && data.usernameValid) {
-                    sessionStorage.setItem('token', data.sessionToken);
+                    console.log("Sent to chatroom");
                     navigate('/chatroom');
                 } else if (!data.locationValid){
                     console.log("Invalid Location")

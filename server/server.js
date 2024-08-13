@@ -5,6 +5,8 @@ dotenv.config({ path: `./server/.env.${ENV}` });
 
 const http = require('http');
 const socketIo = require('socket.io');
+const corsOptions = require('./utils/corsOptions');
+const cookie = require('cookie');
 const app = require('./app');
 const chatController = require('./controllers/chatController');
 const sessionController = require('./controllers/sessionController');
@@ -13,29 +15,27 @@ const connectDB = require('./utils/mongoClient');
 
 // Create server and sockets
 const server = http.createServer(app);
-const io = socketIo(server, {
-    cors: {
-        origin: process.env.CLIENT_URL,
-        methods: ["GET", "POST"],
-        credentials: true
-    }
-});
+const io = socketIo(server, { cors: corsOptions });
 
 // Connect mongoDB
 connectDB();
 
 // Leaderboard manager
-const leaderboardManager = new LeaderboardManager(io);
+new LeaderboardManager(io);
+
+io.use(async (socket, next) => {
+    // Pull out sessionToken
+    const cookies = cookie.parse(socket.handshake.headers.cookie || '');
+    socket.sessionToken = cookies.sessionToken;
+    next();
+})
 
 // Socket action when connection
 io.on('connection', async (socket) => {
     console.log('New client connected');
-    socket.sessionToken = socket.handshake.auth.token;
+
     // Load user info
     socket.username = await sessionController.loadUser(socket);
-
-    //TODO: need a better fix here. solve for needing to reactivate session on a reload
-    await sessionController.reactivateSession(socket.sessionToken);
 
     // Load exisiting chat messages
     try {
@@ -51,13 +51,8 @@ io.on('connection', async (socket) => {
         console.error('Error sending personal chat history to client:', error);
     }
 
-    // Load existing leaderboard
-    socket.emit('leaderboard', leaderboardManager.getLeaderboard());
-
-
     socket.on('chat message', async (msg) => {
-        console.log("Message received from:", socket.username);
-        console.log(msg);
+        console.log(msg, "received from:", socket.username);
         // Send message to chat controller
         try {
             await chatController.handleMessage(socket, msg);
@@ -76,5 +71,5 @@ io.on('connection', async (socket) => {
 const PORT = process.env.PORT;
 const HOST = process.env.HOST;
 server.listen(PORT, HOST, () => {
-    console.log(`Server running on http://${HOST}:${PORT}`);
+    console.log(`Server running on ${process.env.CLIENT_URL}`);
 });

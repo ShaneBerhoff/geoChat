@@ -25,10 +25,9 @@ const handleMessage = async (socket, messageData) => {
       username: username,
       ...messageData
     };
-    console.log("UserMessageData:", userMessageData);
     socket.broadcast.emit('chat message', userMessageData);
     socket.emit('chat message', userMessageData);
-    console.log("Message emitted to clients");
+    console.log(userMessageData, "emitted to clients");
   } catch (error) {
     console.error('Error in handleMessage:', error);
     throw error;

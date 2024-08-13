@@ -1,5 +1,7 @@
 const { Schema, model } = require('mongoose');
 
+const SESSION_RECOVERY_MS = parseInt(process.env.SESSION_RECOVERY_PERIOD) * 60 * 1000;
+
 const sessionSchema = new Schema({
     token: { 
         type: String, 
@@ -16,10 +18,13 @@ const sessionSchema = new Schema({
     },
     isActive: { 
         type: Boolean, 
-        default: true 
+        default: false 
     },
     expiresAt: {
         type: Date,
+        default: function(){
+            return new Date(Date.now() + SESSION_RECOVERY_MS);
+        },
         expires: 0
     }
 });

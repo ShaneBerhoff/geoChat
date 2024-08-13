@@ -7,16 +7,15 @@ import './styles/Chat.css';
 import Chatbox from '../components/ChatBox';
 
 const ChatPage = () => {
-  const [messages, setMessages] = useState([]);
-  const [messageHistory, setMessageHistory] = useState([]);
-  const [userInfo, setUserInfo] = useState([]);
-  const [leaderboard, setLeaderboard] = useState([]);
+  const [ messages, setMessages ] = useState([]);
+  const [ messageHistory, setMessageHistory ] = useState([]);
+  const [ userInfo, setUserInfo ] = useState([]);
+  const [ leaderboard, setLeaderboard ] = useState([]);
   const inputRef = useRef(null);
   const chatContainerRef = useRef(null);
   const socket = useRef(null);
 
   useEffect(() => {
-    const token = sessionStorage.getItem('token');
     const SOCKET_URL = import.meta.env.VITE_SOCKET_URL;
 
     if (!SOCKET_URL) {
@@ -25,9 +24,7 @@ const ChatPage = () => {
     }
 
     socket.current = io(SOCKET_URL, {
-      auth: {
-        token: token
-      },
+      withCredentials: true, //cookies
       transports: ['websocket']
     });
 
