@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
 import io from 'socket.io-client';
 import NavBar from '../components/Navbar';
 import Leaderboard from '../components/Leaderboard';
@@ -15,15 +14,8 @@ const ChatPage = () => {
   const inputRef = useRef(null);
   const chatContainerRef = useRef(null);
   const socket = useRef(null);
-  const navigate = useNavigate();
 
   useEffect(() => {
-    const token = sessionStorage.getItem('token');
-
-    if (!token) {
-      navigate('/');
-      return;
-    }
     const SOCKET_URL = import.meta.env.VITE_SOCKET_URL;
 
     if (!SOCKET_URL) {
@@ -32,9 +24,7 @@ const ChatPage = () => {
     }
 
     socket.current = io(SOCKET_URL, {
-      auth: {
-        token: token
-      },
+      withCredentials: true, //cookies
       transports: ['websocket']
     });
 
