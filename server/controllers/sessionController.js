@@ -5,16 +5,24 @@ const { v4: uuidv4 } = require('uuid');
 const loadUser = async (socket) => {
     let session;
     try {
-        session = await Session.findOne({token: socket.sessionToken});
+        // activate session
+        session = await Session.findOneAndUpdate(
+            { token: socket.sessionToken },
+            {
+                $set: { isActive: true },
+                $unset: { expiresAt: 1 }
+            }
+        );
         if (!session) {
             console.log('No session found for token:', socket.sessionToken);
             return null;
         }
-    } catch (error){
+    } catch (error) {
         console.error("Error finding username for session:", error);
         throw error;
     }
-    
+    console.log(`Session ${socket.sessionToken} set to active`);
+
     userInfo = {
         username: session.username,
         createdAt: session.createdAt
@@ -40,7 +48,7 @@ const findExistingSession = async (username) => {
 // Deactivates a session
 const deactivateSession = async (sessionToken) => {
     if (sessionToken) {
-        const expiresAt = new Date(Date.now() + parseInt(process.env.SESSION_RECOVERY_PERIOD)*60*1000);
+        const expiresAt = new Date(Date.now() + parseInt(process.env.SESSION_RECOVERY_PERIOD) * 60 * 1000);
         try {
             await Session.updateOne(
                 { token: sessionToken },
@@ -55,22 +63,6 @@ const deactivateSession = async (sessionToken) => {
         } catch (error) {
             console.error('Error setting session to inactive:', error);
         }
-    }
-};
-
-// Reactivates a session
-const reactivateSession = async (sessionToken) => {
-    try {
-        await Session.updateOne(
-            { token: sessionToken },
-            { 
-                $set: { isActive: true },
-                $unset: { expiresAt: 1 }
-            }
-        );                      
-    } catch (error) {
-        console.error('Error reactivating session:', error);
-        throw error;
     }
 };
 
@@ -98,6 +90,5 @@ module.exports = {
     loadUser,
     findExistingSession,
     deactivateSession,
-    reactivateSession,
     createSession
 };

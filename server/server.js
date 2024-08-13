@@ -21,7 +21,7 @@ const io = socketIo(server, { cors: corsOptions });
 connectDB();
 
 // Leaderboard manager
-const leaderboardManager = new LeaderboardManager(io);
+new LeaderboardManager(io);
 
 io.use(async (socket, next) => {
     // Pull out sessionToken
@@ -37,9 +37,6 @@ io.on('connection', async (socket) => {
     // Load user info
     socket.username = await sessionController.loadUser(socket);
 
-    //TODO: need a better fix here. solve for needing to reactivate session on a reload
-    await sessionController.reactivateSession(socket.sessionToken);
-
     // Load exisiting chat messages
     try {
         await chatController.loadChat(socket);
@@ -53,10 +50,6 @@ io.on('connection', async (socket) => {
     } catch (error) {
         console.error('Error sending personal chat history to client:', error);
     }
-
-    // Load existing leaderboard
-    socket.emit('leaderboard', leaderboardManager.getLeaderboard());
-
 
     socket.on('chat message', async (msg) => {
         console.log(msg, "received from:", socket.username);
