@@ -3,6 +3,7 @@ dotenv.config({ path: './server/.env' });
 const ENV = process.env.NODE_ENV || 'development';
 dotenv.config({ path: `./server/.env.${ENV}` });
 
+const connectDB = require('./utils/mongoClient');
 const http = require('http');
 const socketIo = require('socket.io');
 const corsOptions = require('./utils/corsOptions');
@@ -11,14 +12,18 @@ const app = require('./app');
 const chatController = require('./controllers/chatController');
 const sessionController = require('./controllers/sessionController');
 const LeaderboardManager = require('./controllers/leaderboardManager');
-const connectDB = require('./utils/mongoClient');
+const roomController = require('./controllers/roomController');
 
 // Create server and sockets
 const server = http.createServer(app);
 const io = socketIo(server, { cors: corsOptions });
 
 // Connect mongoDB
-connectDB();
+connectDB()
+    .then(() => {
+        // Load rooms
+        roomController.loadCampusConfig();
+    })
 
 // Leaderboard manager
 new LeaderboardManager(io);
