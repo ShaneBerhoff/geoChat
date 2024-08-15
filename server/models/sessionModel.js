@@ -26,9 +26,18 @@ const sessionSchema = new Schema({
             return new Date(Date.now() + SESSION_RECOVERY_MS);
         },
         expires: 0
+    },
+    campus: {
+        type: Schema.Types.ObjectId,
+        ref: 'Campus'
+    },
+    building: {
+        type: Schema.Types.ObjectId,
+        ref: 'Building'
     }
 });
 
+sessionSchema.index({ token: 1 });
 const Session = model('Session', sessionSchema);
 
 module.exports = Session;
