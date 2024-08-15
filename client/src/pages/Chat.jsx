@@ -70,12 +70,18 @@ const ChatPage = () => {
   }, []);
 
   useEffect(() => {
-    scrollToBottom();
+
+      scrollToBottom();
   }, [messages]);
 
   const scrollToBottom = () => {
     if (chatContainerRef.current) {
-      chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+      const { scrollTop, scrollHeight, clientHeight } = chatContainerRef.current;
+      const isUserAtBottom = scrollHeight <= scrollTop + clientHeight + 100; 
+      
+      if (isUserAtBottom) {
+        chatContainerRef.current.scrollTop = scrollHeight;
+      }
     }
   };
 
