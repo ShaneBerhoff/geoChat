@@ -39,7 +39,7 @@ io.use(async (socket, next) => {
 io.on('connection', async (socket) => {
     console.log('New client connected');
 
-    // Load user info
+    // Finds user session, activates it, joins correct room, retrieves username
     socket.username = await sessionController.loadUser(socket);
 
     // Load exisiting chat messages

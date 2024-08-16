@@ -1,7 +1,7 @@
 const Session = require('../models/sessionModel')
 const { v4: uuidv4 } = require('uuid');
 
-// Sends user into to client and returns username
+// Finds user session, activates it, joins room, sends user info to client
 const loadUser = async (socket) => {
     let session;
     try {
@@ -23,9 +23,16 @@ const loadUser = async (socket) => {
     }
     console.log(`Session ${socket.sessionToken} set to active`);
 
+    // Join room
+    const room = `${session.campus._id}:${session.building._id}`;
+    socket.currentRoom = room;
+    socket.join(room);
+
     userInfo = {
         username: session.username,
-        createdAt: session.createdAt
+        createdAt: session.createdAt,
+        campus: session.campus.name,
+        building: session.building.name
     }
 
     // Send user info to client
