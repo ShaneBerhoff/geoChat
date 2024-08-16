@@ -2,11 +2,11 @@ const { Campus, Building } = require('../models/locationModels');
 const fs = require('fs').promises;
 const path = require('path');
 
-const getRoom = async (longitude, latitude) => {
+const getRoom = async (latitude, longitude) => {
     // create a point
     const userPoint = {
         type: "Point",
-        coordinates: [longitude, latitude]
+        coordinates: [latitude, longitude]
     };
 
     // Find the campus
