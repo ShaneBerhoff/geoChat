@@ -7,6 +7,10 @@ const usernameMiddleware = async (req, res, next) => {
         const username = req.body.username;
         const clientToken = req.cookies.sessionToken;
         console.log('Requested Username:', username);
+
+        if (!username){ // No username
+            return res.status(400).json({error: "Username is required"});
+        }
         
         // Get existing session from username
         const existingSession = await sessionController.findExistingSession(username);
@@ -18,22 +22,21 @@ const usernameMiddleware = async (req, res, next) => {
             // Send down the line
             console.log("Valid username with SessionToken:", token);
             req.sessionToken = token;
-            req.usernameValid = true;
             return next();
         } else if (!existingSession.isActive && existingSession.token === clientToken) { // If inactive and matching token recover
             // Send down the line
             console.log("Valid username recovery with SessionToken: ", clientToken);
             // Keep token
             req.sessionToken = clientToken;
-            req.usernameValid = true;
             return next();
-        } else { // Username is already in use
-            console.log("Invalid Username")
-            return res.status(403).json({ usernameValid: false });
+        } else {
+            // Username is already in use
+            console.log("Username already in use")
+            return res.status(409).json({ error: 'Username already in use' });
         }
     } catch (error) {
         console.error('User validation error:', error);
-        return res.status(500).json({ usernameValid: false });
+        return res.status(500).json({ error: 'Internal server error' });
     }
 };
 

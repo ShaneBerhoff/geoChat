@@ -18,17 +18,13 @@ const Welcome = () => {
             });
 
             if (response.ok) {
-                const data = await response.json();
-                if (data.usernameValid) {
-                    console.log("Sent to chatroom");
-                    navigate('/chatroom');
-                } else { 
-                    // TODO: Chage to a popup letting them know the username is taken
-                    console.log("Invalid Username")
-                    navigate('/access-denied');
-                }
+                console.log("Sent to chatroom");
+                navigate('/chatroom');
+            } else if (response.status === 409){
+                console.log("Username already in use"); //TODO: Change to a popup letting them know
+                navigate('/access-denied');
             } else {
-                console.log("Error")
+                console.log("Server error");
                 navigate('/access-denied');
             }
         } catch (error) {
