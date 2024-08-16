@@ -1,12 +1,20 @@
 import { useNavigate } from 'react-router-dom';
+import { useEffect, useRef } from 'react';
+import './styles/Welcome.css';
 
 const Welcome = () => {
     const navigate = useNavigate();
+    const inputRef = useRef(null);
+
+    useEffect(() => {
+        if (inputRef.current) {
+            inputRef.current.focus();
+        }
+    }, []);
 
     async function onFormSubmit(event) {
-        // get the username value
         event.preventDefault();
-        const username = document.getElementById('username').value;
+        const username = inputRef.current.value;
 
         try {
             const response = await fetch('/api/validate', {
@@ -14,7 +22,7 @@ const Welcome = () => {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({username: username, clientToken: sessionStorage.getItem('token')}),
+                body: JSON.stringify({ username, clientToken: sessionStorage.getItem('token') }),
             });
 
             if (response.ok) {
@@ -22,15 +30,12 @@ const Welcome = () => {
                 if (data.locationValid && data.usernameValid) {
                     sessionStorage.setItem('token', data.sessionToken);
                     navigate('/chatroom');
-                } else if (!data.locationValid){
-                    console.log("Invalid Location")
-                    navigate('/access-denied');
-                } else if (!data.usernameValid){
-                    console.log("Invalid Username")
+                } else {
+                    console.log("Invalid Access");
                     navigate('/access-denied');
                 }
             } else {
-                console.log("Error")
+                console.log("Error");
                 navigate('/access-denied');
             }
         } catch (error) {
@@ -40,14 +45,22 @@ const Welcome = () => {
     }
 
     return (
-        <>
-            <h1>Welcome to Our Chat App</h1>
-            <p>Enter a pseudonym to start chatting!</p>
-            <form id="form" onSubmit={onFormSubmit}>
-                <input id="username" autoComplete="off" required />
-                <input type="submit" value="Go to chat" />
-            </form>
-        </>
+        <div className="wrapper">
+            <div className='content-container'>
+                <div className='terminal'>
+                    <p>&gt; Welcome to geoChat.</p>
+                    <p>&gt; Enter an alias to start chatting.</p>
+                    <form className="form" id="form" onSubmit={onFormSubmit}>
+                        <span style={{ paddingRight: '8px'}}>&gt; </span>
+                        <input
+                            id="username"
+                            ref={inputRef} 
+                            autoComplete="off"
+                        />
+                    </form>
+                </div>
+            </div>
+        </div>
     );
 }
 
