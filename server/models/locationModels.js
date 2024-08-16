@@ -48,7 +48,7 @@ buildingSchema.index({ name: 1, campus: 1 }, { unique: true });
 campusSchema.index({ boundary: '2dsphere' });
 buildingSchema.index({ boundary: '2dsphere' });
 
-const Campus = model('Campus', campusSchema);
-const Building = model('Building', buildingSchema);
+const Campus = model('Campus', campusSchema, 'campuses');
+const Building = model('Building', buildingSchema, 'buildings');
 
 module.exports = { Campus, Building };

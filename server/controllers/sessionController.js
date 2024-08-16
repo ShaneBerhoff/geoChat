@@ -85,10 +85,27 @@ const createSession = async (username) => {
     }
 };
 
+// Updates a session to be in a room
+const updateRoom = async (sessionToken, room) => {
+    if (!sessionToken || !room) {
+        throw new Error("Session token and room are required");
+    }
+
+    try {
+        await Session.updateOne(
+            { token: sessionToken },
+            { $set: room }
+        );
+    } catch (error) {
+        console.error("Error updating room:", error);
+        throw error;
+    }
+};
 
 module.exports = {
     loadUser,
     findExistingSession,
     deactivateSession,
-    createSession
+    createSession,
+    updateRoom
 };
