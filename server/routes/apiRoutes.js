@@ -1,20 +1,10 @@
 const express = require('express');
 const router = express.Router();
-//const ispMiddleware = require('../middleware/ispMiddleware');
 const usernameMiddleware = require('../middleware/usernameMiddleware');
 const authMiddleware = require('../middleware/authMiddleware');
 
-// route for user entry validation
-router.post('/validate', (req, res, next) => {
-    console.log('Validate route hit');
-    req.locationValid = true;
-    next();
-}, 
-//ispMiddleware,
-usernameMiddleware, 
-(req, res) => {
-    console.log('Validation passed');
-
+// route for username validation
+router.post('/check-username', usernameMiddleware, (req, res) => {
     // set session token as a cookie
     res.cookie('sessionToken', req.sessionToken, {
         httpOnly: true,
@@ -22,7 +12,7 @@ usernameMiddleware,
         sameSite: 'strict',
     });
 
-    res.json({ locationValid: req.locationValid, usernameValid: req.usernameValid});
+    res.json({ usernameValid: req.usernameValid});
 });
 
 // route for auth validation

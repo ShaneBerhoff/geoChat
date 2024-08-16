@@ -1,6 +1,7 @@
 const sessionController = require('../controllers/sessionController');
 
 const usernameMiddleware = async (req, res, next) => {
+    console.log("Checking username");
     try {
         // Pull out the username and token from client
         const username = req.body.username;
@@ -28,11 +29,11 @@ const usernameMiddleware = async (req, res, next) => {
             return next();
         } else { // Username is already in use
             console.log("Invalid Username")
-            return res.status(403).json({ locationValid: req.locationValid, usernameValid: false });
+            return res.status(403).json({ usernameValid: false });
         }
     } catch (error) {
         console.error('User validation error:', error);
-        return res.status(500).json({ locationValid: req.locationValid, usernameValid: false });
+        return res.status(500).json({ usernameValid: false });
     }
 };
 

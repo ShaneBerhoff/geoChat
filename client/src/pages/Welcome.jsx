@@ -9,7 +9,7 @@ const Welcome = () => {
         const username = document.getElementById('username').value;
 
         try {
-            const response = await fetch('/api/validate', {
+            const response = await fetch('/api/check-username', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -19,13 +19,11 @@ const Welcome = () => {
 
             if (response.ok) {
                 const data = await response.json();
-                if (data.locationValid && data.usernameValid) {
+                if (data.usernameValid) {
                     console.log("Sent to chatroom");
                     navigate('/chatroom');
-                } else if (!data.locationValid){
-                    console.log("Invalid Location")
-                    navigate('/access-denied');
-                } else if (!data.usernameValid){
+                } else { 
+                    // TODO: Chage to a popup letting them know the username is taken
                     console.log("Invalid Username")
                     navigate('/access-denied');
                 }
@@ -34,7 +32,7 @@ const Welcome = () => {
                 navigate('/access-denied');
             }
         } catch (error) {
-            console.error('Error with validation fetch operation:', error);
+            console.error('Error with username fetch operation:', error);
             navigate('/access-denied');
         }
     }
