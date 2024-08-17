@@ -19,12 +19,13 @@ const forbiddenWords = readBadWords();
 
 const moderateMessage = (text) => {
   forbiddenWords.forEach(forbiddenWord => {
-    const regex = new RegExp(`\\b${forbiddenWord}\\b`, 'gi');
+    const regex = new RegExp(forbiddenWord, 'gi'); 
     const replacement = '*'.repeat(forbiddenWord.length);
     text = text.replace(regex, replacement);
   });
   return text;
 };
+
 
 // Save message and send to all users
 const handleMessage = async (socket, messageData) => {
