@@ -1,7 +1,7 @@
 const Session = require('../models/sessionModel')
 const { v4: uuidv4 } = require('uuid');
 
-// Sends user into to client and returns username
+// Finds user session, activates it, joins room, sends user info to client
 const loadUser = async (socket) => {
     let session;
     try {
@@ -12,7 +12,7 @@ const loadUser = async (socket) => {
                 $set: { isActive: true },
                 $unset: { expiresAt: 1 }
             }
-        );
+        ).populate('campus').populate('building').exec();
         if (!session) {
             console.log('No session found for token:', socket.sessionToken);
             return null;
@@ -21,13 +21,23 @@ const loadUser = async (socket) => {
         console.error("Error finding username for session:", error);
         throw error;
     }
-    console.log(`Session ${socket.sessionToken} set to active`);
+
+    // Join room
+    const campus = session.campus;
+    const building = session.building;
+    const room = `${campus ? campus._id : null}:${building ? building._id : null}`;
+    socket.currentRoom = room;
+    socket.join(room);
+
+    console.log(`Session ${socket.sessionToken} set to active in room: ${room}`);
 
     userInfo = {
         username: session.username,
-        createdAt: session.createdAt
+        createdAt: session.createdAt,
+        campus: campus ? campus.name : null,
+        building: building ? building.name : null
     }
-
+    console.log(userInfo);
     // Send user info to client
     console.log('User info emitted to client')
     socket.emit('user info', userInfo);
@@ -85,10 +95,27 @@ const createSession = async (username) => {
     }
 };
 
+// Updates a session to be in a room
+const updateRoom = async (sessionToken, room) => {
+    if (!sessionToken || !room) {
+        throw new Error("Session token and room are required");
+    }
+
+    try {
+        await Session.updateOne(
+            { token: sessionToken },
+            { $set: room }
+        );
+    } catch (error) {
+        console.error("Error updating room:", error);
+        throw error;
+    }
+};
 
 module.exports = {
     loadUser,
     findExistingSession,
     deactivateSession,
-    createSession
+    createSession,
+    updateRoom
 };
