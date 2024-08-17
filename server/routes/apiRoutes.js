@@ -1,20 +1,12 @@
 const express = require('express');
 const router = express.Router();
-//const ispMiddleware = require('../middleware/ispMiddleware');
 const usernameMiddleware = require('../middleware/usernameMiddleware');
-const authMiddleware = require('../middleware/authMiddleware');
+const sessionMiddleware = require('../middleware/sessionMiddleware');
+const locationMiddlware = require('../middleware/locationMiddleware');
+const deleteMiddleware = require('../middleware/deleteMiddleware');
 
-// route for user entry validation
-router.post('/validate', (req, res, next) => {
-    console.log('Validate route hit');
-    req.locationValid = true;
-    next();
-}, 
-//ispMiddleware,
-usernameMiddleware, 
-(req, res) => {
-    console.log('Validation passed');
-
+// route for username validation
+router.post('/check-username', usernameMiddleware, (req, res) => {
     // set session token as a cookie
     res.cookie('sessionToken', req.sessionToken, {
         httpOnly: true,
@@ -22,13 +14,23 @@ usernameMiddleware,
         sameSite: 'strict',
     });
 
-    res.json({ locationValid: req.locationValid, usernameValid: req.usernameValid});
+    res.status(200).json({ message: "Valid username" });
 });
 
 // route for auth validation
-router.get('/check-auth', authMiddleware, (req, res) => {
-    res.status(200).json();
+router.post('/check-auth', sessionMiddleware, locationMiddlware, (req, res) => {
+    res.status(200).json({ message: "Valid user in a valid location" });
 });
 
+// route for auth deletion
+router.get('/remove-auth', deleteMiddleware, (req, res) => {
+    res.clearCookie('sessionToken', {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'never', // TODO: Make secure in production
+        sameSite: 'strict'
+    });
+
+    res.status(200).json({ message: "Auth fully removed" });
+});
 
 module.exports = router;
