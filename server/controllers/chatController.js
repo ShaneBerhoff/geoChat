@@ -53,8 +53,9 @@ const loadChat = async (socket) => {
 
 const loadPersonalHistory = async (socket) => {
   try {
-    const messages = await Message.find({ sessionToken: socket.sessionToken })
-    .select('-sessionToken -username')
+    // All past messages from the session in the current room
+    const messages = await Message.find({ sessionToken: socket.sessionToken, room: socket.currentRoom })
+    .select('content createdAt')
     .sort({ createdAt: 1 });
 
     socket.emit('load personal history', messages);

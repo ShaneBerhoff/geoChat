@@ -12,7 +12,7 @@ const loadUser = async (socket) => {
                 $set: { isActive: true },
                 $unset: { expiresAt: 1 }
             }
-        );
+        ).populate('campus').populate('building').exec();
         if (!session) {
             console.log('No session found for token:', socket.sessionToken);
             return null;
@@ -21,20 +21,23 @@ const loadUser = async (socket) => {
         console.error("Error finding username for session:", error);
         throw error;
     }
-    console.log(`Session ${socket.sessionToken} set to active`);
 
     // Join room
-    const room = `${session.campus._id}:${session.building._id}`;
+    const campus = session.campus;
+    const building = session.building;
+    const room = `${campus ? campus._id : null}:${building ? building._id : null}`;
     socket.currentRoom = room;
     socket.join(room);
+
+    console.log(`Session ${socket.sessionToken} set to active in room: ${room}`);
 
     userInfo = {
         username: session.username,
         createdAt: session.createdAt,
-        campus: session.campus.name,
-        building: session.building.name
+        campus: campus ? campus.name : null,
+        building: building ? building.name : null
     }
-
+    console.log(userInfo);
     // Send user info to client
     console.log('User info emitted to client')
     socket.emit('user info', userInfo);
