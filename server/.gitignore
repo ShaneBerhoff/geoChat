@@ -2,5 +2,9 @@
 .env.development
 .env.production
 
+# MODERATION
+badwords.txt
+
 #Locations
 campusConfig.json
+
