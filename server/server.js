@@ -5,6 +5,9 @@ dotenv.config({ path: `./server/.env.${ENV}` });
 
 const connectDB = require('./utils/mongoClient');
 const http = require('http');
+const https = require('https');
+const fs = require('fs');
+const path = require('path');
 const socketIo = require('socket.io');
 const corsOptions = require('./utils/corsOptions');
 const cookie = require('cookie');
@@ -15,7 +18,15 @@ const LeaderboardManager = require('./controllers/leaderboardManager');
 const roomController = require('./controllers/roomController');
 
 // Create server and sockets
-const server = http.createServer(app);
+if (ENV === 'production') {
+    const options = {
+        key: fs.readFileSync(path.join(__dirname, 'key.pem')),
+        cert: fs.readFileSync(path.join(__dirname, 'cert.pem'))
+    };
+    server = https.createServer(options, app);
+} else {
+    server = http.createServer(app);
+}
 const io = socketIo(server, { cors: corsOptions });
 
 // Connect mongoDB
