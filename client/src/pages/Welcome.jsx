@@ -1,12 +1,20 @@
 import { useNavigate } from 'react-router-dom';
+import { useEffect, useRef } from 'react';
+import './styles/Welcome.css';
 
 const Welcome = () => {
     const navigate = useNavigate();
+    const inputRef = useRef(null);
+
+    useEffect(() => {
+        if (inputRef.current) {
+            inputRef.current.focus();
+        }
+    }, []);
 
     async function onFormSubmit(event) {
-        // get the username value
         event.preventDefault();
-        const username = document.getElementById('username').value;
+        const username = inputRef.current.value;
 
         try {
             const response = await fetch('/api/check-username', {
@@ -34,14 +42,22 @@ const Welcome = () => {
     }
 
     return (
-        <>
-            <h1>Welcome to Our Chat App</h1>
-            <p>Enter a pseudonym to start chatting!</p>
-            <form id="form" onSubmit={onFormSubmit}>
-                <input id="username" autoComplete="off" required />
-                <input type="submit" value="Go to chat" />
-            </form>
-        </>
+        <div className="wrapper">
+            <div className='content-container'>
+                <div className='terminal'>
+                    <p>&gt; Welcome to geoChat.</p>
+                    <p>&gt; Enter an alias to start chatting.</p>
+                    <form className="form" id="form" onSubmit={onFormSubmit}>
+                        <span style={{ paddingRight: '8px'}}>&gt; </span>
+                        <input
+                            id="username"
+                            ref={inputRef} 
+                            autoComplete="off"
+                        />
+                    </form>
+                </div>
+            </div>
+        </div>
     );
 }
 
