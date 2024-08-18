@@ -18,6 +18,11 @@ const messageSchema = new Schema({
         type: Date, 
         default: Date.now,
         expires: parseInt(process.env.TTL)
+    },
+    room: {
+        type: String,
+        required: true,
+        index: true
     }
 }); 
 

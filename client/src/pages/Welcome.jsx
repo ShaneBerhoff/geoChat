@@ -17,29 +17,26 @@ const Welcome = () => {
         const username = inputRef.current.value;
 
         try {
-            const response = await fetch('/api/validate', {
+            const response = await fetch('/api/check-username', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ username, clientToken: sessionStorage.getItem('token') }),
+                body: JSON.stringify({username: username}),
             });
 
             if (response.ok) {
-                const data = await response.json();
-                if (data.locationValid && data.usernameValid) {
-                    sessionStorage.setItem('token', data.sessionToken);
-                    navigate('/chatroom');
-                } else {
-                    console.log("Invalid Access");
-                    navigate('/access-denied');
-                }
+                console.log("Sent to chatroom");
+                navigate('/chatroom');
+            } else if (response.status === 409){
+                console.log("Username already in use"); //TODO: Change to a popup letting them know
+                navigate('/access-denied');
             } else {
-                console.log("Error");
+                console.log("Server error");
                 navigate('/access-denied');
             }
         } catch (error) {
-            console.error('Error with validation fetch operation:', error);
+            console.error('Error with username fetch operation:', error);
             navigate('/access-denied');
         }
     }

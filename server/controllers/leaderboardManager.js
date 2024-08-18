@@ -16,9 +16,8 @@ class LeaderboardManager {
             // Set up change stream
             const changeStream = Session.watch();
             changeStream.on('change', async (change) => {
-                // Update for an insert or for change to activity of a session.
-                if (change.operationType === 'insert' ||
-                    change.operationType === 'update' &&
+                // Update for change to activity of a session.
+                if (change.operationType === 'update' &&
                     (change.updateDescription.updatedFields.isActive !== undefined)) {
                     await this.updateLeaderboard();
                 }
