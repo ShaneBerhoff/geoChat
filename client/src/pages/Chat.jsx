@@ -113,7 +113,7 @@ const ChatPage = () => {
         </div>
         <div className="boards-container">
           <div className='leaderboard-container'>
-            <Leaderboard leaderboardArray={leaderboard}/>
+            <Leaderboard leaderboardArray={leaderboard} userInfo={userInfo}/>
           </div>
           <div className='chat-history-container'>
             <ChatHistory messages={messageHistory} userInfo={userInfo} />

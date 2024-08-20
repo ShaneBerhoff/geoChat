@@ -47,7 +47,7 @@ const LeaderboardItem = React.memo(({ item, index, totalItems }) => {
   );
 });
 
-const Leaderboard = ({ leaderboardArray }) => {
+const Leaderboard = ({ leaderboardArray, userInfo }) => {
     const sortedArray = useMemo(() => 
       [...leaderboardArray].sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt)),
       [leaderboardArray]
@@ -55,7 +55,8 @@ const Leaderboard = ({ leaderboardArray }) => {
 
   return (
     <div className="board-container">
-      <h2>Emory: Campus</h2>
+      <h2>{userInfo.campus}
+      {userInfo.building && `: ${userInfo.building}`}</h2>
       <ol className="leaderboard-list">
         {sortedArray.map((item, index) => (
           <LeaderboardItem 
