@@ -21,6 +21,18 @@
     box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.5); /* Optional: Add shadow for depth */
 }
 
+.lime-text {
+    color: #66FF84;
+    text-decoration: none; /* Remove underline by default */
+    font-family: 'Courier New', Courier, monospace;
+    font-weight: normal;
+    text-underline-offset: 2px;
+}
+
+.lime-text:hover {
+    text-decoration: underline; /* Add underline on hover */
+}
+
 .terminal {
     background: black; /* Inner black box */
     color: #66FF84; /* Green text for the terminal effect */
