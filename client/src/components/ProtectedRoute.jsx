@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Navigate } from 'react-router-dom';
+import Loading from './Loading';
 
 const ProtectedRoute = ({ children }) => {
   const [sessionVerified, setSessionVerified] = useState(null);
@@ -121,7 +122,7 @@ const ProtectedRoute = ({ children }) => {
   }, []);
 
   if (sessionVerified === null && locationVerified === null) {
-    return <div>Loading...</div>;
+    return <Loading />
   }
 
   if (sessionVerified === false) {
