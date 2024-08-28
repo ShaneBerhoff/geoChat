@@ -1,7 +1,6 @@
 .container {
     display: flex;
     flex-direction: row;
-
 }
 
 .boards-container {
@@ -32,19 +31,6 @@
 
 #chat ul li {
     margin-bottom: 20px;
-}
-
-.modal-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5); /* Optional: To add a background overlay */
-    z-index: 1000; /* Ensure it appears above other content */
 }
 
 .input-container {
