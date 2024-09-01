@@ -6,7 +6,6 @@ const NavBar = ({ isAboutPage}) => {
 
             <a className="left" href="/chatroom">
                 <img src='/geoChatLogo.png' alt='Logo' className="logo" />
-                <h1>geoChat</h1>
             </a>
             
             { !isAboutPage && <div className="right">
