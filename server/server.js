@@ -53,20 +53,6 @@ io.on('connection', async (socket) => {
     // Finds user session, activates it, joins correct room, retrieves username
     socket.username = await sessionController.loadUser(socket);
 
-    // Load exisiting chat messages
-    try {
-        await chatController.loadChat(socket);
-    } catch (error) {
-        console.error('Error sending chat messages to client:', error);
-    }
-
-    // Load exisiting message history
-    try {
-        await chatController.loadPersonalHistory(socket);
-    } catch (error) {
-        console.error('Error sending personal chat history to client:', error);
-    }
-
     socket.on('chat message', async (msg) => {
         console.log(msg, "received from:", socket.username);
         // Send message to chat controller
@@ -74,6 +60,14 @@ io.on('connection', async (socket) => {
             await chatController.handleMessage(socket, msg);
         } catch (error) {
             console.error('Error handling chat message:', error);
+        }
+    });
+
+    socket.on('room toggle', async () => {
+        try {
+            socket.toggleRoom();
+        } catch {
+            console.error("Could not toggle rooms", error);
         }
     });
 

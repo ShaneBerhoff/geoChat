@@ -11,7 +11,7 @@ const useTimeDifference = (createdAt) => {
       const diffHrs = Math.floor(diffMs / (1000 * 60 * 60));
       const diffMins = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
       const newTimeDiff = `${diffHrs}h ${diffMins}m`;
-      
+
       if (newTimeDiff !== timeDiff) {
         setTimeDiff(newTimeDiff);
       }
@@ -34,9 +34,9 @@ const LeaderboardItem = React.memo(({ item, index, totalItems }) => {
   return (
     <li
       className="leaderboard-item"
-      style={{ 
-        fontSize: `${25 - index * 5}px`, 
-        marginBottom: index === totalItems - 1 ? '0px' : undefined 
+      style={{
+        fontSize: `${25 - index * 5}px`,
+        marginBottom: index === totalItems - 1 ? '0px' : undefined
       }}
     >
       <span className="item-number">{index + 1}.</span>
@@ -47,23 +47,33 @@ const LeaderboardItem = React.memo(({ item, index, totalItems }) => {
   );
 });
 
-const Leaderboard = ({ leaderboardArray, userInfo }) => {
-    const sortedArray = useMemo(() => 
-      [...leaderboardArray].sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt)),
-      [leaderboardArray]
-    );
+const Leaderboard = ({ leaderboardArray, userInfo, socket }) => {
+  const sortedArray = useMemo(() =>
+    [...leaderboardArray].sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt)),
+    [leaderboardArray]
+  );
+
+  const handleClick = () => {
+    socket.current.emit('room toggle');
+    console.log("Room toggled");
+  };
 
   return (
     <div className="board-container">
-      <h2>{userInfo.campus}
-      {userInfo.building && `: ${userInfo.building}`}</h2>
+      <h2
+        onClick={() => handleClick()}
+        style={{ cursor: 'pointer' }}
+      >
+        {userInfo.campus}
+        {userInfo.building && `: ${userInfo.building}`}
+      </h2>
       <ol className="leaderboard-list">
         {sortedArray.map((item, index) => (
-          <LeaderboardItem 
-            key={item._id} 
-            item={item} 
-            index={index} 
-            totalItems={sortedArray.length} 
+          <LeaderboardItem
+            key={item._id}
+            item={item}
+            index={index}
+            totalItems={sortedArray.length}
           />
         ))}
       </ol>
