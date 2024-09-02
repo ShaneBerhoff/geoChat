@@ -1,3 +1,4 @@
+const chatController = require('./chatController');
 const { Campus, Building } = require('../models/locationModels');
 const fs = require('fs').promises;
 const path = require('path');
@@ -81,7 +82,59 @@ const loadCampusConfig = async () => {
     }
 };
 
+const setupRoomToggle = async (socket, session) => {
+    // Set up rooms
+    const campus = session.campus;
+    const building = session.building;
+    socket.validRooms = {
+        outerRoom: `${campus._id}:${null}`,
+        subRoom: `${campus._id}:${building ? building._id : null}`
+    };
+
+    // Set up toggle
+    socket.toggleRoom = async function () {
+        // Leave current
+        if (this.currentRoom) {
+            console.log(`${this.username} left room: ${this.currentRoom}`)
+            this.leave(this.currentRoom);
+        }
+
+        // Toggle the room
+        this.currentRoom = (this.currentRoom === this.validRooms.subRoom)
+            ? this.validRooms.outerRoom
+            : this.validRooms.subRoom;
+
+        this.join(this.currentRoom);
+        console.log(`${this.username} joined room: ${this.currentRoom}`);
+
+        userInfo = {
+            username: session.username,
+            createdAt: session.createdAt,
+            campus: campus.name,
+            building: ((this.validRooms.subRoom === this.currentRoom) && building) ? building.name : null
+        }
+        // Send user info to client
+        console.log('User info emitted to client:', userInfo)
+        socket.emit('user info', userInfo);
+
+        // Load exisiting chat messages
+        try {
+            await chatController.loadChat(socket);
+        } catch (error) {
+            console.error('Error sending chat messages to client:', error);
+        }
+
+        // Load exisiting message history
+        try {
+            await chatController.loadPersonalHistory(socket);
+        } catch (error) {
+            console.error('Error sending personal chat history to client:', error);
+        }
+    };
+};
+
 module.exports = {
     loadCampusConfig,
-    getRoom
+    getRoom,
+    setupRoomToggle
 }

@@ -1,20 +1,20 @@
 const Session = require('../models/sessionModel')
 const { v4: uuidv4 } = require('uuid');
 
-// Finds user session, activates it, joins room, sends user info to client
-const loadUser = async (socket) => {
+// Finds user session, activates it, and loads it
+const loadUser = async (sessionToken) => {
     let session;
     try {
         // activate session
         session = await Session.findOneAndUpdate(
-            { token: socket.sessionToken },
+            { token: sessionToken },
             {
                 $set: { isActive: true },
                 $unset: { expiresAt: 1 }
             }
-        ).populate('campus').populate('building').exec();
+        ).populate('campus').populate('building').exec(); // Include campus and building
         if (!session) {
-            console.log('No session found for token:', socket.sessionToken);
+            console.log('No session found for token:', sessionToken);
             return null;
         }
     } catch (error) {
@@ -22,27 +22,9 @@ const loadUser = async (socket) => {
         throw error;
     }
 
-    // Join room
-    const campus = session.campus;
-    const building = session.building;
-    const room = `${campus ? campus._id : null}:${building ? building._id : null}`;
-    socket.currentRoom = room;
-    socket.join(room);
+    console.log(`Session ${sessionToken} set to active.`);
 
-    console.log(`Session ${socket.sessionToken} set to active in room: ${room}`);
-
-    userInfo = {
-        username: session.username,
-        createdAt: session.createdAt,
-        campus: campus ? campus.name : null,
-        building: building ? building.name : null
-    }
-    console.log(userInfo);
-    // Send user info to client
-    console.log('User info emitted to client')
-    socket.emit('user info', userInfo);
-
-    return session.username;
+    return session;
 }
 
 // Finds an exisitng session with a username
