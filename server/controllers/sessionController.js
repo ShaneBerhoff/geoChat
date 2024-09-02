@@ -1,21 +1,20 @@
 const Session = require('../models/sessionModel')
-const chatController = require('./chatController');
 const { v4: uuidv4 } = require('uuid');
 
-// Finds user session, activates it, joins room, sends user info to client
-const loadUser = async (socket) => {
+// Finds user session, activates it, and loads it
+const loadUser = async (sessionToken) => {
     let session;
     try {
         // activate session
         session = await Session.findOneAndUpdate(
-            { token: socket.sessionToken },
+            { token: sessionToken },
             {
                 $set: { isActive: true },
                 $unset: { expiresAt: 1 }
             }
-        ).populate('campus').populate('building').exec();
+        ).populate('campus').populate('building').exec(); // Include campus and building
         if (!session) {
-            console.log('No session found for token:', socket.sessionToken);
+            console.log('No session found for token:', sessionToken);
             return null;
         }
     } catch (error) {
@@ -23,59 +22,9 @@ const loadUser = async (socket) => {
         throw error;
     }
 
-    console.log(`Session ${socket.sessionToken} set to active.`);
+    console.log(`Session ${sessionToken} set to active.`);
 
-    // Set up rooms
-    const campus = session.campus;
-    const building = session.building;
-    socket.validRooms = {
-        outerRoom: `${campus._id}:${null}`,
-        subRoom: `${campus._id}:${building ? building._id : null}`
-    };
-
-    // Set up toggle
-    socket.toggleRoom = async function () {
-        // Leave current
-        if (this.currentRoom) {
-            this.leave(this.currentRoom);
-        }
-
-        // Toggle the room
-        this.currentRoom = (this.currentRoom === this.validRooms.subRoom)
-            ? this.validRooms.outerRoom
-            : this.validRooms.subRoom;
-
-        this.join(this.currentRoom);
-        console.log(`Switched and joined ${this.currentRoom}`);
-
-        userInfo = {
-            username: session.username,
-            createdAt: session.createdAt,
-            campus: campus.name,
-            building: ((this.validRooms.subRoom === this.currentRoom) && building) ? building.name : null
-        }
-        // Send user info to client
-        console.log('User info emitted to client:', userInfo)
-        socket.emit('user info', userInfo);
-
-        // Load exisiting chat messages
-        try {
-            await chatController.loadChat(socket);
-        } catch (error) {
-            console.error('Error sending chat messages to client:', error);
-        }
-
-        // Load exisiting message history
-        try {
-            await chatController.loadPersonalHistory(socket);
-        } catch (error) {
-            console.error('Error sending personal chat history to client:', error);
-        }
-    };
-
-    socket.toggleRoom();
-
-    return session.username;
+    return session;
 }
 
 // Finds an exisitng session with a username

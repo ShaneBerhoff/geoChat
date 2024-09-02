@@ -50,8 +50,15 @@ io.use(async (socket, next) => {
 io.on('connection', async (socket) => {
     console.log('New client connected');
 
-    // Finds user session, activates it, joins correct room, retrieves username
-    socket.username = await sessionController.loadUser(socket);
+    // Finds user session, activates it, and loads it
+    const userSession = await sessionController.loadUser(socket.sessionToken);
+    socket.username = userSession.username;
+
+    // Sets up valid rooms for user
+    roomController.setupRoomToggle(socket, userSession);
+    
+    // Loads all parts of room
+    socket.toggleRoom();
 
     socket.on('chat message', async (msg) => {
         console.log(msg, "received from:", socket.username);
