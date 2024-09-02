@@ -6,6 +6,7 @@
     background-color: #020000;
 }
 
+
 .content-container {
     background: gray; /* Outer gray box */
     padding: 10px; /* Padding to show a bit of the gray around the black box */
@@ -59,6 +60,7 @@
 
 .terminal p {
     margin-bottom: 1rem;
+    color: #66FF84;
 }
 
 .form {
