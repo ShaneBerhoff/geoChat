@@ -99,28 +99,36 @@ const ChatPage = () => {
   };
 
   return (
-    <>
+    <div className='chat-page'>
       <NavBar />
       <div className="container">
         <div id="chat" ref={chatContainerRef}>
           <Chatbox messages={messages} />
           <form id="form" onSubmit={handleSubmit}>
             <div className="input-container">
+              <span style={{ color: '#66FF84'}}>&gt; </span>
               <input id="input" ref={inputRef} autoComplete="off" placeholder='Enter a message here' />
               <button type="submit" className="send-button">➤</button>
             </div>
           </form>
         </div>
+        
+        {/* Add a vertical divider */}
+        { /* <div className="vertical-divider"></div> */ }
+        
         <div className="boards-container">
           <div className='leaderboard-container'>
             <Leaderboard leaderboardArray={leaderboard}/>
+          </div>
+          <div className='divider'>
           </div>
           <div className='chat-history-container'>
             <ChatHistory messages={messageHistory} userInfo={userInfo} />
           </div>
         </div>
       </div>
-    </>
+    </div>
+
   );
 };
 

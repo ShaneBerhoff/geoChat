@@ -1,11 +1,32 @@
+.chat-page {
+    height: 100vh; /* Ensure the gradient covers the entire viewport height */
+    /* background: linear-gradient(to bottom, #ffffff, #999999); */
+    background: black;
+    margin: 0; /* Remove any default margin */
+    display: flex;
+    flex-direction: column;
+}
+
 .container {
     display: flex;
     flex-direction: row;
+    height: 100%;
 }
+
+
+
+.divider {
+    border: 0;
+    height: 1px;
+    background: #66FF84; /* Line color */
+    width: 75%
+}
+
 
 .boards-container {
     display: flex;
     flex-direction: column;
+    align-items: center;
     flex: 1;
     margin: 0 40px 40px 40px;
     gap: 40px;
@@ -38,16 +59,26 @@
     left: 25px;
     bottom: 25px;
     width: 60%;
+    display: flex; /* Add flexbox layout */
+    align-items: center; 
+}
+
+.input-container span {
+    color: #66FF84;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 1rem;
 }
 
 #input {
+    background-color: black; /* Set background to black */
+    color: #66FF84; /* Green text color */
+    border: none; /* Remove border */
+    padding: 0;
     width: 100%;
-    background-color: lightgray;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
     outline: none;
-    padding: 10px;
+    font-family: 'Courier New', Courier, monospace; /* Match the terminal font */
+    font-size: 1rem; /* Adjust the font size to match the terminal text */
+    margin-left: 8px; /* Adjust spacing from the prompt */
 }
 
 .send-button {
