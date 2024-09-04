@@ -62,6 +62,11 @@ const ChatPage = () => {
       setMessages((prevMessages) => [...prevMessages, msg]);
     });
 
+    // Highlight input form
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
+
     return () => {
       if (socket.current) {
         socket.current.disconnect();
