@@ -1,0 +1,56 @@
+/* Centering the terminal without affecting global styles */
+.wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* Full viewport height to center vertically */
+    background-color: #020000;
+}
+
+.content-container {
+    background: gray; /* Outer gray box */
+    padding: 10px; /* Padding to show a bit of the gray around the black box */
+    text-align: left; /* Left-align the text */
+    max-width: 540px; /* Ensure it doesn't exceed the viewport width */
+    min-height: 290px;
+    box-sizing: border-box; /* Include padding in the width */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px; /* Optional: Rounded corners */
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.5); /* Optional: Add shadow for depth */
+}
+
+.lime-text {
+    color: var(--brand-primary);
+    text-decoration: none; /* Remove underline by default */
+    font-family: var(--font-family-monospace);
+    font-weight: normal;
+    text-underline-offset: 2px;
+}
+
+.lime-text:hover {
+    text-decoration: underline; /* Add underline on hover */
+}
+
+.terminal {
+    background: black; /* Inner black box */
+    color: var(--brand-primary); /* Green text for the terminal effect */
+    padding: 20px;
+    width: 480px; /* Smaller width than the container */
+    height: 280px; /* Smaller height than the container */
+    border-radius: 5px; /* Optional: Rounded corners for the terminal */
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start; /* Align the items at the top */
+    align-items: flex-start; /* Align text to the left */
+    font-family: var(--font-family-monospace); /* Use a monospaced font for the terminal feel */
+}
+
+.form {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    width: 100%;
+    margin-top: 10px;
+}

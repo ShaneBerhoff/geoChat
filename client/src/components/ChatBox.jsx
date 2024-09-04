@@ -1,3 +1,5 @@
+import './styles/Chatbox.css';
+
 const Chatbox = ({ messages }) => {
 
     const formatTime = (timestamp) => {
@@ -11,7 +13,7 @@ const Chatbox = ({ messages }) => {
             <ul id="messages">
                 {messages.map((msg, index) => (
                     <li key={index}>
-                        <em className='timestamp'>{formatTime(msg.createdAt)}</em> <strong>{msg.username}:</strong>  {msg.content}
+                        <em className='timestamp'>{formatTime(msg.createdAt)}</em> <strong>{msg.username}:</strong> <p>{msg.content}</p>
                     </li>
                 ))}
             </ul>
