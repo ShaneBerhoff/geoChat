@@ -22,9 +22,9 @@
 }
 
 .lime-text {
-    color: #66FF84;
+    color: var(--brand-primary);
     text-decoration: none; /* Remove underline by default */
-    font-family: 'Courier New', Courier, monospace;
+    font-family: var(--font-family-monospace);
     font-weight: normal;
     text-underline-offset: 2px;
 }
@@ -35,7 +35,7 @@
 
 .terminal {
     background: black; /* Inner black box */
-    color: #66FF84; /* Green text for the terminal effect */
+    color: var(--brand-primary); /* Green text for the terminal effect */
     padding: 20px;
     width: 480px; /* Smaller width than the container */
     height: 280px; /* Smaller height than the container */
@@ -44,7 +44,7 @@
     flex-direction: column;
     justify-content: flex-start; /* Align the items at the top */
     align-items: flex-start; /* Align text to the left */
-    font-family: 'Courier New', Courier, monospace; /* Use a monospaced font for the terminal feel */
+    font-family: var(--font-family-monospace); /* Use a monospaced font for the terminal feel */
 }
 
 .form {

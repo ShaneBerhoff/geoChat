@@ -27,6 +27,6 @@ a {
     font-family: "Karla";
     font-size: 18px;
     font-weight: 600;
-    color: #66FF84;
+    color: var(--brand-primary);
     text-decoration: none;
 }

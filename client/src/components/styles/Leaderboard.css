@@ -21,7 +21,7 @@
     display: flex;
     flex-direction: column;
     align-items: center; /* Center items horizontally */
-    color: #66FF84;
+    color: var(--brand-primary);
     width: 100%; /* Ensure list takes full width */
 }
 

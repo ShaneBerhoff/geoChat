@@ -18,7 +18,7 @@
 .divider {
     border: 0;
     height: 1px;
-    background: #66FF84; /* Line color */
+    background: var(--brand-primary); /* Line color */
     width: 75%
 }
 
@@ -64,19 +64,19 @@
 }
 
 .input-container span {
-    color: #66FF84;
-    font-family: 'Courier New', Courier, monospace;
+    color: var(--brand-primary);
+    font-family: var(--font-family-monospace);
     font-size: 1rem;
 }
 
 #input {
     background-color: black; /* Set background to black */
-    color: #66FF84; /* Green text color */
+    color: var(--brand-primary); /* Green text color */
     border: none; /* Remove border */
     padding: 0;
     width: 100%;
     outline: none;
-    font-family: 'Courier New', Courier, monospace; /* Match the terminal font */
+    font-family: var(--font-family-monospace); /* Match the terminal font */
     font-size: 1rem; /* Adjust the font size to match the terminal text */
     margin-left: 8px; /* Adjust spacing from the prompt */
 }

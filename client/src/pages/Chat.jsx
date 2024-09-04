@@ -111,7 +111,7 @@ const ChatPage = () => {
           <Chatbox messages={messages} />
           <form id="form" onSubmit={handleSubmit}>
             <div className="input-container">
-              <span style={{ color: '#66FF84'}}>&gt; </span>
+              <span style={{ color: 'var(--brand-primary)'}}>&gt; </span>
               <input id="input" ref={inputRef} autoComplete="off" placeholder='Enter a message here' />
               <button type="submit" className="send-button">➤</button>
             </div>

@@ -1,12 +1,20 @@
+#messages {
+    font-family: var(--font-family-monospace);
+}
+
+#messages strong {
+    font-family: var(--font-family-monospace);
+}
+
 #messages em {
-    color: #66FF84;
+    color: var(--brand-primary);
 }
 
 #messages strong  {
-    color: #66FF84;
+    color: var(--brand-primary);
 }
 
 #messages p {
-    color: #66FF84;
+    color: var(--brand-primary);
     display: inline;
 }

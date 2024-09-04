@@ -60,7 +60,7 @@
 
 .terminal p {
     margin-bottom: 1rem;
-    color: #66FF84;
+    color: var(--brand-primary);
 }
 
 .form {
@@ -73,11 +73,11 @@
 
 #username {
     background-color: black; /* Set background to black */
-    color: #66FF84; /* Green text color */
+    color: var(--brand-primary); /* Green text color */
     border: none; /* Remove border */
     padding: 0;
     width: 100%;
     outline: none;
-    font-family: 'Courier New', Courier, monospace; /* Match the terminal font */
+    font-family: var(--font-family-monospace); /* Match the terminal font */
     font-size: 1rem; /* Adjust the font size to match the terminal text */
 }

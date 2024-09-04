@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import '../styles/variables.css';
 import ProtectedRoute from "./components/ProtectedRoute";
 import Welcome from "./pages/Welcome";
 import AccessDenied from "./pages/AccessDenied";

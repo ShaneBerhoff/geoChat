@@ -7,11 +7,12 @@
     padding: 10px;
     border-radius: 15px;
     overflow: hidden; /* Ensure container does not overflow */
+    font-family: var(--font-family-monospace);
 }
 
 .name-container {
     width: 100%;
-    color: #66FF84;
+    color: var(--brand-primary);
     /* background-color: #F6F6F6; */ /* Match the background to avoid visual breaks */
     text-align: center; /* Center the name */
 }
@@ -25,5 +26,5 @@
 .message {
     font-size: 10px;
     margin-bottom: 5px; /* Add some space between messages */
-    color: #66FF84;
+    color: var(--brand-primary);
 }

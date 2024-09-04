@@ -24,7 +24,7 @@
 .title {
     text-align: center;
     margin-bottom: 50px;
-    color: #66FF84;
+    color: var(--brand-primary);
 }
 
 .columns {
@@ -36,5 +36,5 @@
 }
 
 .columns p, h2 {
-    color: #66FF84;
+    color: var(--brand-primary);
 }
