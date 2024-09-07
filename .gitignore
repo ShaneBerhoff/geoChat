@@ -134,3 +134,7 @@ dist
 
 #DS_Store
 .DS_Store
+
+#HTTPS
+cert.pem
+key.pem
