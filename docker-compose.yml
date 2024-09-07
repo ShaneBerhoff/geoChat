@@ -1,9 +1,6 @@
 services:
-
   app:
     build: .
-    ports:
-      - 3000:3000
     environment:
       - PORT=3000
       - MONGO_URL=${MONGO_URL}
@@ -13,10 +10,16 @@ services:
     depends_on:
       mongodb:
         condition: service_healthy
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:3000" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
 
   mongodb:
     image: mongo:latest
-    command: ["--replSet", "rs0", "--bind_ip_all", "--port", "27017"]
+    command: [ "--replSet", "rs0", "--bind_ip_all", "--port", "27017" ]
     healthcheck:
       test: echo "try { rs.status() } catch (err) { rs.initiate({_id:'rs0',members:[{_id:0,host:'mongodb:27017'}]}) }" | mongosh --quiet
       interval: 10s
@@ -38,8 +41,16 @@ services:
       WEBSOCKET: 'true'
     volumes:
       - https-portal-data:/var/lib/https-portal
+    depends_on:
+      app:
+        condition: service_healthy
 
 volumes:
   mongodb_data:
   mongodb_config:
   https-portal-data:
+
+
+networks:
+  default:
+    name: geochat-network
