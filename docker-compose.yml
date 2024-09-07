@@ -27,6 +27,19 @@ services:
       - mongodb_data:/data/db
       - mongodb_config:/data/configdb
 
+  https-portal:
+    image: steveltn/https-portal:1
+    ports:
+      - '80:80'
+      - '443:443'
+    environment:
+      DOMAINS: 'geochat.live -> http://app:3000'
+      STAGE: 'production'
+      WEBSOCKET: 'true'
+    volumes:
+      - https-portal-data:/var/lib/https-portal
+
 volumes:
   mongodb_data:
   mongodb_config:
+  https-portal-data:
