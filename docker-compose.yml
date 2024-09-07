@@ -6,11 +6,7 @@ services:
       - 3000:3000
     environment:
       - PORT=3000
-      - HOST=0.0.0.0
       - MONGO_URL=${MONGO_URL}
-      - CLIENT_URL=${CLIENT_URL}
-      - VITE_SOCKET_URL=${VITE_SOCKET_URL}
-      - VITE_API_URL=${VITE_API_URL}
       - TTL=${TTL}
       - SESSION_RECOVERY_PERIOD=${SESSION_RECOVERY_PERIOD}
       - LEADERBOARD_MAX=${LEADERBOARD_MAX}
