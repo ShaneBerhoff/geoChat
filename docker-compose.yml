@@ -1,0 +1,56 @@
+services:
+  app:
+    build: .
+    environment:
+      - PORT=3000
+      - MONGO_URL=${MONGO_URL}
+      - TTL=${TTL}
+      - SESSION_RECOVERY_PERIOD=${SESSION_RECOVERY_PERIOD}
+      - LEADERBOARD_MAX=${LEADERBOARD_MAX}
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:3000" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
+  mongodb:
+    image: mongo:latest
+    command: [ "--replSet", "rs0", "--bind_ip_all", "--port", "27017" ]
+    healthcheck:
+      test: echo "try { rs.status() } catch (err) { rs.initiate({_id:'rs0',members:[{_id:0,host:'mongodb:27017'}]}) }" | mongosh --quiet
+      interval: 10s
+      timeout: 20s
+      start_period: 30s
+      retries: 5
+    volumes:
+      - mongodb_data:/data/db
+      - mongodb_config:/data/configdb
+
+  https-portal:
+    image: steveltn/https-portal:1
+    ports:
+      - '80:80'
+      - '443:443'
+    environment:
+      DOMAINS: 'geochat.live -> http://app:3000'
+      STAGE: 'production'
+      WEBSOCKET: 'true'
+    volumes:
+      - https-portal-data:/var/lib/https-portal
+    depends_on:
+      app:
+        condition: service_healthy
+
+volumes:
+  mongodb_data:
+  mongodb_config:
+  https-portal-data:
+
+
+networks:
+  default:
+    name: geochat-network

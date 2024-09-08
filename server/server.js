@@ -1,7 +1,5 @@
 const dotenv = require('dotenv');
 dotenv.config({ path: './server/.env' });
-const ENV = process.env.NODE_ENV || 'development';
-dotenv.config({ path: `./server/.env.${ENV}` });
 
 const connectDB = require('./utils/mongoClient');
 const http = require('http');
@@ -18,16 +16,23 @@ const LeaderboardManager = require('./controllers/leaderboardManager');
 const roomController = require('./controllers/roomController');
 
 // Create server and sockets
-if (ENV === 'production') {
+let server;
+let io;
+if (process.env.NODE_ENV === 'development') {
+    // In development - HTTPS with self-signed certificates
     const options = {
-        key: fs.readFileSync(path.join(__dirname, 'key.pem')),
-        cert: fs.readFileSync(path.join(__dirname, 'cert.pem'))
+        key: fs.readFileSync(path.join(__dirname, '../key.pem')),
+        cert: fs.readFileSync(path.join(__dirname, '../cert.pem'))
     };
     server = https.createServer(options, app);
+    console.log('Server running in development mode with HTTPS');
+    io = socketIo(server, { cors: corsOptions });
 } else {
+    // In production - use HTTP (Nginx will handle HTTPS)
     server = http.createServer(app);
+    console.log('Server running in production mode with HTTP (Nginx handles HTTPS)');
+    io = socketIo(server);
 }
-const io = socketIo(server, { cors: corsOptions });
 
 // Connect mongoDB
 connectDB()
@@ -56,7 +61,7 @@ io.on('connection', async (socket) => {
 
     // Sets up valid rooms for user
     roomController.setupRoomToggle(socket, userSession);
-    
+
     // Loads all parts of room
     socket.toggleRoom();
 
@@ -85,8 +90,8 @@ io.on('connection', async (socket) => {
     });
 });
 
-const PORT = process.env.PORT;
-const HOST = process.env.HOST;
+const PORT = process.env.PORT || 3000;
+const HOST = process.env.HOST || '0.0.0.0';
 server.listen(PORT, HOST, () => {
-    console.log(`Server running on ${process.env.CLIENT_URL}`);
+    console.log(`Server running on port ${PORT}`);
 });

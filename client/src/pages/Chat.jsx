@@ -16,14 +16,8 @@ const ChatPage = () => {
   const socket = useRef(null);
 
   useEffect(() => {
-    const SOCKET_URL = import.meta.env.VITE_SOCKET_URL;
 
-    if (!SOCKET_URL) {
-      console.error("Environment variables VITE_SOCKET_URL must be defined");
-      return;
-    }
-
-    socket.current = io(SOCKET_URL, {
+    socket.current = io({
       withCredentials: true, //cookies
       transports: ['websocket']
     });

@@ -7,7 +7,3 @@ badwords.txt
 
 #Locations
 campusConfig.json
-
-#HTTPS
-cert.pem
-key.pem

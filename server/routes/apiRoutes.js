@@ -10,7 +10,7 @@ router.post('/check-username', usernameMiddleware, (req, res) => {
     // set session token as a cookie
     res.cookie('sessionToken', req.sessionToken, {
         httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
+        secure: req.secure || process.env.NODE_ENV === 'development',
         sameSite: 'strict',
     });
 
@@ -26,7 +26,7 @@ router.post('/check-auth', sessionMiddleware, locationMiddlware, (req, res) => {
 router.get('/remove-auth', deleteMiddleware, (req, res) => {
     res.clearCookie('sessionToken', {
         httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
+        secure: req.secure || process.env.NODE_ENV === 'development',
         sameSite: 'strict'
     });
 

@@ -6,7 +6,13 @@ const corsOptions = require('./utils/corsOptions');
 const cookieParser = require('cookie-parser');
 
 const app = express();
-app.use(cors(corsOptions));
+if (process.env.NODE_ENV === 'production') {
+    // In production, trust the reverse proxy
+    app.set('trust proxy', 1);
+} else {
+    // In dev use cors
+    app.use(cors(corsOptions));
+}
 app.use(express.json());
 app.use(cookieParser());
 

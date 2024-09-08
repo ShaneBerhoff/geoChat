@@ -1,24 +1,28 @@
-import { defineConfig, loadEnv } from 'vite';
+import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
+import fs from 'fs';
+import path from 'path';
 
-// https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
-  // Load environment variables based on the current mode
-  const env = loadEnv(mode, process.cwd());
-
   return {
     plugins: [react()],
     server: {
+      https: mode === 'development' ? {
+        key: fs.readFileSync(path.resolve(__dirname, '../key.pem')),
+        cert: fs.readFileSync(path.resolve(__dirname, '../cert.pem')),
+      } : false,
+      host: true,
       proxy: {
         '/api': {
-          target: env.VITE_API_URL,
+          target: 'https://localhost:3000',
           changeOrigin: true,
           secure: false,
         },
         '/socket.io': {
-          target: env.VITE_API_URL,
+          target: 'https://localhost:3000',
           changeOrigin: true,
           ws: true,
+          secure: false,
         }
       }
     }
