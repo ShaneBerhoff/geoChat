@@ -13,8 +13,9 @@ const getRooms = async (longitude, latitude) => {
     // Find zones that contain the user's location
     const zones = await Zone.find({
         geometry: {
-            $geoIntersects: {
-                $geometry: userPoint
+            $nearSphere: {
+                $geometry: userPoint,
+                $maxDistance: process.env.BUFFER_DISTANCE
             }
         }
     }).select('name');
@@ -31,8 +32,9 @@ const getRooms = async (longitude, latitude) => {
     const rooms = await Room.find({
         zoneId: { $in: zoneIds },
         geometry: {
-            $geoIntersects: {
-                $geometry: userPoint
+            $nearSphere: {
+                $geometry: userPoint,
+                $maxDistance: process.env.BUFFER_DISTANCE
             }
         }
     }).select('name');
