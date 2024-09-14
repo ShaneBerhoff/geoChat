@@ -7,6 +7,7 @@ services:
       - TTL=${TTL}
       - SESSION_RECOVERY_PERIOD=${SESSION_RECOVERY_PERIOD}
       - LEADERBOARD_MAX=${LEADERBOARD_MAX}
+      - BUFFER_DISTANCE=${BUFFER_DISTANCE}
     depends_on:
       mongodb:
         condition: service_healthy
