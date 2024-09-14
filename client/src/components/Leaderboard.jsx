@@ -54,7 +54,7 @@ const Leaderboard = ({ leaderboardArray, userInfo, socket }) => {
   );
 
   const handleClick = () => {
-    socket.current.emit('room toggle');
+    socket.current.emit('cycle rooms');
     console.log("Room toggled");
   };
 
@@ -64,8 +64,7 @@ const Leaderboard = ({ leaderboardArray, userInfo, socket }) => {
         onClick={() => handleClick()}
         style={{ cursor: 'pointer' }}
       >
-        {userInfo.campus}
-        {userInfo.building && `: ${userInfo.building}`}
+        {userInfo.chatRoom}
       </h2>
       <ol className="leaderboard-list">
         {sortedArray.map((item, index) => (

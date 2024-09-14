@@ -38,7 +38,7 @@ if (process.env.NODE_ENV === 'development') {
 connectDB()
     .then(() => {
         // Load rooms
-        roomController.loadCampusConfig();
+        roomController.loadGeoJSONdata();
     })
 
 // Leaderboard manager
@@ -60,10 +60,7 @@ io.on('connection', async (socket) => {
     socket.username = userSession.username;
 
     // Sets up valid rooms for user
-    roomController.setupRoomToggle(socket, userSession);
-
-    // Loads all parts of room
-    socket.toggleRoom();
+    roomController.setupCycleRooms(socket, userSession);
 
     socket.on('chat message', async (msg) => {
         console.log(msg, "received from:", socket.username);
@@ -75,11 +72,11 @@ io.on('connection', async (socket) => {
         }
     });
 
-    socket.on('room toggle', async () => {
+    socket.on('cycle rooms', async () => {
         try {
-            socket.toggleRoom();
+            socket.cycleRooms();
         } catch {
-            console.error("Could not toggle rooms", error);
+            console.error("Could not cycle through rooms", error);
         }
     });
 
