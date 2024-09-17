@@ -11,8 +11,9 @@ const loadUser = async (sessionToken) => {
             {
                 $set: { isActive: true },
                 $unset: { expiresAt: 1 }
-            }
-        ).populate('campus').populate('building').exec(); // Include campus and building
+            },
+            { new: true }
+        );
         if (!session) {
             console.log('No session found for token:', sessionToken);
             return null;
@@ -77,16 +78,16 @@ const createSession = async (username) => {
     }
 };
 
-// Updates a session to be in a room
-const updateRoom = async (sessionToken, room) => {
-    if (!sessionToken || !room) {
-        throw new Error("Session token and room are required");
+// Updates a session to contain the valid chatRooms
+const updateRooms = async (sessionToken, chatRooms) => {
+    if (!sessionToken) {
+        throw new Error("Session token required to adjust session's chatRooms");
     }
 
     try {
         await Session.updateOne(
             { token: sessionToken },
-            { $set: room }
+            { $set: {chatRooms: chatRooms} }
         );
     } catch (error) {
         console.error("Error updating room:", error);
@@ -99,5 +100,5 @@ module.exports = {
     findExistingSession,
     deactivateSession,
     createSession,
-    updateRoom
+    updateRooms
 };

@@ -135,6 +135,12 @@ dist
 #DS_Store
 .DS_Store
 
+# MODERATION
+badwords.txt
+
+#Locations
+locationData
+
 #HTTPS
 cert.pem
 key.pem

@@ -1,117 +1,154 @@
 const chatController = require('./chatController');
-const { Campus, Building } = require('../models/locationModels');
+const { Zone, Room } = require('../models/locationModels');
 const fs = require('fs').promises;
 const path = require('path');
 
-const getRoom = async (latitude, longitude) => {
+const getRooms = async (longitude, latitude) => {
     // create a point
     const userPoint = {
         type: "Point",
-        coordinates: [latitude, longitude]
+        coordinates: [longitude, latitude]
     };
 
-    // Find the campus
-    const campus = await Campus.findOne({
-        boundary: {
-            $geoIntersects: {
-                $geometry: userPoint
+    // Find zones that contain the user's location
+    const zones = await Zone.find({
+        geometry: {
+            $nearSphere: {
+                $geometry: userPoint,
+                $maxDistance: process.env.BUFFER_DISTANCE
             }
         }
-    });
+    }).select('name');
 
-    if (!campus) {
-        console.log("User is not on any campus");
+    // If no zones found, return early
+    if (zones.length === 0) {
         return null;
     }
 
-    // Find the building within the campus
-    const building = await Building.findOne({
-        campus: campus._id,
-        boundary: {
-            $geoIntersects: {
-                $geometry: userPoint
+    // Extract zone IDs
+    const zoneIds = zones.map(zone => zone._id);
+
+    // Find the rooms within the zones
+    const rooms = await Room.find({
+        zoneId: { $in: zoneIds },
+        geometry: {
+            $nearSphere: {
+                $geometry: userPoint,
+                $maxDistance: process.env.BUFFER_DISTANCE
             }
         }
-    });
+    }).select('name');
 
-    if (building) {
-        console.log(`User is in ${campus.name}, ${building.name}`);
-        return { campus, building };
+
+    const chatRooms = [
+        ...zones.map(zone => ({ id: zone._id, name: zone.name, type: 'zone' })),
+        ...rooms.map(room => ({ id: room._id, name: room.name, type: 'room' }))
+    ];
+
+    if (chatRooms) {
+        console.log("User is in:");
+        console.log(chatRooms);
+        return chatRooms;
     } else {
-        console.log(`User is on ${campus.name} campus, but not in any specific building`);
-        return { campus, building: null };
+        return null;
     }
 };
 
-// Loads all campuses and rooms into the database
-const loadCampusConfig = async () => {
+// Loads all zones and rooms into the database
+const loadGeoJSONdata = async () => {
     try {
-        // Read the JSON file
-        const data = await fs.readFile(path.join(__dirname, '..', 'campusConfig.json'), 'utf8');
-        const config = JSON.parse(data);
+        // Read and parse the zones/rooms GeoJSON files
+        const zonesData = JSON.parse(await fs.readFile(path.join(__dirname, '../locationData/zones.geojson'), 'utf8'));
+        const roomsData = JSON.parse(await fs.readFile(path.join(__dirname, '../locationData/rooms.geojson'), 'utf8'));
 
-        for (const campusData of config.campuses) {
-            // Create or update the campus
-            const campus = await Campus.findOneAndUpdate(
-                { name: campusData.name },
-                {
-                    name: campusData.name,
-                    boundary: campusData.boundary
+        // Load zones
+        const zoneOperations = zonesData.features.map(feature => ({
+            updateOne: {
+                filter: { name: feature.properties.name },
+                update: {
+                    $set: {
+                        name: feature.properties.name,
+                        geometry: feature.geometry
+                    }
                 },
-                { upsert: true, new: true }
-            );
-
-            for (const buildingData of campusData.buildings) {
-                // Create or update each building
-                await Building.findOneAndUpdate(
-                    { name: buildingData.name, campus: campus._id },
-                    {
-                        name: buildingData.name,
-                        campus: campus._id,
-                        boundary: buildingData.boundary
-                    },
-                    { upsert: true }
-                );
+                upsert: true
             }
+        }));
+
+        const zoneResult = await Zone.bulkWrite(zoneOperations);
+        console.log(`Zones processed: ${zoneResult.upsertedCount} inserted, ${zoneResult.modifiedCount} updated`);
+
+        // Create a map of zone names to IDs
+        const zoneMap = new Map(await Zone.find().select('name _id').then(zones =>
+            zones.map(zone => [zone.name, zone._id])
+        ));
+
+        // Prepare room operations
+        const roomOperations = roomsData.features.reduce((acc, feature) => {
+            if (feature.properties.zone_name) {
+                const zoneId = zoneMap.get(feature.properties.zone_name);
+                if (zoneId) {
+                    acc.push({
+                        updateOne: {
+                            filter: { name: feature.properties.name, zoneId: zoneId },
+                            update: {
+                                $set: {
+                                    name: feature.properties.name,
+                                    zoneId: zoneId,
+                                    geometry: feature.geometry
+                                }
+                            },
+                            upsert: true
+                        }
+                    });
+                } else {
+                    console.warn(`Zone not found for room: ${feature.properties.name}. Skipping this room.`);
+                }
+            } else {
+                console.warn(`No zone specified for room: ${feature.properties.name}. Skipping this room.`);
+            }
+            return acc;
+        }, []);
+
+        // Load rooms
+        if (roomOperations.length > 0) {
+            const roomResult = await Room.bulkWrite(roomOperations);
+            console.log(`Rooms processed: ${roomResult.upsertedCount} inserted, ${roomResult.modifiedCount} updated`);
+        } else {
+            console.log('No valid rooms to process.');
         }
 
-        console.log('Campus configuration loaded successfully');
+        console.log('GeoJSON data loaded successfully');
     } catch (error) {
-        console.error('Error loading campus configuration:', error);
+        console.error('Error loading GeoJSON data:', error);
         process.exit(1);
     }
 };
 
-const setupRoomToggle = async (socket, session) => {
-    // Set up rooms
-    const campus = session.campus;
-    const building = session.building;
-    socket.validRooms = {
-        outerRoom: `${campus._id}:${null}`,
-        subRoom: `${campus._id}:${building ? building._id : null}`
-    };
+const setupCycleRooms = async (socket, session) => {
+    socket.chatRooms = session.chatRooms;
+
+    // Init index
+    socket.currentRoomIndex = -1;
 
     // Set up toggle
-    socket.toggleRoom = async function () {
+    socket.cycleRooms = async function () {
         // Leave current
         if (this.currentRoom) {
             console.log(`${this.username} left room: ${this.currentRoom}`)
             this.leave(this.currentRoom);
         }
 
-        // Toggle the room
-        this.currentRoom = (this.currentRoom === this.validRooms.subRoom)
-            ? this.validRooms.outerRoom
-            : this.validRooms.subRoom;
-
+        // Cycle to the next room
+        this.currentRoomIndex = (this.currentRoomIndex + 1) % this.chatRooms.length;
+        this.currentRoom = this.chatRooms[this.currentRoomIndex].id;
         this.join(this.currentRoom);
         console.log(`${this.username} joined room: ${this.currentRoom}`);
 
         userInfo = {
             username: session.username,
             createdAt: session.createdAt,
-            campus: campus.name,
-            building: ((this.validRooms.subRoom === this.currentRoom) && building) ? building.name : null
+            chatRoom: this.chatRooms[this.currentRoomIndex].name
         }
         // Send user info to client
         console.log('User info emitted to client:', userInfo)
@@ -131,10 +168,13 @@ const setupRoomToggle = async (socket, session) => {
             console.error('Error sending personal chat history to client:', error);
         }
     };
+
+    // Initial room setup
+    await socket.cycleRooms();
 };
 
 module.exports = {
-    loadCampusConfig,
-    getRoom,
-    setupRoomToggle
+    loadGeoJSONdata,
+    getRooms,
+    setupCycleRooms
 }

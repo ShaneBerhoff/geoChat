@@ -11,12 +11,12 @@ const locationMiddlware = async (req, res, next) => {
     }
 
     try {
-        const room = await roomController.getRoom(location.latitude, location.longitude);
-        if (!room){
+        const chatRooms = await roomController.getRooms(location.longitude, location.latitude);
+        if (!chatRooms){
             console.log("Not authorized, invalid location");
             return res.status(401).json({ message: 'Not in a valid location', type: 'LOCATION_ERROR'});
         }
-        await sessionController.updateRoom(req.cookies.sessionToken, room); // Update the session to belong to the room they are in
+        await sessionController.updateRooms(req.cookies.sessionToken, chatRooms); // Update the session to belong to the chatRooms they are validated for
         console.log("Location auth passed");
         next();
     } catch (error){

@@ -1,12 +1,12 @@
 const { Schema, model } = require('mongoose');
 
-const campusSchema = new Schema({
+const zoneSchema = new Schema({
     name: {
         type: String,
         required: true,
         unique: true
     },
-    boundary: {
+    geometry: {
         type: {
             type: String,
             enum: ['Polygon'],
@@ -19,17 +19,17 @@ const campusSchema = new Schema({
     }
 });
 
-const buildingSchema = new Schema({
+const roomSchema = new Schema({
     name: {
         type: String,
         required: true
     },
-    campus: {
+    zoneId: {
         type: Schema.Types.ObjectId,
-        ref: 'Campus',
+        ref: 'Zone',
         required: true
     },
-    boundary: {
+    geometry: {
         type: {
             type: String,
             enum: ['Polygon'],
@@ -42,13 +42,14 @@ const buildingSchema = new Schema({
     }
 });
 
-// Compound index to ensure unique building names within a campus
-buildingSchema.index({ name: 1, campus: 1 }, { unique: true });
+// Compound index to ensure unique room names within a zone
+roomSchema.index({ name: 1, zoneId: 1 }, { unique: true });
+
 // Geospatial indexes
-campusSchema.index({ boundary: '2dsphere' });
-buildingSchema.index({ boundary: '2dsphere' });
+zoneSchema.index({ geometry: '2dsphere' });
+roomSchema.index({ geometry: '2dsphere' });
 
-const Campus = model('Campus', campusSchema, 'campuses');
-const Building = model('Building', buildingSchema, 'buildings');
+const Zone = model('Zone', zoneSchema, 'zones');
+const Room = model('Room', roomSchema, 'rooms');
 
-module.exports = { Campus, Building };
+module.exports = { Zone, Room };
