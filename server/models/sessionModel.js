@@ -4,7 +4,7 @@ const SESSION_RECOVERY_MS = parseInt(process.env.SESSION_RECOVERY_PERIOD) * 60 *
 
 const chatRoomSchema = new Schema({
     id: {
-        type: Schema.Types.ObjectId,
+        type: String,
         required: true
     },
     name: {
@@ -45,7 +45,7 @@ const sessionSchema = new Schema({
     },
     chatRooms: {
         type: [chatRoomSchema],
-        default: []
+        required: true
       }
 });
 
