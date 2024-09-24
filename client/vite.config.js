@@ -6,6 +6,11 @@ import path from 'path';
 export default defineConfig(({ mode }) => {
   return {
     plugins: [react()],
+    resolve: {
+      alias: {
+        '@': path.resolve(__dirname, './src')
+      }
+    },
     server: {
       https: mode === 'development' ? {
         key: fs.readFileSync(path.resolve(__dirname, '../key.pem')),
