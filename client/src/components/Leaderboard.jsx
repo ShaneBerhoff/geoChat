@@ -1,4 +1,3 @@
-import './styles/Leaderboard.css';
 import React, { useState, useEffect, useMemo } from 'react';
 
 const useTimeDifference = (createdAt) => {
@@ -30,43 +29,37 @@ const useTimeDifference = (createdAt) => {
 
 const LeaderboardItem = React.memo(({ item, index, totalItems }) => {
   const timeDiff = useTimeDifference(item.createdAt);
+  const fontSizeClasses = [
+    'text-2xl', // for 1st place
+    'text-xl',  // for 2nd place
+    'text-lg',  // for 3rd place
+    'text-base' // for 4th place and below
+  ];
+  const fontSizeClass = fontSizeClasses[index] || 'text-base';
 
   return (
-    <li
-      className="leaderboard-item"
-      style={{
-        fontSize: `${25 - index * 5}px`,
-        marginBottom: index === totalItems - 1 ? '0px' : undefined
-      }}
-    >
-      <span className="item-number">{index + 1}.</span>
-      <span className="item-text">
-        {item.username}: {timeDiff}
-      </span>
+    <li className={`
+      grid grid-cols-[auto_1fr_auto] items-center gap-4
+      ${fontSizeClass}
+      transition-all duration-300 ease-in-out
+      hover:bg-black rounded-lg p-2
+    `}>
+      <span className="font-bold text-primary text-right">{index + 1}.</span>
+      <span className="font-medium text-center text-secondary truncate">{item.username}</span>
+      <span className="text-primary text-sm">{timeDiff}</span>
     </li>
   );
 });
 
-const Leaderboard = ({ leaderboardArray, userInfo, socket }) => {
+const Leaderboard = ({ leaderboardArray }) => {
   const sortedArray = useMemo(() =>
     [...leaderboardArray].sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt)),
     [leaderboardArray]
   );
 
-  const handleClick = () => {
-    socket.current.emit('cycle rooms');
-    console.log("Room toggled");
-  };
-
   return (
-    <div className="board-container">
-      <h2
-        onClick={() => handleClick()}
-        style={{ cursor: 'pointer' }}
-      >
-        {userInfo.chatRoom}
-      </h2>
-      <ol className="leaderboard-list">
+    <div className="w-full max-w-fit flex flex-col items-center justify-center rounded-2xl bg-background p-2">
+      <ol className="w-full list-none">
         {sortedArray.map((item, index) => (
           <LeaderboardItem
             key={item._id}

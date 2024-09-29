@@ -42,7 +42,7 @@ connectDB()
     })
 
 // Leaderboard manager
-new LeaderboardManager(io);
+const leaderboard = new LeaderboardManager(io);
 
 io.use(async (socket, next) => {
     // Pull out sessionToken
@@ -61,6 +61,14 @@ io.on('connection', async (socket) => {
 
     // Sets up valid rooms for user
     roomController.setupCycleRooms(socket, userSession);
+
+    // Send current leaderboard
+    try {
+        socket.emit('leaderboard', leaderboard.getLeaderboard());
+        console.log("Existing leaderbaord sent to client");
+    } catch (error){
+        console.error('Error sending leaderboard to client:', error);
+    }
 
     socket.on('chat message', async (msg) => {
         console.log(msg, "received from:", socket.username);

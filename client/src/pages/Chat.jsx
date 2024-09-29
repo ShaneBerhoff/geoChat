@@ -5,6 +5,7 @@ import Leaderboard from '../components/Leaderboard';
 import ChatHistory from '../components/ChatHistory';
 import './styles/Chat.css';
 import Chatbox from '../components/ChatBox';
+import RoomStatus from '../components/RoomStatus';
 
 const ChatPage = () => {
   const [ messages, setMessages ] = useState([]);
@@ -116,9 +117,8 @@ const ChatPage = () => {
         { /* <div className="vertical-divider"></div> */ }
         
         <div className="boards-container">
-          <div className='leaderboard-container'>
-            <Leaderboard leaderboardArray={leaderboard} userInfo={userInfo} socket={socket}/>
-          </div>
+          <RoomStatus userInfo={userInfo} socket={socket}/>
+          <Leaderboard leaderboardArray={leaderboard}/>
           <div className='divider'>
           </div>
           <div className='chat-history-container'>
