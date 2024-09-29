@@ -10,7 +10,13 @@ export default {
   ],
   darkMode: "class",
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        'primary': '#33FF33', //phosphor P1
+        'secondary': '#FFB000', //phosphor P3
+        'background': '#282828'
+      }
+    },
   },
   plugins: [addVariablesForColors],
 };
