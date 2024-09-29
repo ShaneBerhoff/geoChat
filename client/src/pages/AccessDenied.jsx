@@ -1,18 +1,16 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import './styles/AccessDenied.css';
+import TerminalWindow from '../components/TerminalWindow';
 
 const AccessDenied = () => {
     return (
-        <div className='wrapper'>
-            <div className='content-container'>
-                <div className='terminal'>
-                    <p>&gt; Access denied.</p>
-                    <p>&gt; You are in an unauthorized location. </p>
-                    <p>&gt; Visit our <Link to="/about" className="lime-text"><u>About Page</u></Link> for more information.</p>
-                </div>
+        <TerminalWindow>
+            <div className="text-primary mt-1">
+                <div>&gt; Access denied.</div>
+                <div>&gt; You are in an unauthorized location. </div>
+                <div>&gt; Visit our <Link to="/about" className='text-secondary font-mono font-semibold underline'>About Page</Link> for more information.</div>
             </div>
-        </div>
+        </TerminalWindow>
     );
 }
 
