@@ -1,16 +1,13 @@
-import './styles/Navbar.css';
-
-const NavBar = ({ isAboutPage}) => {
+const NavBar = ({ isAboutPage }) => {
     return (
-        <div className="nav">
+        <div className="w-full h-full flex flex-row items-center justify-center">
 
-            <a className="left" href="/chatroom">
-                <img src='/geoChatLogo.png' alt='Logo' className="logo" />
+            <a className="mr-auto" href="/chatroom">
+                <img src='/geoChatLogo.png' alt='Logo' className="h-8 w-8 m-2" />
             </a>
             
-            { !isAboutPage && <div className="right">
-                <a href="/about">About</a>
-            </div> }
+            { !isAboutPage && 
+                <a href="/about" className="m-2 font-mono font-bold">About</a> }
         </div>
     );
 };
