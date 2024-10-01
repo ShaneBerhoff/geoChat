@@ -80,22 +80,22 @@ const ChatPage = () => {
   };
 
   return (
-    <div className="h-screen w-full text-primary bg-background flex">
-      <div className="w-full flex flex-col items-center p-4">
+    <div className="h-screen w-full text-P1-main bg-background-P1-dark flex lg:p-10 md:p-4 sm:p-2 overflow-auto">
+      <div className="w-2/3 flex flex-col items-center p-4 border border-P1-main">
         <Chatbox messages={messages} />
         <form className="mt-auto w-full flex items-center font-mono" onSubmit={handleSubmit}>
           <span className='pl-4 select-none'>&gt;</span>
-          <input className='flex-grow py-2 px-1 focus:outline-none placeholder:text-primary bg-background' ref={inputRef} autoComplete="off" placeholder='Enter a chat here' />
+          <input className='flex-grow py-2 px-1 focus:outline-none placeholder:text-P1-main bg-background-P1-dark' ref={inputRef} autoComplete="off" placeholder='Enter a chat here' />
           {/* <button type="submit" className="px-2 py-1 hover:bg-secondary hover:text-white transition-colors rounded-full">➤</button> */}
         </form>
       </div>
 
-      <div className="w-full max-w-md flex flex-col items-center p-4">
-        <div className="h-1/2 w-full flex flex-col items-center border border-primary overflow-hidden">
+      <div className="w-1/3 flex flex-col items-center pl-4 gap-4">
+        <div className="h-1/2 w-full flex flex-col items-center border border-P1-main overflow-hidden">
           <RoomStatus userInfo={userInfo} socket={socket} />
           <Leaderboard leaderboardArray={leaderboard} />
         </div>
-        <div className="h-1/2 w-full border border-primary">
+        <div className="h-1/2 w-full border border-P1-main">
           <ChatHistory messages={messageHistory} userInfo={userInfo} />
         </div>
       </div>

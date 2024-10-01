@@ -12,9 +12,13 @@ export default {
   theme: {
     extend: {
       colors: {
-        'primary': '#33FF33', //phosphor P1
-        'secondary': '#FFB000', //phosphor P3
-        'background': '#282828'
+        'P1-main': '#33FF33', //phosphor P1
+        'P3-main': '#FFB000', //phosphor P3
+        'background': '#282828',
+        'background-P1-dark': '#001100',
+        'background-P1-light': '#002200',
+        'background-P3-dark': '#1A0F00',
+        'background-P3-light': '#2A1B00'
       },
       fontFamily: {
         'mono': ['Courier New', 'Courier', 'monospace'],
