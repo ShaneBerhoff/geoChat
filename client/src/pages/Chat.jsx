@@ -81,9 +81,7 @@ const ChatPage = () => {
 
   return (
     <div className="h-screen w-full text-P1-main bg-background-P1-dark flex flex-col py-2">
-      <div className="w-full h-min lg:px-10 md:px-4 sm:px-2">
-        <NavBar/>
-      </div>
+      <NavBar/>
       <div className="h-screen w-full flex flex-row lg:px-10 md:px-4 sm:px-2 py-2 overflow-auto">
         <div className="w-2/3 flex flex-col items-center p-4 border border-P1-main">
           <Chatbox messages={messages} />

@@ -31,6 +31,7 @@ const Welcome = () => {
             } else if (response.status === 409) {
                 console.log("Username already in use");
                 setIsUsernameValid(false);
+                inputRef.current.value = '';
             } else {
                 console.log("Server error");
                 navigate('/access-denied');
@@ -62,6 +63,13 @@ const Welcome = () => {
                     text="> Enter an alias to start chatting"
                 />
             )}
+            {!isUsernameValid && (
+                <TypingAnimation
+                    className="text-P1-main mt-1"
+                    duration={50}
+                    text="> This username is currently in use. Please select another."
+                />
+            )}
             <form onSubmit={handleUsernameSubmit} className="mt-1">
                 <span className="text-P1-main">{"> "}</span>
                 <input
@@ -70,15 +78,9 @@ const Welcome = () => {
                     placeholder=""
                     className="text-P1-main outline-none bg-background"
                     autoComplete='off'
+                    onChange={()=>{setIsUsernameValid(true)}}
                 />
             </form>
-            {!isUsernameValid && (
-                <TypingAnimation
-                    className="text-P3-main mt-1"
-                    duration={50}
-                    text="> This username is currently in use. Please select another."
-                />
-            )}
         </TerminalWindow>
     );
 }
