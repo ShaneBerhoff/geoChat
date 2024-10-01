@@ -30,23 +30,23 @@ const useTimeDifference = (createdAt) => {
 const LeaderboardItem = React.memo(({ item, index, totalItems }) => {
   const timeDiff = useTimeDifference(item.createdAt);
   const fontSizeClasses = [
-    'text-2xl', // for 1st place
+    'text-3xl', // for 1st place
     'text-xl',  // for 2nd place
-    'text-lg',  // for 3rd place
+    'text-md',  // for 3rd place
     'text-base' // for 4th place and below
   ];
   const fontSizeClass = fontSizeClasses[index] || 'text-base';
 
   return (
     <li className={`
-      grid grid-cols-[auto_1fr_auto] items-center gap-4
+      grid grid-cols-[auto_auto_auto] items-baseline gap-4
       ${fontSizeClass}
       transition-all duration-300 ease-in-out
       hover:bg-black rounded-lg p-2
     `}>
-      <span className="font-bold text-primary text-right">{index + 1}.</span>
-      <span className="font-medium text-center text-secondary truncate">{item.username}</span>
-      <span className="text-primary text-sm">{timeDiff}</span>
+      <span className="text-right">{index + 1}.</span>
+      <span className="text-center truncate">{item.username}:</span>
+      <span className="text-center">{timeDiff}</span>
     </li>
   );
 });
@@ -58,8 +58,8 @@ const Leaderboard = ({ leaderboardArray }) => {
   );
 
   return (
-    <div className="w-full max-w-fit flex flex-col items-center justify-center rounded-2xl bg-background p-2">
-      <ol className="w-full list-none">
+    <div className="w-full max-w-fit flex flex-col items-center justify-center p-2">
+      <ol className="w-full list-none font-mono">
         {sortedArray.map((item, index) => (
           <LeaderboardItem
             key={item._id}

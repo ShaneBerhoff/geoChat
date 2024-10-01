@@ -3,17 +3,15 @@ import io from 'socket.io-client';
 import NavBar from '../components/Navbar';
 import Leaderboard from '../components/Leaderboard';
 import ChatHistory from '../components/ChatHistory';
-import './styles/Chat.css';
 import Chatbox from '../components/ChatBox';
 import RoomStatus from '../components/RoomStatus';
 
 const ChatPage = () => {
-  const [ messages, setMessages ] = useState([]);
-  const [ messageHistory, setMessageHistory ] = useState([]);
-  const [ userInfo, setUserInfo ] = useState([]);
-  const [ leaderboard, setLeaderboard ] = useState([]);
+  const [messages, setMessages] = useState([]);
+  const [messageHistory, setMessageHistory] = useState([]);
+  const [userInfo, setUserInfo] = useState([]);
+  const [leaderboard, setLeaderboard] = useState([]);
   const inputRef = useRef(null);
-  const chatContainerRef = useRef(null);
   const socket = useRef(null);
 
   useEffect(() => {
@@ -34,7 +32,6 @@ const ChatPage = () => {
     // Load chat messages
     socket.current.on('load chat', (msgArray) => {
       setMessages(msgArray);
-      scrollToBottom();
     });
 
     // Load user info
@@ -69,22 +66,6 @@ const ChatPage = () => {
     };
   }, []);
 
-  useEffect(() => {
-
-      scrollToBottom();
-  }, [messages]);
-
-  const scrollToBottom = () => {
-    if (chatContainerRef.current) {
-      const { scrollTop, scrollHeight, clientHeight } = chatContainerRef.current;
-      const isUserAtBottom = scrollHeight <= scrollTop + clientHeight + 100; 
-      
-      if (isUserAtBottom) {
-        chatContainerRef.current.scrollTop = scrollHeight;
-      }
-    }
-  };
-
   const handleSubmit = (event) => {
     event.preventDefault();
     if (inputRef.current.value) {
@@ -99,32 +80,20 @@ const ChatPage = () => {
   };
 
   return (
-    <div className='chat-page'>
-      <NavBar />
-      <div className="container">
-        <div id="chat" ref={chatContainerRef}>
-          <Chatbox messages={messages} />
-          <form id="form" onSubmit={handleSubmit}>
-            <div className="input-container">
-              <span style={{ color: 'var(--brand-primary)'}}>&gt; </span>
-              <input id="input" ref={inputRef} autoComplete="off" placeholder='Enter a message here' />
-              <button type="submit" className="send-button">➤</button>
-            </div>
-          </form>
-        </div>
-        
-        {/* Add a vertical divider */}
-        { /* <div className="vertical-divider"></div> */ }
-        
-        <div className="boards-container">
-          <RoomStatus userInfo={userInfo} socket={socket}/>
-          <Leaderboard leaderboardArray={leaderboard}/>
-          <div className='divider'>
-          </div>
-          <div className='chat-history-container'>
-            <ChatHistory messages={messageHistory} userInfo={userInfo} />
-          </div>
-        </div>
+    <div className="min-h-screen max-h-screen w-full text-primary bg-background flex justify-center">
+      <div className="w-full flex flex-col items-center p-4">
+        <Chatbox messages={messages} />
+        <form className="mt-auto w-full flex items-center font-mono" onSubmit={handleSubmit}>
+          <span className='pl-4 select-none'>&gt;</span>
+          <input className='flex-grow py-2 px-1 focus:outline-none placeholder:text-primary bg-background' ref={inputRef} autoComplete="off" placeholder='Enter a chat here' />
+          {/* <button type="submit" className="px-2 py-1 hover:bg-secondary hover:text-white transition-colors rounded-full">➤</button> */}
+        </form>
+      </div>
+
+      <div className="w-full max-w-md flex flex-col items-center p-4">
+        <RoomStatus userInfo={userInfo} socket={socket} />
+        <Leaderboard leaderboardArray={leaderboard} />
+        <ChatHistory messages={messageHistory} userInfo={userInfo} />
       </div>
     </div>
 

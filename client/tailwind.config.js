@@ -15,6 +15,9 @@ export default {
         'primary': '#33FF33', //phosphor P1
         'secondary': '#FFB000', //phosphor P3
         'background': '#282828'
+      },
+      fontFamily: {
+        'mono': ['Courier New', 'Courier', 'monospace'],
       }
     },
   },
