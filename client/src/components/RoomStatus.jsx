@@ -8,7 +8,7 @@ const RoomStatus = ({ userInfo, socket }) => {
     };
 
     return (
-        <div className="flex items-center">
+        <div className="flex w-full items-center justify-center p-4">
             <div className="text-3xl font-mono font-bold pr-2">{userInfo.chatRoom}</div>
             <TbSwitch3 className="text-xl cursor-pointer" onClick={handleClick}/>
         </div>

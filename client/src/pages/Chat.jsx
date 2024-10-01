@@ -80,7 +80,7 @@ const ChatPage = () => {
   };
 
   return (
-    <div className="min-h-screen max-h-screen w-full text-primary bg-background flex justify-center">
+    <div className="h-screen w-full text-primary bg-background flex">
       <div className="w-full flex flex-col items-center p-4">
         <Chatbox messages={messages} />
         <form className="mt-auto w-full flex items-center font-mono" onSubmit={handleSubmit}>
@@ -91,9 +91,13 @@ const ChatPage = () => {
       </div>
 
       <div className="w-full max-w-md flex flex-col items-center p-4">
-        <RoomStatus userInfo={userInfo} socket={socket} />
-        <Leaderboard leaderboardArray={leaderboard} />
-        <ChatHistory messages={messageHistory} userInfo={userInfo} />
+        <div className="h-1/2 w-full flex flex-col items-center border border-primary overflow-hidden">
+          <RoomStatus userInfo={userInfo} socket={socket} />
+          <Leaderboard leaderboardArray={leaderboard} />
+        </div>
+        <div className="h-1/2 w-full border border-primary">
+          <ChatHistory messages={messageHistory} userInfo={userInfo} />
+        </div>
       </div>
     </div>
 
