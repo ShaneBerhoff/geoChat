@@ -57,6 +57,11 @@ io.on('connection', async (socket) => {
 
     // Finds user session, activates it, and loads it
     const userSession = await sessionController.loadUser(socket.sessionToken);
+    if (userSession === null){
+        socket.emit('invalid-session');
+        socket.disconnect(true);
+        return;
+    }
     socket.username = userSession.username;
 
     // Sets up valid rooms for user

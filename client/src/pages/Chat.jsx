@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import io from 'socket.io-client';
 import NavBar from '../components/Navbar';
 import Leaderboard from '../components/Leaderboard';
@@ -13,6 +14,7 @@ const ChatPage = () => {
   const [leaderboard, setLeaderboard] = useState([]);
   const inputRef = useRef(null);
   const socket = useRef(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
 
@@ -27,6 +29,9 @@ const ChatPage = () => {
     });
     socket.current.on('connect_error', (err) => {
       console.log('Connection error:', err.message);
+    });
+    socket.current.on('invalid-session', ()=>{
+      navigate('/');
     });
 
     // Load chat messages
