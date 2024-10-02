@@ -2,7 +2,7 @@ import NavBar from "../components/Navbar";
 
 const About = () => {
     return (
-        <div className="h-screen w-full bg-background-P1-dark p-2 text-P1-main flex flex-col font-mono">
+        <div className="h-screen w-full bg-primary-darker p-2 text-primary flex flex-col font-mono">
             <NavBar />
             <div className="w-full h-screen flex flex-col text-center overflow-hidden">
                 <div className="mx-auto justify-center pt-16">

@@ -85,24 +85,24 @@ const ChatPage = () => {
   };
 
   return (
-    <div className="h-screen w-full text-P1-main bg-background-P1-dark flex flex-col py-2">
+    <div className="h-screen w-full text-primary bg-primary-darker flex flex-col py-2">
       <NavBar/>
       <div className="h-screen w-full flex flex-row lg:px-10 md:px-4 sm:px-2 py-2 overflow-auto">
-        <div className="w-2/3 flex flex-col items-center p-4 border border-P1-main">
+        <div className="w-2/3 flex flex-col items-center p-4 border border-primary">
           <Chatbox messages={messages} />
           <form className="mt-auto w-full flex items-center font-mono" onSubmit={handleSubmit}>
             <span className='pl-4 select-none'>&gt;</span>
-            <input className='flex-grow py-2 px-1 focus:outline-none placeholder:text-P1-main bg-background-P1-dark' ref={inputRef} autoComplete="off" placeholder='Enter a chat here' />
-            {/* <button type="submit" className="px-2 py-1 hover:bg-secondary hover:text-white transition-colors rounded-full">➤</button> */}
+            <input className='flex-grow py-2 px-1 focus:outline-none placeholder:text-primary bg-primary-darker' ref={inputRef} autoComplete="off" placeholder='Enter a chat here' />
+            {/* <button type="submit" className="px-2 py-1 hover:bg-primary hover:text-white transition-colors rounded-full">➤</button> */}
           </form>
         </div>
 
         <div className="w-1/3 flex flex-col items-center pl-4 gap-4">
-          <div className="h-1/2 w-full flex flex-col items-center border border-P1-main overflow-hidden">
+          <div className="h-1/2 w-full flex flex-col items-center border border-primary overflow-hidden">
             <RoomStatus userInfo={userInfo} socket={socket} />
             <Leaderboard leaderboardArray={leaderboard} />
           </div>
-          <div className="h-1/2 w-full border border-P1-main">
+          <div className="h-1/2 w-full border border-primary">
             <ChatHistory messages={messageHistory} userInfo={userInfo} />
           </div>
         </div>

@@ -17,7 +17,7 @@ const Loading = () => {
   }, []);
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen w-full bg-background-P1-dark">
+    <div className="flex flex-col items-center justify-center min-h-screen w-full bg-primary-darker">
       <div className="w-[350px] h-[350px] overflow-hidden">
         <img
           src="/geoChatLogo.png"
@@ -28,7 +28,7 @@ const Loading = () => {
           }}
         />
       </div>
-      <p className="mt-5 text-base font-bold text-P1-main">Loading...</p>
+      <p className="mt-5 text-base font-bold text-primary">Loading...</p>
     </div>
   );
 };

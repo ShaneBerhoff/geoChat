@@ -51,32 +51,32 @@ const Welcome = () => {
     return (
         <TerminalWindow>
             <TypingAnimation
-                className="text-P1-main mt-1"
+                className="text-primary mt-1"
                 duration={50}
                 text="> Welcome to geoChat"
                 onComplete={() => setFirstAnimationComplete(true)}
             />
             {firstAnimationComplete && (
                 <TypingAnimation
-                    className="text-P1-main mt-1"
+                    className="text-primary mt-1"
                     duration={50}
                     text="> Enter an alias to start chatting"
                 />
             )}
             {!isUsernameValid && (
                 <TypingAnimation
-                    className="text-P1-main mt-1"
+                    className="text-primary mt-1"
                     duration={50}
                     text="> This username is currently in use. Please select another."
                 />
             )}
             <form onSubmit={handleUsernameSubmit} className="mt-1">
-                <span className="text-P1-main">{"> "}</span>
+                <span className="text-primary">{"> "}</span>
                 <input
                     ref={inputRef}
                     type="text"
                     placeholder=""
-                    className="text-P1-main outline-none bg-background"
+                    className="text-primary outline-none bg-background"
                     autoComplete='off'
                     onChange={()=>{setIsUsernameValid(true)}}
                 />
