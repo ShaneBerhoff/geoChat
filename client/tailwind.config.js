@@ -28,7 +28,7 @@ export default {
           extend: {
             colors: {
               'primary': '#33FF33',
-              'primary-dark': '#0a330a',
+              'primary-dark': '#1f991f',
               'primary-darker': '#051905'
             }
           }
@@ -38,7 +38,7 @@ export default {
           extend: {
             colors: {
               'primary': '#FFB000',
-              'primary-dark': '#332300',
+              'primary-dark': '#996a00',
               'primary-darker': '#191200'
             }
           }

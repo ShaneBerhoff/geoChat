@@ -9,19 +9,19 @@ const About = () => {
                     <div className="text-24px">geoChat</div>
                     <div>Anonymous Local Chatrooms</div>
                 </div>
-                <div className="flex flex-row w-full h-full p-24">
+                <div className="flex flex-row w-full h-full p-24 text-primary-dark">
                     <div className="flex-1 px-4 overflow-auto">
-                        <div className="p-2 text-24px">What is geoChat?</div>
+                        <div className="p-2 text-24px text-primary">What is geoChat?</div>
                         <div>geoChat is a collection of entirely anonymous local live chatrooms. User's can join any room in their immediate vicinity and chat with other people in real time.</div>
                     </div>
 
                     <div className="flex-1 px-4 overflow-auto">
-                        <div className="p-2 text-24px">How It Works</div>
+                        <div className="p-2 text-24px text-primary">How It Works</div>
                         <div>It's <a className="underline" href="https://github.com/ShaneBerhoff/geoChat">super secret</a></div>
                     </div>
 
                     <div className="flex-1 px-4 overflow-auto">
-                        <div className="p-2 text-24px">Data Privacy</div>
+                        <div className="p-2 text-24px text-primary">Data Privacy</div>
                         <div>geoChat has no accounts, and your chats are only briefly linked to an alias you create. Once you leave it the connection is gone. Chat's only exist for 10 mintues and then they are gone from everywhere (including the database). Your location is only used to figure out which chat rooms you can access, the cordinates are never stored, and the information disappears with your alias too.</div>
                     </div>
                 </div>
