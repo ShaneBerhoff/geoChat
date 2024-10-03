@@ -8,7 +8,7 @@ const AccessDenied = () => {
             <div className="text-primary mt-1">
                 <div>&gt; Access denied.</div>
                 <div>&gt; You are in an unauthorized location. </div>
-                <div>&gt; Visit our <Link to="/about" className='font-mono font-semibold underline'>About Page</Link> for more information.</div>
+                <div>&gt; Visit our <Link to="/about" className='font-IBM-BIOS underline'>About Page</Link> for more information.</div>
             </div>
         </TerminalWindow>
     );

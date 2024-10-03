@@ -11,7 +11,12 @@ export default {
         'background': '#282828'
       },
       fontFamily: {
-        'mono': ['Courier New', 'Courier', 'monospace'],
+        'IBM-BIOS': ['"IBM BIOS"', 'monospace'],
+      },
+      fontSize: {
+        '8px': '8px',
+        '16px': '16px',
+        '24px': '24px'
       }
     },
   },

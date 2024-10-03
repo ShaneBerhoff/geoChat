@@ -8,7 +8,7 @@ const NavBar = () => {
                 <img src='/geoChatLogo.png' alt='Logo' className="h-8 w-8 m-2" />
             </a>
             <ThemeSelector/>
-            <a href="/about" className="m-2 font-mono font-bold">About</a>
+            <a href="/about" className="m-2 font-IBM-BIOS">About</a>
         </div>
     );
 };

@@ -1,5 +1,5 @@
 import React from "react";
-import { TbSwitch3 } from "react-icons/tb";
+import { FaArrowsRotate } from "react-icons/fa6";
 
 const RoomStatus = ({ userInfo, socket }) => {
     const handleClick = () => {
@@ -8,9 +8,11 @@ const RoomStatus = ({ userInfo, socket }) => {
     };
 
     return (
-        <div className="flex w-full items-center justify-center p-4">
-            <div className="text-3xl font-mono font-bold pr-2">{userInfo.chatRoom}</div>
-            <TbSwitch3 className="text-xl cursor-pointer" onClick={handleClick}/>
+        <div className="grid grid-cols-[auto_auto] items-center gap-4 p-2">
+            <span className="text-24px font-IBM-BIOS text-cener overflow-hidden">{userInfo.chatRoom}</span>
+            <span className="text-24px cursor-pointer" onClick={handleClick}>
+                <FaArrowsRotate/>
+            </span>
         </div>
     );
 }
