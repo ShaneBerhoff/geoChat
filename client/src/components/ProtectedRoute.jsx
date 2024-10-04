@@ -5,7 +5,7 @@ import Loading from './Loading';
 const ProtectedRoute = ({ children }) => {
   const [sessionVerified, setSessionVerified] = useState(null);
   const [locationVerified, setLocationVerified] = useState(null);
-  const [closestZone, setClosestZone] = useState(null);
+  const [deniedMessage, setDeniedMessage] = useState(null);
   const fetchedRef = useRef(false);
 
   const getUserLocation = () => {
@@ -22,7 +22,6 @@ const ProtectedRoute = ({ children }) => {
             });
           },
           (error) => {
-            setLocationVerified(false);
             switch (error.code) {
               case error.PERMISSION_DENIED:
                 reject(new Error("User denied the request for Geolocation."));
@@ -68,7 +67,7 @@ const ProtectedRoute = ({ children }) => {
             break;
           case 'LOCATION_ERROR':
             console.log("Location auth failed:", error.message);
-            setClosestZone(error.closestZone);
+            setDeniedMessage(`You are in an unsupported location. Closest valid zone: ${error.closestZone}.`);
             setLocationVerified(false);
             break;
           case 'SERVER_ERROR':
@@ -116,6 +115,7 @@ const ProtectedRoute = ({ children }) => {
       } catch (error) { // If get location fail
         removeAuth();
         console.error('Error:', error.message);
+        setDeniedMessage("Enable location to be placed in a chatroom.");
         setLocationVerified(false);
       }
     };
@@ -132,7 +132,7 @@ const ProtectedRoute = ({ children }) => {
   }
 
   if (locationVerified === false) {
-    return <Navigate to="/access-denied" replace state={closestZone}/>;
+    return <Navigate to="/access-denied" replace state={deniedMessage}/>;
   }
 
   if (sessionVerified && locationVerified) {
