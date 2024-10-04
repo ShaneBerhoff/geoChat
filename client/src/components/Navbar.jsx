@@ -1,16 +1,14 @@
-import './styles/Navbar.css';
+import ThemeSelector from "./ThemeSelector";
 
-const NavBar = ({ isAboutPage}) => {
+const NavBar = () => {
     return (
-        <div className="nav">
+        <div className="w-full h-min lg:px-10 md:px-4 sm:px-2 flex flex-row items-center justify-center">
 
-            <a className="left" href="/chatroom">
-                <img src='/geoChatLogo.png' alt='Logo' className="logo" />
+            <a className="mr-auto" href="/">
+                <img src='/geoChatLogo.png' alt='Logo' className="h-8 w-8 m-2" />
             </a>
-            
-            { !isAboutPage && <div className="right">
-                <a href="/about">About</a>
-            </div> }
+            <ThemeSelector/>
+            <a href="/about" className="m-2 font-IBM-BIOS">About</a>
         </div>
     );
 };

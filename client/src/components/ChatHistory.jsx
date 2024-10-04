@@ -1,4 +1,3 @@
-import './styles/ChatHistory.css';
 import { useState, useEffect, useRef } from 'react';
 
 const ChatHistory = ({ messages, userInfo }) => {
@@ -26,14 +25,11 @@ const ChatHistory = ({ messages, userInfo }) => {
     }, [userInfo.createdAt]);
 
     useEffect(() => {
-        scrollToBottom();
-    }, [messages]);
-
-    const scrollToBottom = () => {
         if (messagesContainerRef.current) {
-            messagesContainerRef.current.scrollTop = messagesContainerRef.current.scrollHeight;
+            const { scrollHeight, clientHeight } = messagesContainerRef.current;
+            messagesContainerRef.current.scrollTop = scrollHeight - clientHeight;
         }
-    };
+    }, [messages]);
 
     const formatTime = (timestamp) => {
         const date = new Date(timestamp);
@@ -41,15 +37,26 @@ const ChatHistory = ({ messages, userInfo }) => {
     };
 
     return (
-        <div className="board-container">
-            <div className="name-container">
-                <p className="name"><strong>{userInfo.username}</strong> &lt; {elapsedTime} &gt;</p>
+        <div className="w-full h-full flex flex-col overflow-hidden font-IBM-BIOS">
+            <div className="pt-4 px-4">
+                <p className="flex flex-wrap items-baseline justify-center text-24px">
+                    <span className="">{userInfo.username}</span>
+                    <span className="text-16px">&nbsp;&lt;{elapsedTime}&gt;&nbsp;</span>
+                </p>
             </div>
-            <div className="messages-container" ref={messagesContainerRef}>
+            <div
+                ref={messagesContainerRef}
+                className="flex-grow overflow-y-auto p-4 space-y-2 text-primary-dark"
+            >
                 {messages.map((message, index) => (
-                    <p className="message" key={index}>
-                        {formatTime(message.createdAt)} {message.content}
-                    </p>
+                    <div key={index} className="flex items-baseline space-x-2">
+                        <span className="text-8px">
+                            {formatTime(message.createdAt)}
+                        </span>
+                        <p className="text-sm">
+                            {message.content}
+                        </p>
+                    </div>
                 ))}
             </div>
         </div>

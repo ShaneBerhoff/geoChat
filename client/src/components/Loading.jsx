@@ -1,38 +1,34 @@
 import React, { useEffect, useState } from 'react';
-import './styles/Loading.css';
 
 const Loading = () => {
   const [progress, setProgress] = useState(0);
 
   useEffect(() => {
-    const updateInterval = 15;
-    const increment = 0.3; // Increment value to maintain speed
+    const updateInterval = 8;
+    const increment = 0.5;
 
-    const interval = setInterval(() => {
-      setProgress((prevProgress) => {
-        const newProgress = prevProgress + increment;
-        if (newProgress > 100) {
-          return 0; // Reset progress for continuous drawing effect
-        }
-        return newProgress;
-      });
-    }, updateInterval);
+    const animate = () => {
+      setProgress((prevProgress) => (prevProgress + increment) % 100);
+    };
 
-    return () => clearInterval(interval);
+    const intervalId = setInterval(animate, updateInterval);
+
+    return () => clearInterval(intervalId);
   }, []);
 
   return (
-    <div className='loading-container'>
-      <img
-        id="globe"
-        src="/geoChatLogo.png"
-        alt="Loading Globe"
-        className='image'
-        style={{
-          clipPath: `circle(${progress}% at 50% 50%)`, // Dynamically apply clipPath
-        }}
-      />
-      <p className='loading-text'>Loading...</p>
+    <div className="flex flex-col items-center justify-center min-h-screen w-full bg-primary-darker">
+      <div className="w-[350px] h-[350px] overflow-hidden">
+        <img
+          src="/geoChatLogo.png"
+          alt="Loading Globe"
+          className="w-full h-full object-cover"
+          style={{
+            clipPath: `circle(${progress}% at 50% 50%)`,
+          }}
+        />
+      </div>
+      <p className="mt-5 font-IBM-BIOS text-primary">Loading...</p>
     </div>
   );
 };

@@ -1,37 +1,22 @@
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useRef, useState } from 'react';
-import './styles/Welcome.css';
+import { TypingAnimation } from '../components/ui/typing-effect';
+import TerminalWindow from '../components/TerminalWindow';
 
 const Welcome = () => {
     const navigate = useNavigate();
     const inputRef = useRef(null);
-    const [messages, setMessages] = useState([
-        { text: 'Welcome to geoChat.', typed: false },
-        { text: 'Enter an alias to start chatting.', typed: false },
-    ]);
-    const [currentMessageIndex, setCurrentMessageIndex] = useState(0);
     const [isUsernameValid, setIsUsernameValid] = useState(true);
-
-    useEffect(() => {
-        if (inputRef.current) {
-            inputRef.current.focus();
-        }
-        if (currentMessageIndex < messages.length) {
-            const timer = setTimeout(() => {
-                setMessages((prevMessages) => {
-                    const updatedMessages = [...prevMessages];
-                    updatedMessages[currentMessageIndex].typed = true;
-                    return updatedMessages;
-                });
-                setCurrentMessageIndex(currentMessageIndex + 1);
-            }, 1000);
-            return () => clearTimeout(timer);
-        }
-    }, [messages, currentMessageIndex]);
+    const [firstAnimationComplete, setFirstAnimationComplete] = useState(false);
 
     async function handleUsernameSubmit(event) {
         event.preventDefault();
-        const username = inputRef.current.value;
+
+        const username = inputRef.current.value.trim();
+        if (username === "") {
+            return;
+        }
+
         try {
             const response = await fetch('/api/check-username', {
                 method: 'POST',
@@ -44,51 +29,59 @@ const Welcome = () => {
                 console.log("Sent to chatroom");
                 navigate('/chatroom');
             } else if (response.status === 409) {
+                console.log("Username already in use");
                 setIsUsernameValid(false);
-                setMessages([]);
-                setMessages([
-                    { text: "This username is taken. Please select another.", typed: false },
-                ]);
-                setCurrentMessageIndex(0);
+                inputRef.current.value = '';
             } else {
-                setIsUsernameValid(false);
-                setMessages([
-                    ...messages,
-                    { text: "Server error", typed: false },
-                ]);
-                setCurrentMessageIndex(0);
+                console.log("Server error");
                 navigate('/access-denied');
             }
         } catch (error) {
-            setIsUsernameValid(false);
-            setMessages([
-                ...messages,
-                { text: "Error with username fetch operation", typed: false },
-            ]);
-            setCurrentMessageIndex(0);
+            console.log("Error with username fetch operation")
             navigate('/access-denied');
-        } 
-       
+        }
     }
 
+    useEffect(() => {
+        if (inputRef.current) {
+            inputRef.current.focus();
+        }
+    })
+
     return (
-        <div className="wrapper">
-            <div className='content-container'>
-                <div className='terminal'>
-                    {messages.map((message, index) => (
-                        <p key={index} className={`typed-text ${message.typed ? 'typed' : ''}`}>&gt; {message.text}</p>
-                    ))}
-                    <form className={`form ${!isUsernameValid ? 'invalid' : ''}`} id="form" onSubmit={handleUsernameSubmit}>
-                        <span style={{ paddingRight: '8px'}}>&gt; </span>
-                        <input
-                            id="username"
-                            ref={inputRef} 
-                            autoComplete="off"
-                        />
-                    </form>
-                </div>
-            </div>
-        </div>
+        <TerminalWindow>
+            <TypingAnimation
+                className="text-primary mt-1"
+                duration={50}
+                text="> Welcome to geoChat"
+                onComplete={() => setFirstAnimationComplete(true)}
+            />
+            {firstAnimationComplete && (
+                <TypingAnimation
+                    className="text-primary mt-1"
+                    duration={50}
+                    text="> Enter an alias to start chatting"
+                />
+            )}
+            {!isUsernameValid && (
+                <TypingAnimation
+                    className="text-primary mt-1"
+                    duration={50}
+                    text="> This username is currently in use. Please select another."
+                />
+            )}
+            <form onSubmit={handleUsernameSubmit} className="mt-1">
+                <span className="text-primary">{"> "}</span>
+                <input
+                    ref={inputRef}
+                    type="text"
+                    placeholder=""
+                    className="text-primary outline-none bg-background"
+                    autoComplete='off'
+                    onChange={()=>{setIsUsernameValid(true)}}
+                />
+            </form>
+        </TerminalWindow>
     );
 }
 
