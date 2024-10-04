@@ -16,20 +16,20 @@ const Chatbox = ({ messages }) => {
     }, [messages]);
 
     return (
-        <div className="w-full h-full flex flex-col pb-2 overflow-hidden font-IBM-BIOS">
+        <div className="w-full h-full flex flex-col pb-2 overflow-hidden ">
             <div
                 ref={messagesContainerRef}
                 className="flex-grow overflow-y-auto p-4 space-y-2"
             >
                 {messages.map((message, index) => (
                     <div key={index} className="flex items-baseline space-x-2">
-                        <span className="text-primary-dark text-8px">
+                        <span className="text-primary-dark text-sm">
                             {formatTime(message.createdAt)}
                         </span>
-                        <span className="text-16px">
+                        <span className="text-lg">
                             [{message.username}]
                         </span>
-                        <p className="text-sm text-primary-dark">
+                        <p className="text-lg text-primary-dark">
                             {message.content}
                         </p>
                     </div>

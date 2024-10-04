@@ -88,9 +88,9 @@ const ChatPage = () => {
     <div className="h-screen w-full text-primary bg-primary-darker flex flex-col py-2">
       <NavBar/>
       <div className="h-screen w-full flex flex-row lg:px-10 md:px-4 sm:px-2 py-2 overflow-auto">
-        <div className="w-2/3 flex flex-col items-center p-4 border-2 border-primary">
+        <div className="w-2/3 flex flex-col items-center p-4 border-2 border-primary-dark">
           <Chatbox messages={messages} />
-          <form className="mt-auto w-full flex items-center font-IBM-BIOS text-sm" onSubmit={handleSubmit}>
+          <form className="mt-auto w-full flex items-center text-xl" onSubmit={handleSubmit}>
             <span className='pl-4 select-none'>&gt;</span>
             <input className='flex-grow py-2 px-1 focus:outline-none placeholder:text-primary bg-primary-darker' ref={inputRef} autoComplete="off" placeholder='Enter a chat here' />
             {/* <button type="submit" className="px-2 py-1 hover:bg-primary hover:text-white transition-colors rounded-full">➤</button> */}
@@ -98,11 +98,11 @@ const ChatPage = () => {
         </div>
 
         <div className="w-1/3 flex flex-col items-center pl-4 gap-4">
-          <div className="h-1/2 w-full flex flex-col items-center border-2 border-primary overflow-hidden">
+          <div className="h-1/2 w-full flex flex-col items-center border-2 border-primary-dark overflow-hidden">
             <RoomStatus userInfo={userInfo} socket={socket} />
             <Leaderboard leaderboardArray={leaderboard} />
           </div>
-          <div className="h-1/2 w-full border-2 border-primary">
+          <div className="h-1/2 w-full border-2 border-primary-dark">
             <ChatHistory messages={messageHistory} userInfo={userInfo} />
           </div>
         </div>

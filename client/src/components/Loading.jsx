@@ -28,7 +28,7 @@ const Loading = () => {
           }}
         />
       </div>
-      <p className="mt-5 font-IBM-BIOS text-primary">Loading...</p>
+      <p className="mt-5  text-primary">Loading...</p>
     </div>
   );
 };

@@ -1,9 +1,8 @@
 import { useState, useEffect } from 'react';
 
 const fonts = [
-    { name: 'IBM BIOS', value: 'IBM BIOS' },
-    { name: 'IBM VGA', value: 'IBM VGA' },
     { name: 'Cordata PPC', value: 'Cordata PPC' },
+    { name: 'IBM VGA', value: 'IBM VGA' },
 ];
 
 export const initializeFont = () => {

@@ -37,11 +37,11 @@ const ChatHistory = ({ messages, userInfo }) => {
     };
 
     return (
-        <div className="w-full h-full flex flex-col overflow-hidden font-IBM-BIOS">
+        <div className="w-full h-full flex flex-col overflow-hidden ">
             <div className="pt-4 px-4">
-                <p className="flex flex-wrap items-baseline justify-center text-24px">
+                <p className="flex flex-wrap items-baseline justify-center text-3xl">
                     <span className="">{userInfo.username}</span>
-                    <span className="text-16px">&nbsp;&lt;{elapsedTime}&gt;&nbsp;</span>
+                    <span className="text-xl">&nbsp;&lt;{elapsedTime}&gt;&nbsp;</span>
                 </p>
             </div>
             <div
@@ -50,10 +50,10 @@ const ChatHistory = ({ messages, userInfo }) => {
             >
                 {messages.map((message, index) => (
                     <div key={index} className="flex items-baseline space-x-2">
-                        <span className="text-8px">
+                        <span className="text-sm">
                             {formatTime(message.createdAt)}
                         </span>
-                        <p className="text-sm">
+                        <p className="text-lg">
                             {message.content}
                         </p>
                     </div>

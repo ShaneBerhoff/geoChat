@@ -10,7 +10,7 @@ const NavBar = () => {
             </a>
             <FontSelector/>
             <ThemeSelector/>
-            <a href="/about" className="m-2 font-IBM-BIOS">About</a>
+            <a href="/about" className="m-2 text-lg">About</a>
         </div>
     );
 };

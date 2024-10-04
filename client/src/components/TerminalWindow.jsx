@@ -14,12 +14,12 @@ const TerminalWindow = ({ children, title = 'geoChat' }) => {
                             <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
                             <div className="w-3 h-3 rounded-full bg-green-500"></div>
                         </div>
-                        <div className="flex-grow flex justify-center items-end text-white text-sm">
+                        <div className="flex-grow flex justify-center text-white text-sm">
                             <span ref={glitch.ref}><FcGlobe className='mr-1 text-lg' /></span>
                             <span className=''>{title}</span>
                         </div>
                     </div>
-                    <div className="p-4 font-IBM-BIOS flex-grow overflow-auto">
+                    <div className="p-4  flex-grow overflow-auto text-2xl">
                         {children}
                     </div>
                 </div>

@@ -9,8 +9,8 @@ const RoomStatus = ({ userInfo, socket }) => {
 
     return (
         <div className="grid grid-cols-[auto_auto] items-center gap-4 p-4">
-            <span className="text-24px font-IBM-BIOS text-cener overflow-hidden">{userInfo.chatRoom}</span>
-            <span className="text-24px cursor-pointer" onClick={handleClick}>
+            <span className="text-3xl  text-cener overflow-hidden">{userInfo.chatRoom}</span>
+            <span className="text-xl cursor-pointer" onClick={handleClick}>
                 <FaArrowsRotate/>
             </span>
         </div>
