@@ -173,8 +173,28 @@ const setupCycleRooms = async (socket, session) => {
     await socket.cycleRooms();
 };
 
+const getClosestZone = async (longitude, latitude) => {
+    const userPoint = {
+        type: "Point",
+        coordinates: [longitude, latitude]
+    };
+
+    // Find closest zone to user location
+    const closestZone = await Zone.findOne({
+        geometry: {
+          $nearSphere: {
+            $geometry: userPoint
+          }
+        }
+    }).select('name');
+
+    console.log("User closest to:", closestZone.name);
+    return closestZone.name;
+}
+
 module.exports = {
     loadGeoJSONdata,
     getRooms,
-    setupCycleRooms
+    setupCycleRooms,
+    getClosestZone
 }

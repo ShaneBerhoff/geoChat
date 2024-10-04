@@ -14,7 +14,8 @@ const locationMiddlware = async (req, res, next) => {
         const chatRooms = await roomController.getRooms(location.longitude, location.latitude);
         if (!chatRooms){
             console.log("Not authorized, invalid location");
-            return res.status(401).json({ message: 'Not in a valid location', type: 'LOCATION_ERROR'});
+            const closestZone = await roomController.getClosestZone(location.longitude, location.latitude);
+            return res.status(401).json({ message: 'Not in a valid location', type: 'LOCATION_ERROR', closestZone: closestZone});
         }
         await sessionController.updateRooms(req.cookies.sessionToken, chatRooms); // Update the session to belong to the chatRooms they are validated for
         console.log("Location auth passed");

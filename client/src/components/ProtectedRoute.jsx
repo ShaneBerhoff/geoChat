@@ -5,6 +5,7 @@ import Loading from './Loading';
 const ProtectedRoute = ({ children }) => {
   const [sessionVerified, setSessionVerified] = useState(null);
   const [locationVerified, setLocationVerified] = useState(null);
+  const [closestZone, setClosestZone] = useState(null);
   const fetchedRef = useRef(false);
 
   const getUserLocation = () => {
@@ -67,6 +68,7 @@ const ProtectedRoute = ({ children }) => {
             break;
           case 'LOCATION_ERROR':
             console.log("Location auth failed:", error.message);
+            setClosestZone(error.closestZone);
             setLocationVerified(false);
             break;
           case 'SERVER_ERROR':
@@ -130,7 +132,7 @@ const ProtectedRoute = ({ children }) => {
   }
 
   if (locationVerified === false) {
-    return <Navigate to="/access-denied" replace />;
+    return <Navigate to="/access-denied" replace state={closestZone}/>;
   }
 
   if (sessionVerified && locationVerified) {
