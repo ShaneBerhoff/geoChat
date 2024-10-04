@@ -7,8 +7,8 @@ const TerminalWindow = ({ children, title = 'geoChat' }) => {
     return (
         <div className='min-h-screen w-full bg-black flex items-center justify-center'>
             <div className='w-full max-w-xl p-4 h-screen max-h-96 flex flex-col'>
-                <div className="bg-background rounded-lg shadow-lg overflow-hidden flex flex-col flex-grow">
-                    <div className="bg-gray-600 px-4 py-2 flex items-center relative">
+                <div className="bg-primary-darker rounded-lg shadow-lg overflow-hidden flex flex-col flex-grow">
+                    <div className="bg-stone-900 px-4 py-2 flex items-center relative">
                         <div className="flex space-x-2 absolute left-4">
                             <div className="w-3 h-3 rounded-full bg-red-500"></div>
                             <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
