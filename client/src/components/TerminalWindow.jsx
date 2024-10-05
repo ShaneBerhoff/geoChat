@@ -3,7 +3,14 @@ import { FcGlobe } from 'react-icons/fc';
 import { useGlitch } from 'react-powerglitch';
 
 const TerminalWindow = ({ children, title = 'geoChat' }) => {
-    const glitch = useGlitch({ playMode: 'hover' });
+    const glitch = useGlitch({
+        "timing": {
+            "duration": 3000
+        },
+        "glitchTimeSpan": {
+            "end": 0.8
+        }
+    });
     return (
         <div className='min-h-screen w-full bg-black flex items-center justify-center'>
             <div className='w-full max-w-xl p-4 h-screen max-h-96 flex flex-col'>

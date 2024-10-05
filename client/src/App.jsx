@@ -7,7 +7,7 @@ import About from "./pages/About";
 
 function App() {
   return (
-    <>
+    <div className="selection:text-primary-darker selection:bg-primary-dark">
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Welcome />} />
@@ -20,7 +20,7 @@ function App() {
           <Route path="/about" element={<About />} />
         </Routes>
       </BrowserRouter>
-    </>
+    </div>
   );
 }
 

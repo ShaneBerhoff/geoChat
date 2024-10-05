@@ -1,12 +1,22 @@
 import NavBar from "../components/Navbar";
+import { useGlitch } from "react-powerglitch";
 
 const About = () => {
+    const glitch = useGlitch({
+        "timing": {
+            "duration": 3000
+        },
+        "glitchTimeSpan": {
+            "end": 0.8
+        }
+    });
+
     return (
         <div className="h-screen w-full bg-primary-darker p-2 text-primary flex flex-col ">
             <NavBar />
             <div className="w-full h-screen flex flex-col text-center overflow-hidden">
                 <div className="mx-auto justify-center pt-16">
-                    <div className="text-5xl">geoChat</div>
+                    <div className="text-5xl" ref={glitch.ref}>geoChat</div>
                     <div>Anonymous Local Chatrooms</div>
                 </div>
                 <div className="flex flex-row w-full h-full p-24 text-lg text-primary-dark">
