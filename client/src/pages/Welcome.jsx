@@ -76,7 +76,7 @@ const Welcome = () => {
                     ref={inputRef}
                     type="text"
                     placeholder=""
-                    className="text-primary outline-none bg-background"
+                    className="text-primary outline-none bg-primary-darker"
                     autoComplete='off'
                     onChange={()=>{setIsUsernameValid(true)}}
                 />

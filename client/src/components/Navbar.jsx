@@ -1,4 +1,5 @@
 import ThemeSelector from "./ThemeSelector";
+import FontSelector from "./FontSelector";
 
 const NavBar = () => {
     return (
@@ -7,8 +8,9 @@ const NavBar = () => {
             <a className="mr-auto" href="/">
                 <img src='/geoChatLogo.png' alt='Logo' className="h-8 w-8 m-2" />
             </a>
+            <FontSelector/>
             <ThemeSelector/>
-            <a href="/about" className="m-2 font-IBM-BIOS">About</a>
+            <a href="/about" className="m-2 text-lg">About</a>
         </div>
     );
 };

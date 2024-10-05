@@ -30,12 +30,12 @@ const useTimeDifference = (createdAt) => {
 const LeaderboardItem = React.memo(({ item, index, totalItems }) => {
   const timeDiff = useTimeDifference(item.createdAt);
   const fontSizeClasses = [
-    'text-24px', // for 1st place
-    'text-16px',  // for 2nd place
-    'text-16px',  // for 3rd place
-    'text-8px' // for 4th place and below
+    'text-3xl', // for 1st place
+    'text-2xl',  // for 2nd place
+    'text-xl',  // for 3rd place
+    'text-md' // for 4th place and below
   ];
-  const fontSizeClass = fontSizeClasses[index] || 'text-8px';
+  const fontSizeClass = fontSizeClasses[index] || 'text-md';
 
   return (
     <li className={`
@@ -59,7 +59,7 @@ const Leaderboard = ({ leaderboardArray }) => {
 
   return (
     <div className="w-full max-w-fit flex flex-col items-center overflow-y-auto">
-      <ol className="w-full list-none font-IBM-BIOS">
+      <ol className="w-full list-none ">
         {sortedArray.map((item, index) => (
           <LeaderboardItem
             key={item._id}

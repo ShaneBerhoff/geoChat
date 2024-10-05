@@ -11,7 +11,7 @@ const AccessDenied = () => {
             <div className="text-primary mt-1">
                 <div>&gt; Access denied.</div>
                 {location.state && (<div>&gt; {location.state}</div>)}
-                <div>&gt; Visit our <Link to="/about" className='font-IBM-BIOS underline'>About Page</Link> for more information.</div>
+                <div>&gt; Visit our <Link to="/about" className=' underline'>About Page</Link> for more information.</div>
             </div>
         </TerminalWindow>
     );

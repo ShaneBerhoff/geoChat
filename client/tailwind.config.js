@@ -9,14 +9,6 @@ export default {
     extend: {
       colors: {
         'background': '#282828'
-      },
-      fontFamily: {
-        'IBM-BIOS': ['"IBM BIOS"', 'monospace'],
-      },
-      fontSize: {
-        '8px': '8px',
-        '16px': '16px',
-        '24px': '24px'
       }
     },
   },
