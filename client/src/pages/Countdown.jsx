@@ -4,7 +4,7 @@ import { useGlitch } from 'react-powerglitch';
 const Countdown = () => {
     const Ref = useRef(null);
     const [timer, setTimer] = useState("00:00:00:00");
-    const [isInitial, setIsInitial] = useState(true);
+    //const [isInitial, setIsInitial] = useState(true);
 
     // Initialize the glitch effect
     const glitch = useGlitch({
@@ -42,11 +42,6 @@ const Countdown = () => {
                 (minutes > 9 ? minutes : "0" + minutes) +
                 ":" +
                 (seconds > 9 ? seconds : "0" + seconds);
-
-            // If the new time is not "00:00:00:00", stop the glitch effect
-            if (newTime !== "00:00:00:00") {
-                setIsInitial(false);
-            }
 
             setTimer(newTime);
         }
