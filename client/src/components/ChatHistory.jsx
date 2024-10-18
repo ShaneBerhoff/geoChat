@@ -10,13 +10,16 @@ const ChatHistory = ({ messages, userInfo }) => {
             const startTime = new Date(userInfo.createdAt);
             const now = new Date();
             const difference = now - startTime;
-
+        
             const hours = Math.floor(difference / (1000 * 60 * 60));
             const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
             const seconds = Math.floor((difference % (1000 * 60)) / 1000);
-
-            setElapsedTime(`${hours}:${minutes}:${seconds}`);
+        
+            const formatWithLeadingZero = (num) => (num < 10 ? '0' + num : num);
+        
+            setElapsedTime(`${formatWithLeadingZero(hours)}:${formatWithLeadingZero(minutes)}:${formatWithLeadingZero(seconds)}`);
         };
+        
 
         calculateElapsedTime();
         const intervalId = setInterval(calculateElapsedTime, 1000);

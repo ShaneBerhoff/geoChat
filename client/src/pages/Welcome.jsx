@@ -51,8 +51,8 @@ const Welcome = () => {
 
     return (
 
-        <Countdown />
-        /*<TerminalWindow>
+        /*<Countdown />*/
+        <TerminalWindow>
             <TypingAnimation
                 className="text-primary mt-1"
                 duration={50}
@@ -84,7 +84,7 @@ const Welcome = () => {
                     onChange={()=>{setIsUsernameValid(true)}}
                 />
             </form>
-        </TerminalWindow>*/
+        </TerminalWindow>
     );
 }
 
