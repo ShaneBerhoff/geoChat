@@ -50,8 +50,6 @@ const Welcome = () => {
     })
 
     return (
-
-        /*<Countdown />*/
         <TerminalWindow>
             <TypingAnimation
                 className="text-primary mt-1"
