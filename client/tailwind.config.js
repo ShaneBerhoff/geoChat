@@ -1,3 +1,5 @@
+import tailwindcssThemer from 'tailwindcss-themer';
+
 /** @type {import('tailwindcss').Config} */
 export default {
   content: [
@@ -13,7 +15,7 @@ export default {
     },
   },
   plugins: [
-    require('tailwindcss-themer')({
+    tailwindcssThemer({
       themes: [
         {
           name: 'phosphor-P1',

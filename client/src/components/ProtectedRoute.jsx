@@ -1,46 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Navigate } from 'react-router-dom';
 import Loading from './Loading';
+import useLocationCheck from '../hooks/useLocationCheck';
 
 const ProtectedRoute = ({ children }) => {
   const [sessionVerified, setSessionVerified] = useState(null);
   const [locationVerified, setLocationVerified] = useState(null);
   const [deniedMessage, setDeniedMessage] = useState(null);
   const fetchedRef = useRef(false);
-
-  const getUserLocation = () => {
-    return new Promise((resolve, reject) => {
-      if (!navigator.geolocation) {
-        reject(new Error('Geolocation is not supported by your browser'));
-      } else {
-        navigator.geolocation.getCurrentPosition(
-          (position) => {
-            resolve({
-              latitude: position.coords.latitude,
-              longitude: position.coords.longitude,
-              accuracy: position.coords.accuracy
-            });
-          },
-          (error) => {
-            switch (error.code) {
-              case error.PERMISSION_DENIED:
-                reject(new Error("User denied the request for Geolocation."));
-                break;
-              case error.POSITION_UNAVAILABLE:
-                reject(new Error("Location information is unavailable."));
-                break;
-              case error.TIMEOUT:
-                reject(new Error("The request to get user location timed out."));
-                break;
-              default:
-                reject(new Error("An unknown error occurred."));
-                break;
-            }
-          }
-        );
-      }
-    });
-  };
 
   const checkAuth = async (location) => {
     try {
@@ -103,6 +70,7 @@ const ProtectedRoute = ({ children }) => {
     }
   }
 
+  const checkLocation = useLocationCheck();
   useEffect(() => {
     const performChecks = async () => {
       if (fetchedRef.current) return;
@@ -110,7 +78,7 @@ const ProtectedRoute = ({ children }) => {
 
       try {
         // Get location
-        const location = await getUserLocation();
+        const location = await checkLocation();
         await checkAuth(location);
       } catch (error) { // If get location fail
         removeAuth();
@@ -121,7 +89,7 @@ const ProtectedRoute = ({ children }) => {
     };
 
     performChecks();
-  }, []);
+  }, [checkLocation]);
 
   if (sessionVerified === null && locationVerified === null) {
     return <Loading />

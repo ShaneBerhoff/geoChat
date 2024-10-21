@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react';
+import NavBar from './Navbar';
 
 const Chatbox = ({ messages }) => {
     const messagesContainerRef = useRef(null);
@@ -16,13 +17,14 @@ const Chatbox = ({ messages }) => {
     }, [messages]);
 
     return (
-        <div className="w-full h-full flex flex-col pb-2 overflow-hidden ">
+        <div className="w-full h-full flex flex-col pb-2 overflow-hidden">
+            <NavBar/>
             <div
                 ref={messagesContainerRef}
                 className="flex-grow overflow-y-auto p-4 space-y-2"
             >
                 {messages.map((message, index) => (
-                    <div key={index} className="flex items-baseline space-x-2">
+                    <div key={index} className="flex items-baseline space-x-2 flex-wrap">
                         <span className="text-primary-dark text-sm">
                             {formatTime(message.createdAt)}
                         </span>
