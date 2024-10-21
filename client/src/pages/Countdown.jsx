@@ -1,77 +1,52 @@
-import React, { useState, useRef, useEffect } from "react";
-import { useGlitch } from 'react-powerglitch';
+import React, { useState, useEffect } from "react";
+import { useGlitch } from "react-powerglitch";
 
 const Countdown = () => {
-    const Ref = useRef(null);
-    const [timer, setTimer] = useState("00:00:00:00");
-    //const [isInitial, setIsInitial] = useState(true);
-
-    // Initialize the glitch effect
+    const [timeRemaining, setTimeRemaining] = useState("");
     const glitch = useGlitch({
         "timing": {
-            "duration": 6000 // Duration of the glitch effect
+            "duration": 6000
         },
         "glitchTimeSpan": {
-            "end": 0.6 // Time span during which the glitch will appear
+            "end": 0.6
         }
     });
 
-    const getTimeRemaining = (e) => {
-        const total = Date.parse(e) - Date.parse(new Date());
-        const seconds = Math.floor((total / 1000) % 60);
-        const minutes = Math.floor((total / 1000 / 60) % 60);
-        const hours = Math.floor((total / 1000 / 60 / 60) % 24);
-        const days = Math.floor(total / (1000 * 60 * 60 * 24));
-        return {
-            total,
-            days,
-            hours,
-            minutes,
-            seconds,
-        };
-    };
-
-    const startTimer = (e) => {
-        let { total, days, hours, minutes, seconds } = getTimeRemaining(e);
-        if (total >= 0) {
-            const newTime = 
-                (days > 9 ? days : "0" + days) +
-                ":" +
-                (hours > 9 ? hours : "0" + hours) +
-                ":" +
-                (minutes > 9 ? minutes : "0" + minutes) +
-                ":" +
-                (seconds > 9 ? seconds : "0" + seconds);
-
-            setTimer(newTime);
-        }
-    };
-
-    const clearTimer = (e) => {
-        if (Ref.current) clearInterval(Ref.current);
-        const id = setInterval(() => {
-            startTimer(e);
-        }, 1000);
-        Ref.current = id;
-    };
-
-    const getDeadTime = () => {
-        let deadline = new Date();
-        deadline = new Date(deadline.getFullYear(), 10, 1, 12, 0, 0); // November 1st at noon
-        return deadline;
-    };
-
     useEffect(() => {
-        clearTimer(getDeadTime());
+        const targetDate = new Date(new Date().getFullYear(), 10, 1, 12, 0, 0);
+
+        const updateTimer = () => {
+            const now = new Date();
+            const difference = targetDate - now;
+
+            if (difference > 0) {
+                const days = Math.floor(difference / 86400000);
+                const hours = Math.floor((difference % 86400000) / 3600000);
+                const minutes = Math.floor((difference % 3600000) / 60000);
+                const seconds = Math.floor((difference % 60000) / 1000);
+
+                setTimeRemaining(
+                    `${days}:${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`
+                );
+            } else {
+                setTimeRemaining("Starting Now...");
+                clearInterval(timerInterval);
+            }
+        };
+
+        updateTimer();
+        const timerInterval = setInterval(updateTimer, 1000);
+
+        return () => clearInterval(timerInterval);
     }, []);
 
     return (
-        <div className="flex justify-center items-center h-screen w-screen bg-primary-darker text-white flex-col">
-            <h1 className="text-4xl mb-4 text-primary-dark p-2 rounded">geoChat</h1>
-            {/* Apply glitch effect using the custom glitch hook on the initial state */}
-            <h2 ref={glitch.ref} className={`text-3xl text-primary p-2 rounded`}>
-                {timer}
-            </h2>
+        <div className="flex justify-center items-center h-screen w-screen bg-primary-darker text-primary flex-col space-y-10">
+            <img ref={glitch.ref} src='../geoChatLogo.png' alt='Logo' className="w-32 h-32" />
+            <div className="text-6xl">geoChat</div>
+            <div className="text-5xl text-primary-dark">
+                {timeRemaining}
+            </div>
         </div>
     );
 };

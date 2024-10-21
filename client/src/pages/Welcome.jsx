@@ -2,7 +2,6 @@ import { useNavigate } from 'react-router-dom';
 import { useEffect, useRef, useState } from 'react';
 import { TypingAnimation } from '../components/ui/typing-effect';
 import TerminalWindow from '../components/TerminalWindow';
-import Countdown from './Countdown';
 
 const Welcome = () => {
     const navigate = useNavigate();
@@ -50,9 +49,7 @@ const Welcome = () => {
     })
 
     return (
-
-        <Countdown />
-        /*<TerminalWindow>
+        <TerminalWindow>
             <TypingAnimation
                 className="text-primary mt-1"
                 duration={50}
@@ -81,10 +78,10 @@ const Welcome = () => {
                     placeholder=""
                     className="text-primary outline-none bg-primary-darker"
                     autoComplete='off'
-                    onChange={()=>{setIsUsernameValid(true)}}
+                    onChange={() => { setIsUsernameValid(true) }}
                 />
             </form>
-        </TerminalWindow>*/
+        </TerminalWindow>
     );
 }
 
