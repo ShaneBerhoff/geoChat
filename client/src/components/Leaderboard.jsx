@@ -42,7 +42,7 @@ const LeaderboardItem = React.memo(({ item, index, totalItems }) => {
       grid grid-cols-[auto_auto_auto] items-baseline gap-4
       ${fontSizeClass}
       transition-all duration-300 ease-in-out
-      hover:bg-primary hover:text-primary-darker rounded-sm p-2
+      hover:bg-primary hover:text-primary-darker rounded-sm p-2 text-primary-dark
     `}>
       <span className="text-right">{index + 1}.</span>
       <span className="text-center truncate">{item.username}</span>
