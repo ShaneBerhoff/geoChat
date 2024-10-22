@@ -9,7 +9,7 @@ import { HelmetProvider } from "react-helmet-async";
 import Countdown from "./pages/Countdown";
 
 function App() {
-  const launchDate = new Date(2024, 10, 1, 12, 0, 0);
+  const launchDate = new Date(2024, 9, 28, 12, 0, 0);
   const [isLaunched, setIsLaunched] = useState(false);
 
   return (
