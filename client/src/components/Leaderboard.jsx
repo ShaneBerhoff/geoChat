@@ -58,7 +58,7 @@ const Leaderboard = ({ leaderboardArray }) => {
   );
 
   return (
-    <div className="w-full max-w-fit flex flex-col items-center overflow-y-auto">
+    <div className="w-full max-w-fit flex flex-col items-center overflow-y-auto scrollbar-hide">
       <ol className="w-full list-none ">
         {sortedArray.map((item, index) => (
           <LeaderboardItem
