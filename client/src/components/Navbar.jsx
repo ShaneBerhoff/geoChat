@@ -9,11 +9,16 @@ const NavBar = () => {
 
   return (
     <div className="w-full h-10 flex flex-row items-center px-4 justify-between">
+        <div className="hidden">
+            <a href="/">Home</a>
+            <a href="/chatroom">Chat Room</a>
+            <a href="/about">About</a>
+        </div>
       <div className="flex items-center">
         <button className="z-10" onClick={() => setNavIsOpen(!navIsOpen)}>
           <img src='/geoChatLogo.png' alt='Logo' className="h-8 w-8" />
         </button>
-        <div className={`flex items-center transition-all duration-300 ease-in-out space-x-4 overflow-hidden ${navIsOpen ? 'w-32 ml-4' : 'w-0 opacity-0 ml-0'}`}>
+        <div className={`flex items-center transition-all duration-500 ease-in-out space-x-4 overflow-hidden ${navIsOpen ? 'max-w-32 ml-4' : 'max-w-0 opacity-0 ml-0'}`}>
           <a className="shrink-0" href="/">
             <svg className="w-8 h-8 hover:text-primary-dark" fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
               <path d="M15 2H9v2H7v6h2V4h6V2zm0 8H9v2h6v-2zm0-6h2v6h-2V4zM4 16h2v-2h12v2H6v4h12v-4h2v6H4v-6z" fill="currentColor" />
@@ -32,7 +37,7 @@ const NavBar = () => {
         </div>
       </div>
       <div className="flex items-center">
-        <div className={`flex items-center transition-all duration-300 ease-in-out overflow-hidden ${propsIsOpen ? 'w-32' : 'w-0 opacity-0'}`}>
+        <div className={`flex items-center transition-all duration-500 ease-in-out overflow-hidden ${propsIsOpen ? 'max-w-32 mr-2' : 'max-w-0 mr-0 opacity-0'}`}>
           <div className="shrink-0">
             <LocationCheck />
             <FontSelector />
