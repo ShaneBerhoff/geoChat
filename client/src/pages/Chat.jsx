@@ -73,7 +73,13 @@ const ChatPage = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
+    const MAX_LENGTH = 500;
+
     if (inputRef.current.value) {
+      if (inputRef.current.value.length > MAX_LENGTH){
+        inputRef.current.value = '';
+        return;
+      }
       const message = {
         content: inputRef.current.value,
         createdAt: Date.now(),
@@ -107,7 +113,7 @@ const ChatPage = () => {
             <Chatbox messages={messages} />
             <form className="mt-auto w-full flex items-center text-xl" onSubmit={handleSubmit}>
               <span className='pl-4 pr-1 select-none'>&gt;</span>
-              <input className='flex-grow py-2 px-1 focus:outline-none placeholder:text-primary-dark bg-primary-darker' ref={inputRef} autoComplete="off" placeholder='Enter a chat here' />
+              <input className='flex-grow py-2 px-1 focus:outline-none placeholder:text-primary-dark bg-primary-darker' ref={inputRef} autoComplete="off" placeholder='Enter a chat here' maxLength={500}/>
               {/* <button type="submit" className="px-2 py-1 hover:bg-primary hover:text-white transition-colors rounded-full">➤</button> */}
             </form>
           </div>

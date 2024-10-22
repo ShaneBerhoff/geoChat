@@ -13,8 +13,8 @@ const Welcome = () => {
     async function handleUsernameSubmit(event) {
         event.preventDefault();
 
-        const username = inputRef.current.value.trim();
-        if (username === "") {
+        const username = inputRef.current.value.replace(/\s/g, '');
+        if (username === "" || username.length > 20) {
             return;
         }
 
@@ -101,9 +101,13 @@ const Welcome = () => {
                             id="username-input"
                             type="text"
                             placeholder=""
+                            maxLength={20}
                             className="text-primary outline-none bg-primary-darker w-full"
                             autoComplete='off'
-                            onChange={() => { setIsUsernameValid(true) }}
+                            onChange={(e) => {
+                                e.target.value = e.target.value.replace(/\s/g, '');
+                                setIsUsernameValid(true);
+                              }}                            
                             aria-invalid={!isUsernameValid}
                             aria-describedby={!isUsernameValid ? "username-error" : undefined}
                         />

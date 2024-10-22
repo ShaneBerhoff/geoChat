@@ -76,6 +76,10 @@ io.on('connection', async (socket) => {
     }
 
     socket.on('chat message', async (msg) => {
+        if (!msg.content || msg.content.length > 500){
+            console.log("Oversized message from:", socket.username);
+            return;
+        }
         console.log(msg, "received from:", socket.username);
         // Send message to chat controller
         try {
