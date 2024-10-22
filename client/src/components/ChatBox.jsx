@@ -21,7 +21,7 @@ const Chatbox = ({ messages }) => {
             <NavBar/>
             <div
                 ref={messagesContainerRef}
-                className="flex-grow overflow-y-auto p-4 space-y-2"
+                className="flex-grow overflow-y-auto px-4 space-y-2"
             >
                 {messages.map((message, index) => (
                     <div key={index} className="flex items-baseline space-x-2 flex-wrap">
