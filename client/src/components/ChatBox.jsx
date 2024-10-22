@@ -31,7 +31,7 @@ const Chatbox = ({ messages }) => {
                         <span className="text-lg">
                             [{message.username}]
                         </span>
-                        <p className="text-lg text-primary-dark">
+                        <p className="text-lg text-primary-dark break-words min-w-0">
                             {message.content}
                         </p>
                     </div>
