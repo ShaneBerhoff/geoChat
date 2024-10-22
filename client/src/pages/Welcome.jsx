@@ -88,15 +88,31 @@ const Welcome = () => {
                     />
                 )}
                 <form onSubmit={handleUsernameSubmit} className="mt-1">
-                    <span className="text-primary">{"> "}</span>
-                    <input
-                        ref={inputRef}
-                        type="text"
-                        placeholder=""
-                        className="text-primary outline-none bg-primary-darker"
-                        autoComplete='off'
-                        onChange={() => { setIsUsernameValid(true) }}
-                    />
+                    <label
+                        htmlFor="username-input"
+                        className="sr-only"
+                    >
+                        Enter your alias
+                    </label>
+                    <div className="flex items-center space-x-3">
+                        <span className="text-primary">{"> "}</span>
+                        <input
+                            ref={inputRef}
+                            id="username-input"
+                            type="text"
+                            placeholder=""
+                            className="text-primary outline-none bg-primary-darker w-full"
+                            autoComplete='off'
+                            onChange={() => { setIsUsernameValid(true) }}
+                            aria-invalid={!isUsernameValid}
+                            aria-describedby={!isUsernameValid ? "username-error" : undefined}
+                        />
+                    </div>
+                    {!isUsernameValid && (
+                        <div id="username-error" className="sr-only">
+                            This username is currently in use. Please select another.
+                        </div>
+                    )}
                 </form>
             </TerminalWindow>
         </>
