@@ -1,16 +1,14 @@
 import { useState, useEffect } from 'react';
 
 const fonts = [
-    { name: 'Cordata PPC', value: 'Cordata PPC' },
-    { name: 'IBM VGA', value: 'IBM VGA' },
+    { name: 'IBM VGA', value: 'IBM VGA, monospace' },
+    { name: 'Cordata PPC', value: 'Cordata PPC, monospace' },
 ];
 
 export const initializeFont = () => {
-    const savedFont = localStorage.getItem('font');
-    const initialFont = savedFont && fonts.some(f => f.value === savedFont)
-        ? savedFont
-        : fonts[0].value;
-
+    const savedFontName = localStorage.getItem('font');
+    const foundFont = fonts.find(f => f.name === savedFontName);
+    const initialFont = foundFont ? foundFont.value : fonts[0].value;
     document.body.style.fontFamily = initialFont;
     return initialFont;
 };
@@ -20,7 +18,10 @@ export const useFont = () => {
 
     useEffect(() => {
         document.body.style.fontFamily = font;
-        localStorage.setItem('font', font);
+        const currentFont = fonts.find(f => f.value === font);
+        if (currentFont) {
+            localStorage.setItem('font', currentFont.name);
+        }
     }, [font]);
 
     return { font, setFont, fonts };
