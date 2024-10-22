@@ -29,6 +29,7 @@ const ChatPage = () => {
     });
     socket.current.on('connect_error', (err) => {
       console.log('Connection error:', err.message);
+      navigate('/');
     });
     socket.current.on('invalid-session', () => {
       navigate('/');
