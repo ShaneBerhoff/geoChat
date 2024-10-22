@@ -7,17 +7,17 @@ const https = require('https');
 const fs = require('fs');
 const path = require('path');
 const socketIo = require('socket.io');
-const corsOptions = require('./utils/corsOptions');
+const socketOptions = require('./utils/socketOptions');
 const cookie = require('cookie');
 const app = require('./app');
 const chatController = require('./controllers/chatController');
 const sessionController = require('./controllers/sessionController');
 const LeaderboardManager = require('./controllers/leaderboardManager');
 const roomController = require('./controllers/roomController');
+const SocketRateLimiter = require('./utils/socketRateLimiter');
 
 // Create server and sockets
 let server;
-let io;
 if (process.env.NODE_ENV === 'development') {
     // In development - HTTPS with self-signed certificates
     const options = {
@@ -26,13 +26,12 @@ if (process.env.NODE_ENV === 'development') {
     };
     server = https.createServer(options, app);
     console.log('Server running in development mode with HTTPS');
-    io = socketIo(server, { cors: corsOptions });
 } else {
     // In production - use HTTP (Nginx will handle HTTPS)
     server = http.createServer(app);
     console.log('Server running in production mode with HTTP (Nginx handles HTTPS)');
-    io = socketIo(server);
 }
+const io = socketIo(server, socketOptions);
 
 // Connect mongoDB
 connectDB()
@@ -44,10 +43,22 @@ connectDB()
 // Leaderboard manager
 const leaderboard = new LeaderboardManager(io);
 
+const socketLimiter = new SocketRateLimiter();
 io.use(async (socket, next) => {
+    // rate limiting
+    if(!socketLimiter.canConnect(socket.handshake.address)){
+        return next(new Error('Too many connections, please try again later'));
+    }
+
     // Pull out sessionToken
     const cookies = cookie.parse(socket.handshake.headers.cookie || '');
-    socket.sessionToken = cookies.sessionToken;
+    const sessionToken = cookies.sessionToken;
+
+    if (!sessionToken){
+        return next(new Error('Authentication required'));
+    }
+
+    socket.sessionToken = sessionToken;
     next();
 })
 
@@ -76,6 +87,16 @@ io.on('connection', async (socket) => {
     }
 
     socket.on('chat message', async (msg) => {
+        // rate limit
+        if(!socketLimiter.canSendMessage(socket.handshake.address)){
+            return; // TODO: send info back to client
+        }
+        
+        // sanitize message
+        if (!msg.content || msg.content.length > 500){
+            console.log("Oversized message from:", socket.username);
+            return;
+        }
         console.log(msg, "received from:", socket.username);
         // Send message to chat controller
         try {

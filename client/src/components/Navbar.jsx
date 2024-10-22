@@ -8,7 +8,7 @@ const NavBar = () => {
   const [propsIsOpen, setPropsIsOpen] = useState(false);
 
   return (
-    <div className="w-full h-10 flex flex-row items-center px-4 justify-between">
+    <div className="w-full h-min flex flex-row items-center px-4 pb-4 justify-between">
         <div className="hidden">
             <a href="/">Home</a>
             <a href="/chatroom">Chat Room</a>

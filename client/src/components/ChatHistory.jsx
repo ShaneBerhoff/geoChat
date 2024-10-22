@@ -56,7 +56,7 @@ const ChatHistory = ({ messages, userInfo }) => {
                         <span className="text-sm">
                             {formatTime(message.createdAt)}
                         </span>
-                        <p className="text-lg">
+                        <p className="text-lg break-words min-w-0">
                             {message.content}
                         </p>
                     </div>
