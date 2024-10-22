@@ -1,0 +1,16 @@
+# Global settings
+User-agent: *
+
+# Allow main pages
+Allow: /$
+Allow: /about$
+
+# Block dynamic/private pages
+Disallow: /chatroom
+Disallow: /access-denied
+
+# Block any API endpoints
+Disallow: /api/
+
+# Add sitemap
+Sitemap: https://geochat.live/sitemap.xml
