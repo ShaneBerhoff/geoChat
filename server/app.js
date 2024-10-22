@@ -22,7 +22,7 @@ const apiLimiter = rateLimit({
 
 const speedLimiter = slowDown({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  delayAfter: 1, // allow 40 requests per 15 minutes, then...
+  delayAfter: 40, // allow 40 requests per 15 minutes, then...
   delayMs: () => 500, // begin adding 500ms of delay per request
 });
 
