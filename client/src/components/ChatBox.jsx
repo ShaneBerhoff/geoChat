@@ -75,10 +75,10 @@ const Chatbox = ({ messages }) => {
                 <div className="absolute bottom-4 right-4">
                     <button
                         onClick={scrollToBottom}
-                        className="w-8 h-8 rounded-full shadow-lg flex items-center justify-center hover:bg-primary-dark transition-colors"
+                        className="w-8 h-8 hover:text-primary-dark"
                         aria-label="Scroll to bottom"
                     >
-                        <span className="text-primary text-lg">↓</span>
+                        <svg fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"> <path d="M11 4h2v8h2v2h-2v2h-2v-2H9v-2h2V4zm-2 8H7v-2h2v2zm6 0v-2h2v2h-2zM4 18h16v2H4v-2z" fill="currentColor"/> </svg>
                     </button>
                 </div>
             )}
