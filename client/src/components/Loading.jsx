@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
+import { useLogo } from '../hooks/useLogo';
 
 const Loading = () => {
   const [progress, setProgress] = useState(0);
+  const logoUrl = useLogo();
 
   useEffect(() => {
     const updateInterval = 8;
@@ -20,7 +22,7 @@ const Loading = () => {
     <div className="flex flex-col items-center justify-center min-h-screen w-full bg-primary-darker">
       <div className="w-[350px] h-[350px] overflow-hidden">
         <img
-          src="/geoChatLogo.png"
+          src={logoUrl}
           alt="Loading Globe"
           className="w-full h-full object-cover"
           style={{

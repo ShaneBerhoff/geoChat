@@ -2,10 +2,12 @@ import ThemeSelector from "./ThemeSelector";
 import FontSelector from "./FontSelector";
 import LocationCheck from "./LocationCheck";
 import { useState } from "react";
+import { useLogo } from "../hooks/useLogo";
 
 const NavBar = () => {
   const [navIsOpen, setNavIsOpen] = useState(false);
   const [propsIsOpen, setPropsIsOpen] = useState(false);
+  const logoUrl = useLogo();
 
   return (
     <div className="w-full h-min flex flex-row items-center px-4 pb-4 justify-between">
@@ -21,7 +23,7 @@ const NavBar = () => {
           aria-label={navIsOpen ? "Close navigation menu" : "Open navigation menu"}
           aria-expanded={navIsOpen}
         >
-          <img src='/geoChatLogo.png' alt='geoChat Logo' className="h-8 w-8" />
+          <img src={logoUrl} alt='geoChat Logo' className="h-8 w-8" />
         </button>
         <div 
             className={`flex items-center transition-all duration-500 ease-in-out space-x-4 overflow-hidden ${navIsOpen ? 'max-w-32 ml-4' : 'max-w-0 opacity-0 ml-0'}`}

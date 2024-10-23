@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { useGlitch } from "react-powerglitch";
+import { useLogo } from "../hooks/useLogo";
 
 const Countdown = ({ onLaunch, launchDate }) => {
     const [timeRemaining, setTimeRemaining] = useState("");
     const [shouldDisplay, setShouldDisplay] = useState(true);
+    const logoUrl = useLogo();
     const glitch = useGlitch({
         "timing": {
             "duration": 6000
@@ -57,7 +59,7 @@ const Countdown = ({ onLaunch, launchDate }) => {
 
     return (
         <div className="fixed inset-0 flex justify-center items-center bg-primary-darker text-primary flex-col space-y-10 z-50 transition-opacity duration-1000">
-            <img ref={glitch.ref} src='../geoChatLogo.png' alt='Logo' className="w-32 h-32" />
+            <img ref={glitch.ref} src={logoUrl} alt='Logo' className="w-32 h-32" />
             <div className="text-6xl">geoChat</div>
             <div className="text-5xl text-primary-dark">
                 {timeRemaining}
