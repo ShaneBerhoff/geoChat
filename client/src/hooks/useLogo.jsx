@@ -1,22 +1,24 @@
 import { useState, useEffect } from 'react';
 
+const getLogoForTheme = (theme) => {
+  if (theme.includes('phosphor-P3')) return '/geoChatLogoP3.png';
+  if (theme.includes('phosphor-P4')) return '/geoChatLogoP4.png';
+  if (theme.includes('phosphor-P11')) return '/geoChatLogoP11.png';
+  return '/geoChatLogoP1.png';
+}
+
 export const useLogo = () => {
   const [logoUrl, setLogoUrl] = useState(() => {
-    // Initialize with current theme
     const currentTheme = document.documentElement.className;
-    if (currentTheme.includes('phosphor-P3')) return '/geoChatLogoP3.png';
-    return '/geoChatLogoP1.png';
+    return getLogoForTheme(currentTheme);
   });
 
   useEffect(() => {
     const updateLogo = () => {
       const currentTheme = document.documentElement.className;
-      if (currentTheme.includes('phosphor-P3')) {
-        setLogoUrl('/geoChatLogoP3.png');
-      } else {
-        setLogoUrl('/geoChatLogoP1.png');
-      }
+      setLogoUrl(getLogoForTheme(currentTheme));
     };
+
 
     const observer = new MutationObserver(updateLogo);
     observer.observe(document.documentElement, {

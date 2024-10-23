@@ -30,7 +30,7 @@ const Loading = () => {
           }}
         />
       </div>
-      <p className="mt-5  text-primary">Loading...</p>
+      <p className="mt-20 text-4xl text-primary">Verifying Location</p>
     </div>
   );
 };
