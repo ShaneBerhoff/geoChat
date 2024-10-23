@@ -39,6 +39,7 @@ export default defineConfig(({ mode }) => {
           changeOrigin: true,
           ws: true,
           secure: false,
+          xfwd: true,
         },
       },
     },

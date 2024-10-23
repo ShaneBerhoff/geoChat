@@ -2,6 +2,8 @@ const express = require("express");
 const staticRoutes = require("./routes/staticRoutes");
 const apiRoutes = require("./routes/apiRoutes");
 const cookieParser = require("cookie-parser");
+const cors = require('cors');
+const corsOptions = require('./utils/corsOptions');
 const helmet = require("helmet");
 const rateLimit = require("express-rate-limit");
 const slowDown = require("express-slow-down");
@@ -29,6 +31,8 @@ const speedLimiter = slowDown({
 if (process.env.NODE_ENV === "production") {
   // In production, trust the reverse proxy
   app.set("trust proxy", 1);
+} else {
+    app.use(cors(corsOptions));
 }
 
 app.use(express.json({ limit: "10kb" })); // Limit body size
