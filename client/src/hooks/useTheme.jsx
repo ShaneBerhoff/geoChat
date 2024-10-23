@@ -3,6 +3,8 @@ import { useState, useEffect } from 'react';
 const themes = [
     { name: 'Phosphor P1', value: 'phosphor-P1' },
     { name: 'Phosphor P3', value: 'phosphor-P3' },
+    { name: 'Phosphor P4', value: 'phosphor-P4' },
+    { name: 'Phosphor P11', value: 'phosphor-P11' }
 ];
 
 export const initializeTheme = () => {

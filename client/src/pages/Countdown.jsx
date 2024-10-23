@@ -58,9 +58,10 @@ const Countdown = ({ onLaunch, launchDate }) => {
     if (!shouldDisplay) return null;
 
     return (
-        <div className="fixed inset-0 flex justify-center items-center bg-primary-darker text-primary flex-col space-y-10 z-50 transition-opacity duration-1000">
-            <img ref={glitch.ref} src={logoUrl} alt='Logo' className="w-32 h-32" />
-            <div className="text-6xl">geoChat</div>
+        <div className="fixed inset-0 flex justify-center items-center bg-primary-darker text-primary flex-col z-50 transition-opacity duration-1000">
+            <img ref={glitch.ref} src={logoUrl} alt='Logo' className="w-36 h-36 m-10" />
+            <div className="text-7xl">geoChat</div>
+            <div className="pb-10 text-lg">anonymous local chat rooms</div>
             <div className="text-5xl text-primary-dark">
                 {timeRemaining}
             </div>
