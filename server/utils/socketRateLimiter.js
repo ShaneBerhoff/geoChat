@@ -90,6 +90,7 @@ class IPRateLimiter {
     if (!data) return null;
 
     return {
+      ip: ip,
       messagesRemaining: Math.max(0, this.MESSAGE_LIMIT - data.messages.count),
       connectionsRemaining: Math.max(
         0,

@@ -46,7 +46,12 @@ const leaderboard = new LeaderboardManager(io);
 const socketLimiter = new SocketRateLimiter();
 io.use(async (socket, next) => {
     // rate limiting
-    if(!socketLimiter.canConnect(socket.handshake.address)){
+    socket.ip  = 
+        socket.handshake.headers['x-forwarded-for']?.split(',')[0] ||
+        socket.handshake.address; //fallback
+
+    if(!socketLimiter.canConnect(socket.ip)){
+        console.log("Rate Limited:", socketLimiter.getRateLimitInfo(socket.ip));
         return next(new Error('Too many connections, please try again later'));
     }
 
@@ -88,7 +93,8 @@ io.on('connection', async (socket) => {
 
     socket.on('chat message', async (msg) => {
         // rate limit
-        if(!socketLimiter.canSendMessage(socket.handshake.address)){
+        if(!socketLimiter.canSendMessage(socket.ip)){
+            console.log("Rate Limited:", socketLimiter.getRateLimitInfo(socket.ip));
             return; // TODO: send info back to client
         }
         
