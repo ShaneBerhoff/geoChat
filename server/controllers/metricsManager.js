@@ -6,6 +6,16 @@ class MetricsManager {
     this.io = null;
     this.roomMetrics = new Map();
     this.SAVE_INTERVAL = parseFloat(process.env.METRICS);
+    this.SALT = process.env.METRICS_SALT;
+
+    if (!this.SAVE_INTERVAL) {
+      throw new Error(
+        "METRICS interval must be defined in environment variables"
+      );
+    }
+    if (!this.SALT) {
+      throw new Error("METRICS_SALT must be defined in environment variables");
+    }
   }
 
   initialize(io) {
@@ -30,7 +40,10 @@ class MetricsManager {
   }
 
   hashIP(ip) {
-    return crypto.createHash("md5").update(ip).digest();
+    return crypto
+      .createHash("md5")
+      .update(ip + this.SALT)
+      .digest();
   }
 
   parseRoomKey(roomKey) {
