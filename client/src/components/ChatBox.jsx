@@ -54,7 +54,7 @@ const Chatbox = ({ messages }) => {
             <NavBar />
             <div
                 ref={messagesContainerRef}
-                className="flex-grow overflow-y-auto p-4 space-y-2 scrollbar-hide"
+                className="flex-grow overflow-y-auto px-4 space-y-2 scrollbar-hide"
             >
                 {messages.map((message, index) => (
                     <div key={index} className="flex items-baseline space-x-2 flex-wrap">
@@ -75,7 +75,7 @@ const Chatbox = ({ messages }) => {
                 <div className="absolute bottom-4 right-4">
                     <button
                         onClick={scrollToBottom}
-                        className="w-8 h-8 hover:text-primary-dark"
+                        className="w-10 h-10 hover:text-primary-darker rounded-sm hover:bg-primary transition-all duration-300 ease-in-out"
                         aria-label="Scroll to bottom"
                     >
                         <svg fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"> <path d="M11 4h2v8h2v2h-2v2h-2v-2H9v-2h2V4zm-2 8H7v-2h2v2zm6 0v-2h2v2h-2zM4 18h16v2H4v-2z" fill="currentColor"/> </svg>
