@@ -2,6 +2,7 @@ const chatController = require('./chatController');
 const { Zone, Room } = require('../models/locationModels');
 const fs = require('fs').promises;
 const path = require('path');
+const metricsManager = require('./metricsManager');
 
 const getRooms = async (longitude, latitude) => {
     // create a point
@@ -141,7 +142,8 @@ const setupCycleRooms = async (socket, session) => {
 
         // Cycle to the next room
         this.currentRoomIndex = (this.currentRoomIndex + 1) % this.chatRooms.length;
-        this.currentRoom = this.chatRooms[this.currentRoomIndex].id;
+        const currentRoomInfo = this.chatRooms[this.currentRoomIndex];
+        this.currentRoom = `[${currentRoomInfo.type}][${currentRoomInfo.name}][${currentRoomInfo.id}]`;
         this.join(this.currentRoom);
         console.log(`${this.username} joined room: ${this.currentRoom}`);
 
@@ -167,6 +169,7 @@ const setupCycleRooms = async (socket, session) => {
         } catch (error) {
             console.error('Error sending personal chat history to client:', error);
         }
+        metricsManager.handleRoomEvent(this.currentRoom, "join", this.ip);
     };
 
     // Initial room setup
