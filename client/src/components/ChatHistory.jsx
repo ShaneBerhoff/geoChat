@@ -41,7 +41,7 @@ const ChatHistory = ({ messages, userInfo }) => {
 
     return (
         <div className="w-full h-full flex flex-col overflow-hidden">
-            <div className="pt-4 px-4">
+            <div className="p-4">
                 <p className="flex flex-wrap items-baseline justify-center text-3xl">
                     <span className="">{userInfo.username}</span>
                     <span className="text-xl">&nbsp;&lt;{elapsedTime}&gt;&nbsp;</span>
@@ -49,7 +49,7 @@ const ChatHistory = ({ messages, userInfo }) => {
             </div>
             <div
                 ref={messagesContainerRef}
-                className="flex-grow overflow-y-auto p-4 space-y-2 text-primary-dark scrollbar-hide"
+                className="flex-grow overflow-y-auto px-4 space-y-2 text-primary-dark scrollbar-hide"
             >
                 {messages.map((message, index) => (
                     <div key={index} className="flex items-baseline space-x-2 flex-wrap">

@@ -11,7 +11,7 @@ const LocationCheck = () => {
     return (
         <button
             onClick={handleClick}
-            className="p-2 rounded-full hover:bg-primary-dark hover:text-primary focus:outline-none w-10 h-10 transition-all duration-300 ease-in-out"
+            className="hover:text-primary-darker hover:bg-primary p-2 w-10 h-10 rounded-sm transition-all duration-300 ease-in-out"
             aria-label="Location"
         >
             <svg fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true"> 

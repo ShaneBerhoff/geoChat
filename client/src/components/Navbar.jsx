@@ -3,31 +3,38 @@ import FontSelector from "./FontSelector";
 import LocationCheck from "./LocationCheck";
 import { useState } from "react";
 import { useLogo } from "../hooks/useLogo";
+import { useGlitch } from 'react-powerglitch';
 
 const NavBar = () => {
   const [navIsOpen, setNavIsOpen] = useState(false);
   const [propsIsOpen, setPropsIsOpen] = useState(false);
   const logoUrl = useLogo();
+  const glitch = useGlitch({
+    "timing": {
+    "duration": 750,
+  },
+    "playMode": 'click'
+  });
 
   return (
     <div className="w-full h-min flex flex-row items-center px-4 pb-4 justify-between">
-        <div className="hidden">
-            <a href="/">Home</a>
-            <a href="/chatroom">Chat Room</a>
-            <a href="/about">About</a>
-        </div>
+      <div className="hidden">
+        <a href="/">Home</a>
+        <a href="/chatroom">Chat Room</a>
+        <a href="/about">About</a>
+      </div>
       <div className="flex items-center">
-        <button 
-          className="z-10" 
+        <button
+          className="z-10"
           onClick={() => setNavIsOpen(!navIsOpen)}
           aria-label={navIsOpen ? "Close navigation menu" : "Open navigation menu"}
           aria-expanded={navIsOpen}
         >
-          <img src={logoUrl} alt='geoChat Logo' className="h-8 w-8" />
+          <img src={logoUrl} ref={glitch.ref} alt='geoChat Logo' className="h-8 w-8" />
         </button>
-        <div 
-            className={`flex items-center transition-all duration-500 ease-in-out space-x-4 overflow-hidden ${navIsOpen ? 'max-w-32 ml-4' : 'max-w-0 opacity-0 ml-0'}`}
-            aria-hidden={!navIsOpen}
+        <div
+          className={`flex items-center transition-all duration-500 ease-in-out space-x-4 overflow-hidden ${navIsOpen ? 'max-w-32 ml-4' : 'max-w-0 opacity-0 ml-0'}`}
+          aria-hidden={!navIsOpen}
         >
           <a className="shrink-0" href="/" aria-label="Home">
             <svg className="w-8 h-8 hover:text-primary-dark" fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true">
@@ -50,9 +57,9 @@ const NavBar = () => {
         </div>
       </div>
       <div className="flex items-center">
-        <div 
-            className={`flex items-center transition-all duration-500 ease-in-out overflow-hidden ${propsIsOpen ? 'max-w-32 mr-2' : 'max-w-0 mr-0 opacity-0'}`}
-            aria-hidden={!propsIsOpen}
+        <div
+          className={`flex items-center transition-all duration-500 ease-in-out overflow-hidden ${propsIsOpen ? 'max-w-32 mr-2' : 'max-w-0 mr-0 opacity-0'}`}
+          aria-hidden={!propsIsOpen}
         >
           <div className="shrink-0">
             <LocationCheck />
@@ -60,15 +67,15 @@ const NavBar = () => {
             <ThemeSelector />
           </div>
         </div>
-        <button 
-          className="w-8 h-8 z-10" 
+        <button
+          className="w-10 h-10 z-10"
           onClick={() => setPropsIsOpen(!propsIsOpen)}
           aria-label={propsIsOpen ? "Close settings menu" : "Open settings menu"}
           aria-expanded={propsIsOpen}
         >
           <svg fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true">
             <title>Settings</title>
-            <path d="M17 4h2v10h-2V4zm0 12h-2v2h2v2h2v-2h2v-2h-4zm-4-6h-2v10h2V10zm-8 2H3v2h2v6h2v-6h2v-2H5zm8-8h-2v2H9v2h6V6h-2V4zM5 4h2v6H5V4z" fill="currentColor"/>
+            <path d="M17 4h2v10h-2V4zm0 12h-2v2h2v2h2v-2h2v-2h-4zm-4-6h-2v10h2V10zm-8 2H3v2h2v6h2v-6h2v-2H5zm8-8h-2v2H9v2h6V6h-2V4zM5 4h2v6H5V4z" fill="currentColor" />
           </svg>
         </button>
       </div>
