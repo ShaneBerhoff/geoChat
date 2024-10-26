@@ -14,6 +14,8 @@ services:
       - SESSION_RECOVERY_PERIOD=${SESSION_RECOVERY_PERIOD}
       - LEADERBOARD_MAX=${LEADERBOARD_MAX}
       - BUFFER_DISTANCE=${BUFFER_DISTANCE}
+      - METRICS=${METRICS}
+      - METRICS_SALT=${METRICS_SALT}
     depends_on:
       mongodb:
         condition: service_healthy

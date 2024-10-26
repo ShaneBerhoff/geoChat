@@ -114,7 +114,7 @@ const Welcome = () => {
                     </div>
                     {!isUsernameValid && (
                         <div id="username-error" className="sr-only">
-                            This username is currently in use. Please select another.
+                            This alias is currently in use. Please select another.
                         </div>
                     )}
                 </form>
