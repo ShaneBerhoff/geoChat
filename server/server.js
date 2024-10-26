@@ -129,6 +129,28 @@ io.on('connection', async (socket) => {
     });
 });
 
+async function gracefulShutdown(signal) {
+    console.log(`\n${signal} signal received. Starting graceful shutdown...`);
+
+    // Create array of promises for all deactivation operations
+    const deactivationPromises = Array.from(io.sockets.sockets.values()).map(socket => 
+        sessionController.deactivateSession(socket.sessionToken)
+    );
+
+    try {
+        // Wait for all deactivations to complete
+        await Promise.all(deactivationPromises);
+        console.log('All sessions deactivated successfully');
+    } catch (error) {
+        console.error('Error during session deactivation:', error);
+    }
+
+    process.exit(0);
+}
+
+process.on('SIGTERM', () => gracefulShutdown('SIGTERM'));
+process.on('SIGINT', () => gracefulShutdown('SIGINT'));
+
 const PORT = process.env.PORT || 3000;
 const HOST = process.env.HOST || '0.0.0.0';
 server.listen(PORT, HOST, () => {
