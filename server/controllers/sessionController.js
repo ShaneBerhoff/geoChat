@@ -95,10 +95,21 @@ const updateRooms = async (sessionToken, chatRooms) => {
     }
 };
 
+// Drops all sessions
+const dropAll = async () => {
+    try {
+        await Session.collection.drop();
+        console.log('Sessions collection dropped successfully');
+    } catch (error) {
+        console.error('Error dropping sessions:', error);
+    }
+}
+
 module.exports = {
     loadUser,
     findExistingSession,
     deactivateSession,
     createSession,
-    updateRooms
+    updateRooms,
+    dropAll
 };
