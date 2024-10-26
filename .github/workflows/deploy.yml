@@ -1,24 +1,24 @@
 name: Deploy to EC2
-
 on:
   pull_request:
     types: [closed]
   workflow_dispatch:
     inputs:
-      deploy:
-        description: 'Deploy to EC2?'
+      deployment_type:
+        description: 'Deploy to EC2'
         required: true
-        default: 'false'
         type: choice
         options:
-          - 'true'
-          - 'false'
+          - 'full-rebuild'
+          - 'app-only'
+          - 'none'
+        default: 'none'
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
     if: |
-      (github.event_name == 'workflow_dispatch' && github.event.inputs.deploy == 'true') ||
+      (github.event_name == 'workflow_dispatch' && github.event.inputs.deployment_type != 'none') ||
       (github.event_name == 'pull_request' && github.event.pull_request.merged == true && contains(github.event.pull_request.labels.*.name, 'deploy'))
     steps:
       - name: Deploy to EC2
@@ -29,7 +29,13 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
             cd ~/geoChat/
-            docker compose down
-            docker system prune -a -f --filter "until=24h"
-            git pull origin main
-            docker compose up -d --build
+            if [[ "${{ github.event.inputs.deployment_type }}" == "full-rebuild" ]]; then
+              docker compose down
+              git pull origin main
+              docker compose up -d --build
+              docker system prune -a -f --volumes=false --filter "until=24h"
+            else
+              git pull origin main
+              docker compose up -d --build app
+              docker image prune -f
+            fi

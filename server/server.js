@@ -13,6 +13,7 @@ const app = require('./app');
 const chatController = require('./controllers/chatController');
 const sessionController = require('./controllers/sessionController');
 const LeaderboardManager = require('./controllers/leaderboardManager');
+const metricsManager = require('./controllers/metricsManager');
 const roomController = require('./controllers/roomController');
 const SocketRateLimiter = require('./utils/socketRateLimiter');
 
@@ -38,12 +39,15 @@ connectDB()
     .then(() => {
         // Load rooms
         roomController.loadGeoJSONdata();
+    }).then(() => {
+        sessionController.dropAll();
     })
 
-// Leaderboard manager
+// managers
 const leaderboard = new LeaderboardManager(io);
-
+metricsManager.initialize(io);
 const socketLimiter = new SocketRateLimiter();
+
 io.use(async (socket, next) => {
     // rate limiting
     socket.ip  = 

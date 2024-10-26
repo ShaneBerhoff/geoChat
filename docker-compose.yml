@@ -1,6 +1,12 @@
 services:
   app:
     build: .
+    restart: unless-stopped
+    deploy:
+      replicas: 1
+      update_config:
+        order: start-first
+        failure_action: rollback
     environment:
       - PORT=3000
       - MONGO_URL=${MONGO_URL}
@@ -8,11 +14,15 @@ services:
       - SESSION_RECOVERY_PERIOD=${SESSION_RECOVERY_PERIOD}
       - LEADERBOARD_MAX=${LEADERBOARD_MAX}
       - BUFFER_DISTANCE=${BUFFER_DISTANCE}
+      - METRICS=${METRICS}
+      - METRICS_SALT=${METRICS_SALT}
     depends_on:
       mongodb:
         condition: service_healthy
+      https-portal:
+        condition: service_started
     healthcheck:
-      test: [ "CMD", "curl", "-f", "http://localhost:3000" ]
+      test: ["CMD", "curl", "-f", "http://localhost:3000"]
       interval: 30s
       timeout: 10s
       retries: 3
@@ -20,7 +30,8 @@ services:
 
   mongodb:
     image: mongo:latest
-    command: [ "--replSet", "rs0", "--bind_ip_all", "--port", "27017" ]
+    command: ["--replSet", "rs0", "--bind_ip_all", "--port", "27017"]
+    restart: unless-stopped
     healthcheck:
       test: echo "try { rs.status() } catch (err) { rs.initiate({_id:'rs0',members:[{_id:0,host:'mongodb:27017'}]}) }" | mongosh --quiet
       interval: 10s
@@ -33,24 +44,21 @@ services:
 
   https-portal:
     image: steveltn/https-portal:1
+    restart: unless-stopped
     ports:
-      - '80:80'
-      - '443:443'
+      - "80:80"
+      - "443:443"
     environment:
       DOMAINS: 'geochat.live -> http://app:3000, www.geochat.live => https://geochat.live'
       STAGE: 'production'
       WEBSOCKET: 'true'
     volumes:
       - https-portal-data:/var/lib/https-portal
-    depends_on:
-      app:
-        condition: service_healthy
 
 volumes:
   mongodb_data:
   mongodb_config:
   https-portal-data:
-
 
 networks:
   default:
