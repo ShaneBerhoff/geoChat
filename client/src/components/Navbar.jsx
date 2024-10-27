@@ -17,7 +17,7 @@ const NavBar = () => {
   });
 
   return (
-    <div className="w-full h-min flex flex-row items-center px-4 pb-4 justify-between">
+    <div className="w-full h-min flex flex-row items-center sm:px-4 pb-4 justify-between">
       <div className="hidden">
         <a href="/">Home</a>
         <a href="/chatroom">Chat Room</a>
@@ -25,31 +25,31 @@ const NavBar = () => {
       </div>
       <div className="flex items-center">
         <button
-          className="z-10"
+          className="z-10 h-8 w-8"
           onClick={() => setNavIsOpen(!navIsOpen)}
           aria-label={navIsOpen ? "Close navigation menu" : "Open navigation menu"}
           aria-expanded={navIsOpen}
         >
-          <img src={logoUrl} ref={glitch.ref} alt='geoChat Logo' className="h-8 w-8" />
+          <img src={logoUrl} ref={glitch.ref} alt='geoChat Logo' className="" />
         </button>
         <div
-          className={`flex items-center transition-all duration-500 ease-in-out space-x-4 overflow-hidden ${navIsOpen ? 'max-w-32 ml-4' : 'max-w-0 opacity-0 ml-0'}`}
+          className={`flex items-center mr-2 transition-all duration-500 ease-in-out space-x-4 overflow-hidden ${navIsOpen ? 'max-w-32 sm:ml-4 ml-2' : 'max-w-0 opacity-0 ml-0'}`}
           aria-hidden={!navIsOpen}
         >
           <a className="shrink-0" href="/" aria-label="Home">
-            <svg className="w-8 h-8 hover:text-primary-dark" fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true">
+            <svg className="sm:w-8 sm:h-8 w-6 h-6 hover:text-primary-dark" fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true">
               <title>Home</title>
               <path d="M15 2H9v2H7v6h2V4h6V2zm0 8H9v2h6v-2zm0-6h2v6h-2V4zM4 16h2v-2h12v2H6v4h12v-4h2v6H4v-6z" fill="currentColor" />
             </svg>
           </a>
           <a className="shrink-0" href="/chatroom" aria-label="Chat Room">
-            <svg className="w-8 h-8 hover:text-primary-dark" fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true">
+            <svg className="sm:w-8 sm:h-8 w-6 h-6 hover:text-primary-dark" fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true">
               <title>Chat Room</title>
               <path d="M4 2h18v16H6v2H4v-2h2v-2h14V4H4v18H2V2h2zm5 7H7v2h2V9zm2 0h2v2h-2V9zm6 0h-2v2h2V9z" fill="currentColor" />
             </svg>
           </a>
           <a className="shrink-0" href="/about" aria-label="About">
-            <svg className="w-8 h-8 hover:text-primary-dark" fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true">
+            <svg className="sm:w-8 sm:h-8 w-6 h-6 hover:text-primary-dark" fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true">
               <title>About</title>
               <path d="M3 3h8v2H3v12h8V5h2v12h8V5h-8V3h10v16H13v2h-2v-2H1V3h2zm16 7h-4v2h4v-2zm-4-3h4v2h-4V7zm2 6h-2v2h2v-2z" fill="currentColor" />
             </svg>
@@ -58,7 +58,7 @@ const NavBar = () => {
       </div>
       <div className="flex items-center">
         <div
-          className={`flex items-center transition-all duration-500 ease-in-out overflow-hidden ${propsIsOpen ? 'max-w-32 mr-2' : 'max-w-0 mr-0 opacity-0'}`}
+          className={`flex items-center transition-all duration-500 ease-in-out overflow-hidden ${propsIsOpen ? 'max-w-32 sm:mr-2' : 'max-w-0 mr-0 opacity-0'}`}
           aria-hidden={!propsIsOpen}
         >
           <div className="shrink-0">

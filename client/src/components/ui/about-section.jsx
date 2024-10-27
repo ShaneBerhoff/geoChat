@@ -6,7 +6,7 @@ export default function AboutSection({
     className = ""
 }) {
     return (
-        <div className={`group space-y-2 ${className}`}>
+        <div className={`group space-y-2 break-words${className}`}>
             <div className="p-2 rounded-sm text-3xl w-min text-nowrap text-primary transition-all duration-300 ease-in-out">
                 {title}
             </div>

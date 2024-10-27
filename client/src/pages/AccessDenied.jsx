@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import TerminalWindow from '../components/TerminalWindow';
 import { useLocation } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
+import MainLayout from '../components/ui/mainLayout';
 
 const AccessDenied = () => {
     const location = useLocation();
@@ -25,13 +26,15 @@ const AccessDenied = () => {
                 <meta property="twitter:title" content="Access Denied | geoChat - Location Settings" />
                 <meta property="twitter:description" content="To use geoChat, please enable location access or check if your area is supported. geoChat requires location services to connect you with local chat rooms." />
             </Helmet>
-            <TerminalWindow>
-                <div className="text-primary mt-1">
-                    <div>&gt; Access denied.</div>
-                    {location.state && (<div>&gt; {location.state}</div>)}
-                    <div>&gt; Visit our <Link to="/about" className=' underline'>About Page</Link> for more information.</div>
-                </div>
-            </TerminalWindow>
+            <MainLayout bgColor='bg-black'>
+                <TerminalWindow>
+                    <div className="text-primary mt-1">
+                        <div>&gt; Access denied.</div>
+                        {location.state && (<div>&gt; {location.state}</div>)}
+                        <div>&gt; Visit our <Link to="/about" className=' underline'>About Page</Link> for more information.</div>
+                    </div>
+                </TerminalWindow>
+            </MainLayout>
         </>
     );
 }
