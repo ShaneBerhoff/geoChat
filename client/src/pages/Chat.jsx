@@ -6,6 +6,7 @@ import ChatHistory from '../components/ChatHistory';
 import Chatbox from '../components/ChatBox';
 import RoomStatus from '../components/RoomStatus';
 import { Helmet } from 'react-helmet-async';
+import MainLayout from '../components/ui/mainLayout';
 
 const ChatPage = () => {
   const [messages, setMessages] = useState([]);
@@ -77,7 +78,7 @@ const ChatPage = () => {
     const MAX_LENGTH = 500;
 
     if (inputRef.current.value) {
-      if (inputRef.current.value.length > MAX_LENGTH){
+      if (inputRef.current.value.length > MAX_LENGTH) {
         inputRef.current.value = '';
         return;
       }
@@ -108,27 +109,27 @@ const ChatPage = () => {
         <meta property="twitter:title" content="Chat Room | geoChat - Real-time Local Messaging" />
         <meta property="twitter:description" content="Chat in real-time with people nearby in our anonymous local chat rooms. Experience location-based messaging with a retro vibe." />
       </Helmet>
-      <div className="h-screen w-full text-primary bg-primary-darker flex flex-col py-2">
-        <div className="h-screen w-full flex flex-row lg:px-10 md:px-4 sm:px-2 py-2 overflow-auto">
-          <div className="w-2/3 flex flex-col items-center p-4 border-2 border-primary-dark">
+      <MainLayout>
+        <div className="h-full w-full text-primary bg-primary-darker flex sm:flex-row flex-col-reverse">
+          <div className="sm:w-2/3 w-full sm:h-full h-2/3 flex flex-col items-center p-4 border-2 border-primary-dark">
             <Chatbox messages={messages} />
-            <form className="mt-auto w-full flex items-center text-xl" onSubmit={handleSubmit}>
+            <form className="mt-auto w-full flex items-center sm:text-xl text-md" onSubmit={handleSubmit}>
               <span className='pl-4 pr-1 select-none'>&gt;</span>
-              <input className='flex-grow py-2 px-1 focus:outline-none placeholder:text-primary-dark bg-primary-darker' ref={inputRef} autoComplete="off" placeholder='Enter a chat here' maxLength={500}/>
+              <input className='flex-grow py-2 px-1 focus:outline-none placeholder:text-primary-dark bg-primary-darker' ref={inputRef} autoComplete="off" placeholder='Enter a chat here' maxLength={500} />
             </form>
           </div>
 
-          <div className="w-1/3 flex flex-col items-center pl-4 gap-4">
-            <div className="h-1/2 w-full flex flex-col items-center border-2 border-primary-dark overflow-hidden">
+          <div className="sm:w-1/3 w-full sm:h-full h-1/3 sm:flex flex-col items-center sm:pl-4 sm:gap-4">
+            <div className="sm:h-1/2 h-full w-full flex flex-col items-center border-2 border-primary-dark overflow-hidden">
               <RoomStatus userInfo={userInfo} socket={socket} />
               <Leaderboard leaderboardArray={leaderboard} />
             </div>
-            <div className="h-1/2 w-full border-2 border-primary-dark">
+            <div className="h-1/2 w-full sm:flex hidden border-2 border-primary-dark">
               <ChatHistory messages={messageHistory} userInfo={userInfo} />
             </div>
           </div>
         </div>
-      </div>
+      </MainLayout>
     </>
   );
 };

@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from 'react';
 import { TypingAnimation } from '../components/ui/typing-effect';
 import TerminalWindow from '../components/TerminalWindow';
 import { Helmet } from 'react-helmet-async';
+import MainLayout from '../components/ui/mainLayout';
 
 const Welcome = () => {
     const navigate = useNavigate();
@@ -66,59 +67,61 @@ const Welcome = () => {
                 <meta property="twitter:title" content="geoChat - Anonymous Local Chat Rooms" />
                 <meta property="twitter:description" content="geoChat is a collection of entirely anonymous local live chat rooms. Join any room in your immediate vicinity and chat with others in real time." />
             </Helmet>
-            <TerminalWindow>
-                <TypingAnimation
-                    className="text-primary mt-1"
-                    duration={50}
-                    text="> Welcome to geoChat"
-                    onComplete={() => setFirstAnimationComplete(true)}
-                />
-                {firstAnimationComplete && (
+            <MainLayout bgColor='bg-black'>
+                <TerminalWindow>
                     <TypingAnimation
                         className="text-primary mt-1"
                         duration={50}
-                        text="> Enter an alias to start chatting"
+                        text="> Welcome to geoChat"
+                        onComplete={() => setFirstAnimationComplete(true)}
                     />
-                )}
-                {!isUsernameValid && (
-                    <TypingAnimation
-                        className="text-primary mt-1"
-                        duration={50}
-                        text="> This username is currently in use. Please select another."
-                    />
-                )}
-                <form onSubmit={handleUsernameSubmit} className="mt-1">
-                    <label
-                        htmlFor="username-input"
-                        className="sr-only"
-                    >
-                        Enter your alias
-                    </label>
-                    <div className="flex items-center space-x-3">
-                        <span className="text-primary">{"> "}</span>
-                        <input
-                            ref={inputRef}
-                            id="username-input"
-                            type="text"
-                            placeholder=""
-                            maxLength={20}
-                            className="text-primary outline-none bg-primary-darker w-full"
-                            autoComplete='off'
-                            onChange={(e) => {
-                                e.target.value = e.target.value.replace(/\s/g, '');
-                                setIsUsernameValid(true);
-                              }}                            
-                            aria-invalid={!isUsernameValid}
-                            aria-describedby={!isUsernameValid ? "username-error" : undefined}
+                    {firstAnimationComplete && (
+                        <TypingAnimation
+                            className="text-primary mt-1"
+                            duration={50}
+                            text="> Enter an alias to start chatting"
                         />
-                    </div>
-                    {!isUsernameValid && (
-                        <div id="username-error" className="sr-only">
-                            This alias is currently in use. Please select another.
-                        </div>
                     )}
-                </form>
-            </TerminalWindow>
+                    {!isUsernameValid && (
+                        <TypingAnimation
+                            className="text-primary mt-1"
+                            duration={50}
+                            text="> This username is currently in use. Please select another."
+                        />
+                    )}
+                    <form onSubmit={handleUsernameSubmit} className="mt-1">
+                        <label
+                            htmlFor="username-input"
+                            className="sr-only"
+                        >
+                            Enter your alias
+                        </label>
+                        <div className="flex items-center space-x-3">
+                            <span className="text-primary">{"> "}</span>
+                            <input
+                                ref={inputRef}
+                                id="username-input"
+                                type="text"
+                                placeholder=""
+                                maxLength={20}
+                                className="text-primary outline-none bg-primary-darker w-full"
+                                autoComplete='off'
+                                onChange={(e) => {
+                                    e.target.value = e.target.value.replace(/\s/g, '');
+                                    setIsUsernameValid(true);
+                                }}
+                                aria-invalid={!isUsernameValid}
+                                aria-describedby={!isUsernameValid ? "username-error" : undefined}
+                            />
+                        </div>
+                        {!isUsernameValid && (
+                            <div id="username-error" className="sr-only">
+                                This alias is currently in use. Please select another.
+                            </div>
+                        )}
+                    </form>
+                </TerminalWindow>
+            </MainLayout>
         </>
     );
 }
