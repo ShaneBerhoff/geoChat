@@ -58,7 +58,7 @@ const About = () => {
                             />
                             <AboutSection
                                 title="Data Privacy"
-                                content={<>We build geoChat with privacy in mind, because the truth is we have no interest in your data. There are no accounts, just alias that you temporarily create. Once you leave it the connection is gone. Oh also chat's only live for 20 minutes and then they are gone from everywhere (including the server). Your location is only used to figure out which chat rooms you can access, the coordinates are never stored, and the room information disappears with your alias too. If you don't believe us or want to make geoChat more secure just <a href="https://github.com/ShaneBerhoff/geoChat" className="text-primary hover:text-primary-darker underline">take a look</a>.</>}
+                                content={<>We build geoChat with privacy in mind, because the truth is we have no interest in your data. There are no accounts, just alias that you temporarily create. Once you leave it the connection is gone. Oh also chat's only live for 60 minutes and then they are gone from everywhere (including the server). Your location is only used to figure out which chat rooms you can access, the coordinates are never stored, and the room information disappears with your alias too. If you don't believe us or want to make geoChat more secure just <a href="https://github.com/ShaneBerhoff/geoChat" className="text-primary hover:text-primary-darker underline">take a look</a>.</>}
                                 className=""
                             />
                             <AboutSection

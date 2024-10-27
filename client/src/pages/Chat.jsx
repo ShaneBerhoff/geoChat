@@ -17,7 +17,7 @@ const ChatPage = () => {
   const socket = useRef(null);
   const navigate = useNavigate();
 
-  const MESSAGE_EXPIRY_TIME = 20 * 60 * 1000;
+  const MESSAGE_EXPIRY_TIME = 60 * 60 * 1000; //60min
   console.log(MESSAGE_EXPIRY_TIME);
   // message cleanup
   useEffect(() => {
