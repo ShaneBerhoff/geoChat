@@ -1,11 +1,12 @@
 const Message = require('../models/messageModel')
 require('dotenv').config();
-const fs = require('fs');
-const path = require('path');
-const badwordsFilePath = path.join(__dirname, '../badwords.txt');
+// const fs = require('fs');
+// const path = require('path');
 const metricsManager = require('./metricsManager');
 
 // Read bad words from the file
+/*
+const badwordsFilePath = path.join(__dirname, '../badwords.txt');
 const readBadWords = () => {
   try {
     const data = fs.readFileSync(badwordsFilePath, 'utf8');
@@ -26,14 +27,14 @@ const moderateMessage = (text) => {
   });
   return text;
 };
-
+*/
 
 // Save message and send to all users
 const handleMessage = async (socket, messageData) => {
   const username = socket.username;
   const sessionToken = socket.sessionToken;
   
-  messageData.content = moderateMessage(messageData.content);
+  //messageData.content = moderateMessage(messageData.content);
   const room = socket.currentRoom;
 
   // Save to db
