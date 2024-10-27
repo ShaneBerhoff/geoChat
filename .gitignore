@@ -138,9 +138,6 @@ dist
 # MODERATION
 badwords.txt
 
-#Locations
-locationData
-
 #HTTPS
 cert.pem
 key.pem
