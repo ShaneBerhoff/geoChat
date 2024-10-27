@@ -37,7 +37,7 @@ const About = () => {
                     <div className="flex flex-col overflow-y-auto overflow-x-hidden scrollbar-hide">
                         <div className="mx-auto justify-center text-center p-12">
                             <div className="text-5xl" ref={glitch.ref}>geoChat</div>
-                            <div>Anonymous Local Chatrooms</div>
+                            <div>Anonymous Local Chat Rooms</div>
                         </div>
                         <div className="flex flex-col w-full space-y-2 text-lg text-primary-dark">
                             <AboutSection
@@ -63,7 +63,7 @@ const About = () => {
                             />
                             <AboutSection
                                 title="Design Principles"
-                                content="The main layout and feature choices are kept minimal, coming straight from old school chat rooms (with our own local twist). We didn't want to add useless features that stray from its intentions. geoChat is styled after monochrome monitors: only using one color at a time and different brightness levels to show emphasis. Each theme option corresponds to a specific phosphor type used in these monitors and other old display types."
+                                content={<>The main layout and feature choices are kept minimal, coming straight from old school chat rooms (with our own local twist). We didn't want to add useless features that stray from its intentions. geoChat is styled after monochrome monitors: only using one color at a time and different brightness levels to show emphasis. Each theme option corresponds to a <a href="https://en.wikipedia.org/wiki/Phosphor#Standard_phosphor_types" className="text-primary hover:text-primary-darker underline">specific phosphor</a> type used in these monitors and other old displays.</>}
                                 className=""
                             />
                             <AboutSection
@@ -79,6 +79,10 @@ const About = () => {
                                         . If you want to <a href="https://github.com/ShaneBerhoff/geoChat" className="text-primary hover:text-primary-darker underline">build a feature yourself</a>, go for it! The goal is for people to contribute and for it to grow as a community project.
                                     </>
                                 }
+                            />
+                            <AboutSection
+                                title="Contributors"
+                                content="Coming soon: your name here."
                             />
                         </div>
                     </div>
