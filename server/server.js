@@ -40,7 +40,7 @@ connectDB()
         // Load rooms
         roomController.loadGeoJSONdata();
     }).then(() => {
-        sessionController.dropAll();
+        sessionController.deactivateAllSessions();
     })
 
 // managers

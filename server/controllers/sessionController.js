@@ -95,14 +95,18 @@ const updateRooms = async (sessionToken, chatRooms) => {
     }
 };
 
-// Drops all sessions
-const dropAll = async () => {
+// deactivates all sessions
+const deactivateAllSessions = async () => {
     try {
-        await Session.collection.drop();
-        console.log('Sessions collection dropped successfully');
+        const result = await Session.updateMany(
+        {}, // empty filter matches all documents
+        { $set: { isActive: false } }
+    );
+        console.log(`Successfully deactivated ${result.modifiedCount} sessions`);
     } catch (error) {
-        console.error('Error dropping sessions:', error);
+        console.error('Error deactivating sessions:', error);
     }
+    
 }
 
 module.exports = {
@@ -111,5 +115,5 @@ module.exports = {
     deactivateSession,
     createSession,
     updateRooms,
-    dropAll
+    deactivateAllSessions
 };
