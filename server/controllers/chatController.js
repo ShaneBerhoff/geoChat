@@ -3,6 +3,7 @@ require('dotenv').config();
 // const fs = require('fs');
 // const path = require('path');
 const metricsManager = require('./metricsManager');
+const debug = process.env.DEBUG ? console.debug : () => {};
 
 // Read bad words from the file
 /*
@@ -47,7 +48,7 @@ const handleMessage = async (socket, messageData) => {
     });
     
     await message.save();
-    console.log("Message saved to DB")
+    debug("Message saved to DB")
   } catch (error) {
     console.error('Failed to save message to DB:', error)
     throw error;
@@ -61,7 +62,7 @@ const handleMessage = async (socket, messageData) => {
     };
     socket.to(room).emit('chat message', userMessageData);
     socket.emit('chat message', userMessageData);
-    console.log(userMessageData, "emitted to clients in room:", room);
+    debug(userMessageData, "emitted to clients in room:", room);
     metricsManager.handleRoomEvent(room, "message");
   } catch (error) {
     console.error('Error in handleMessage:', error);

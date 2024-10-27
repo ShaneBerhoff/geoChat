@@ -1,5 +1,6 @@
 const Session = require('../models/sessionModel')
 const { v4: uuidv4 } = require('uuid');
+const debug = process.env.DEBUG ? console.debug : () => {};
 
 // Finds user session, activates it, and loads it
 const loadUser = async (sessionToken) => {
@@ -15,7 +16,7 @@ const loadUser = async (sessionToken) => {
             { new: true }
         );
         if (!session) {
-            console.log('No session found for token:', sessionToken);
+            debug('No session found for token:', sessionToken);
             return null;
         }
     } catch (error) {
@@ -23,7 +24,7 @@ const loadUser = async (sessionToken) => {
         throw error;
     }
 
-    console.log(`Session ${sessionToken} set to active.`);
+    debug(`Session ${sessionToken} set to active.`);
 
     return session;
 }
@@ -52,7 +53,7 @@ const deactivateSession = async (sessionToken) => {
                     }
                 }
             );
-            console.log(`Session ${sessionToken} set to inactive`);
+            debug(`Session ${sessionToken} set to inactive`);
         } catch (error) {
             console.error('Error setting session to inactive:', error);
         }
