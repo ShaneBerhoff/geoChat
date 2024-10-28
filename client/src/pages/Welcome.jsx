@@ -8,6 +8,7 @@ import MainLayout from '../components/ui/mainLayout';
 const Welcome = () => {
     const navigate = useNavigate();
     const inputRef = useRef(null);
+    const [inputValue, setInputValue] = useState('');
     const [isUsernameValid, setIsUsernameValid] = useState(true);
     const [firstAnimationComplete, setFirstAnimationComplete] = useState(false);
 
@@ -48,7 +49,7 @@ const Welcome = () => {
         if (inputRef.current) {
             inputRef.current.focus();
         }
-    })
+    });
 
     return (
         <>
@@ -106,8 +107,10 @@ const Welcome = () => {
                                 maxLength={20}
                                 className="text-primary outline-none bg-primary-darker w-full"
                                 autoComplete='off'
+                                value={inputValue}
                                 onChange={(e) => {
-                                    e.target.value = e.target.value.replace(/\s/g, '');
+                                    const newValue = e.target.value.replace(/\s/g, '');
+                                    setInputValue(newValue);
                                     setIsUsernameValid(true);
                                 }}
                                 aria-invalid={!isUsernameValid}
@@ -119,6 +122,12 @@ const Welcome = () => {
                                 This alias is currently in use. Please select another.
                             </div>
                         )}
+                        { inputValue.length > 0 && (<button 
+                            type='submit'
+                            className="sm:hidden bg:none py-2 text-center absolute bottom-4 right-8"
+                        >
+                            Enter
+                        </button>)}
                     </form>
                 </TerminalWindow>
             </MainLayout>
