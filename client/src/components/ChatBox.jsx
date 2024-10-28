@@ -58,13 +58,13 @@ const Chatbox = ({ messages }) => {
             >
                 {messages.map((message, index) => (
                     <div key={index} className="flex items-baseline space-x-2 flex-wrap">
-                        <span className="text-primary-dark text-sm">
+                        <span className="text-primary-dark sm:text-sm text-xs">
                             {formatTime(message.createdAt)}
                         </span>
-                        <span className="text-lg">
+                        <span className="sm:text-lg text-md">
                             [{message.username}]
                         </span>
-                        <p className="text-lg text-primary-dark break-words min-w-0">
+                        <p className="sm:text-lg text-md text-primary-dark break-words min-w-0">
                             {message.content}
                         </p>
                     </div>
