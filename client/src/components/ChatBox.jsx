@@ -4,6 +4,7 @@ import NavBar from './Navbar';
 const Chatbox = ({ messages }) => {
     const messagesContainerRef = useRef(null);
     const [showScrollButton, setShowScrollButton] = useState(false);
+    const initialScrollDone = useRef(false);
 
     const formatTime = (timestamp) => {
         const date = new Date(timestamp);
@@ -48,6 +49,13 @@ const Chatbox = ({ messages }) => {
             messagesContainerRef.current.scrollTop = scrollHeight - clientHeight;
         }
     };
+
+    useEffect(() => {
+        if (messages.length > 0 && !initialScrollDone.current) {
+          scrollToBottom();
+          initialScrollDone.current = true;
+        }
+    }, [messages.length]);
 
     return (
         <div className="w-full h-full flex flex-col pb-2 overflow-hidden relative">
