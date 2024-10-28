@@ -1,4 +1,5 @@
 const sessionController = require('../controllers/sessionController');
+const debug = process.env.DEBUG ? console.debug : () => {};
 
 const usernameMiddleware = async (req, res, next) => {
     console.log("Checking username");
@@ -20,18 +21,18 @@ const usernameMiddleware = async (req, res, next) => {
             // Create session
             const token = await sessionController.createSession(username);
             // Send down the line
-            console.log("Valid username with SessionToken:", token);
+            debug("Valid username with SessionToken:", token);
             req.sessionToken = token;
             return next();
         } else if (!existingSession.isActive && existingSession.token === clientToken) { // If inactive and matching token recover
             // Send down the line
-            console.log("Valid username recovery with SessionToken: ", clientToken);
+            debug("Valid username recovery with SessionToken: ", clientToken);
             // Keep token
             req.sessionToken = clientToken;
             return next();
         } else {
             // Username is already in use
-            console.log("Username already in use")
+            debug("Username already in use")
             return res.status(409).json({ error: 'Username already in use' });
         }
     } catch (error) {

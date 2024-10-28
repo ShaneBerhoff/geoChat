@@ -1,6 +1,6 @@
 const dotenv = require('dotenv');
 dotenv.config({ path: './server/.env' });
-
+const debug = process.env.DEBUG ? console.debug : () => {};
 const connectDB = require('./utils/mongoClient');
 const http = require('http');
 const https = require('https');
@@ -40,7 +40,7 @@ connectDB()
         // Load rooms
         roomController.loadGeoJSONdata();
     }).then(() => {
-        sessionController.dropAll();
+        sessionController.deactivateAllSessions();
     })
 
 // managers
@@ -90,7 +90,7 @@ io.on('connection', async (socket) => {
     // Send current leaderboard
     try {
         socket.emit('leaderboard', leaderboard.getLeaderboard());
-        console.log("Existing leaderbaord sent to client");
+        console.log("Existing leaderboard sent to client");
     } catch (error){
         console.error('Error sending leaderboard to client:', error);
     }
@@ -104,10 +104,10 @@ io.on('connection', async (socket) => {
         
         // sanitize message
         if (!msg.content || msg.content.length > 500){
-            console.log("Oversized message from:", socket.username);
+            console.log("Oversized message from:", socket.ip);
             return;
         }
-        console.log(msg, "received from:", socket.username);
+        debug(msg, "received from:", socket.username);
         // Send message to chat controller
         try {
             await chatController.handleMessage(socket, msg);

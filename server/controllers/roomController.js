@@ -3,6 +3,7 @@ const { Zone, Room } = require('../models/locationModels');
 const fs = require('fs').promises;
 const path = require('path');
 const metricsManager = require('./metricsManager');
+const debug = process.env.DEBUG ? console.debug : () => {};
 
 const getRooms = async (longitude, latitude) => {
     // create a point
@@ -47,8 +48,8 @@ const getRooms = async (longitude, latitude) => {
     ];
 
     if (chatRooms) {
-        console.log("User is in:");
-        console.log(chatRooms);
+        debug("User is in:");
+        debug(chatRooms);
         return chatRooms;
     } else {
         return null;
@@ -153,7 +154,7 @@ const setupCycleRooms = async (socket, session) => {
             chatRoom: this.chatRooms[this.currentRoomIndex].name
         }
         // Send user info to client
-        console.log('User info emitted to client:', userInfo)
+        debug('User info emitted to client:', userInfo)
         socket.emit('user info', userInfo);
 
         // Load exisiting chat messages
@@ -191,7 +192,7 @@ const getClosestZone = async (longitude, latitude) => {
         }
     }).select('name');
 
-    console.log("User closest to:", closestZone.name);
+    debug("User closest to:", closestZone.name);
     return closestZone.name;
 }
 

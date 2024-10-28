@@ -17,6 +17,24 @@ const ChatPage = () => {
   const socket = useRef(null);
   const navigate = useNavigate();
 
+  const MESSAGE_EXPIRY_TIME = 60 * 60 * 1000; //60min
+  console.log(MESSAGE_EXPIRY_TIME);
+  // message cleanup
+  useEffect(() => {
+    const cleanupMessages = () => {
+      const currentTime = Date.now();
+      setMessages(prevMessages =>
+        prevMessages.filter(msg =>
+          (currentTime - msg.createdAt) < MESSAGE_EXPIRY_TIME
+        )
+      );
+    };
+
+    const cleanup = setInterval(cleanupMessages, 60000); // Check every minute
+
+    return () => clearInterval(cleanup);
+  }, [MESSAGE_EXPIRY_TIME]);
+
   useEffect(() => {
 
     socket.current = io({
@@ -71,7 +89,7 @@ const ChatPage = () => {
         socket.current.disconnect();
       }
     };
-  }, []);
+  }, [navigate]);
 
   const handleSubmit = (event) => {
     event.preventDefault();
