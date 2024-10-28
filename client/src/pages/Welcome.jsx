@@ -48,7 +48,7 @@ const Welcome = () => {
         if (inputRef.current) {
             inputRef.current.focus();
         }
-    })
+    });
 
     return (
         <>
@@ -119,6 +119,12 @@ const Welcome = () => {
                                 This alias is currently in use. Please select another.
                             </div>
                         )}
+                        <button 
+                            type='submit'
+                            className="sm:hidden bg:none py-2 mt-2 rounded-lg text-center absolute bottom-4 right-8"
+                        >
+                            Enter
+                        </button>
                     </form>
                 </TerminalWindow>
             </MainLayout>
