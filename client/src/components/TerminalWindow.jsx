@@ -12,13 +12,13 @@ const TerminalWindow = ({ children, title = 'geoChat' }) => {
         }
     });
     return (
-        <div className='min-h-screen w-full bg-black flex items-center justify-center'>
+        <div className='min-h-screen w-full bg-black sm:flex items-center justify-center'>
             <div className="hidden">
                 <a href="/">Home</a>
                 <a href="/chatroom">Chat Room</a>
                 <a href="/about">About</a>
             </div>
-            <div className='w-full max-w-xl p-4 h-screen max-h-96 flex flex-col'>
+            <div className='relative w-full max-w-xl p-4 h-screen max-h-96 flex flex-col'>
                 <div className="bg-primary-darker rounded-lg shadow-lg overflow-hidden flex flex-col flex-grow">
                     <div className="bg-stone-900 px-4 py-2 flex items-center relative">
                         <div className="flex space-x-2 absolute left-4">
