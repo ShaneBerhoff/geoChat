@@ -1,6 +1,7 @@
 # geoChat
 A geofenced anonymous live chat 📍💬
 
+Watch the demo [here](https://youtu.be/QkPuiNC02CA)  
 Read more about it [here](https://geochat.live/about)
 
 Currently supported for:
